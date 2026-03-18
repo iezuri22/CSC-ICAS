@@ -169,6 +169,117 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 .toast{position:fixed;bottom:20px;right:20px;background:#2c3e50;color:#fff;padding:10px 20px;border-radius:4px;font-size:13px;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);}
 .toast.show{display:block;animation:ti .3s ease;}
 @keyframes ti{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* === MOBILE RESPONSIVE === */
+@media(max-width:900px){
+  .main-layout{flex-direction:column;}
+  .sidebar{width:100%;display:flex;flex-wrap:wrap;padding:4px 8px;gap:0;}
+  .sbt{padding:6px 10px;font-size:12px;}
+  .sbi{padding:6px 10px 6px 14px;font-size:12px;}
+  .sbd{display:none;}
+  .sidebar{flex-direction:row;align-items:center;overflow-x:auto;}
+  .sbt,.sbi{white-space:nowrap;}
+  /* Hide non-essential sidebar items on mobile */
+  .sbi:not(.active),.sbt:not(:first-child){display:none;}
+  .sidebar{justify-content:flex-start;gap:4px;padding:6px 10px;}
+  .sbi.active{border-left:none;padding-left:10px;border-radius:3px;}
+}
+@media(max-width:768px){
+  /* Header */
+  .ecm-header{height:auto;flex-wrap:wrap;padding:6px 10px;gap:6px;}
+  .ecm-logo{font-size:16px;}
+  .ecm-logo svg{width:24px;height:24px;}
+  .nav-icons{gap:1px;}
+  .nav-btn{padding:3px 6px;font-size:9px;}
+  .nav-btn svg{width:16px;height:16px;}
+  .nav-btn span{display:none;}
+  .acct{gap:6px;}
+  .av{width:28px;height:28px;font-size:11px;}
+  .owner-name{font-size:11px;}
+  .owner-label{display:none;}
+  /* Lookup */
+  .lookup-bar{flex-wrap:wrap;padding:8px 10px;gap:8px;}
+  .lookup-label{padding:6px 12px;font-size:13px;}
+  .lf{flex-wrap:wrap;gap:6px;}
+  .lfg input{width:100px;}
+  .sbtn{padding:6px 16px;font-size:12px;}
+  /* Tabs */
+  .ctabs{overflow-x:auto;padding:0 4px;-webkit-overflow-scrolling:touch;}
+  .ctab{padding:8px 12px;font-size:11px;white-space:nowrap;flex-shrink:0;}
+  /* Vertical side tabs - hide on mobile */
+  .content>div:first-child{display:none !important;}
+  /* Tab content */
+  .tp{padding:12px;}
+  /* Domain table */
+  .dtb{font-size:11px;display:block;overflow-x:auto;}
+  .dtb th,.dtb td{padding:5px 6px;font-size:10px;}
+  .sc{min-width:60px;font-size:10px;padding:3px 4px;}
+  /* Applicant + Legend */
+  .appb{display:block;margin-bottom:10px;}
+  .legb{margin-left:0;display:flex;flex-wrap:wrap;gap:4px;}
+  .bdg{padding:3px 8px;font-size:10px;}
+  /* Assessment tables */
+  .atb{display:block;overflow-x:auto;}
+  .atb th,.atb td{padding:6px 8px;font-size:11px;}
+  .abar{flex-wrap:wrap;gap:6px;padding:6px 10px;}
+  .abar .al{font-size:11px;}
+  .abar .ar{font-size:11px;flex-wrap:wrap;gap:6px;}
+  /* Stats grid */
+  .cost{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .cov{font-size:20px;}
+  /* Score table */
+  .stb{display:block;overflow-x:auto;}
+  /* Goal cards */
+  .gch{flex-wrap:wrap;gap:6px;padding:8px 12px;}
+  .gn{font-size:12px;}
+  .gcb{padding:8px 12px;}
+  .sgt{font-size:10px;padding:2px 8px;}
+  /* Progress Notes layout */
+  .pnlay{flex-direction:column;min-height:auto;}
+  .pnl{width:100%;border-right:none;border-bottom:1px solid #d0dbe5;max-height:150px;display:flex;overflow-x:auto;overflow-y:hidden;}
+  .pnc{min-width:140px;flex-shrink:0;text-align:center;border-bottom:none;border-right:1px solid #e0e8f0;}
+  .pnr{padding:10px;}
+  .nd-card{margin-bottom:8px;}
+  /* Services flow */
+  .nd-svc-flow{flex-direction:column;gap:6px;}
+  .nd-svc-col{max-width:100%;min-width:0;}
+  /* Goal achievement tables */
+  .ga-table{display:block;overflow-x:auto;}
+  .ga-hdr{flex-wrap:wrap;gap:6px;padding:6px 10px;}
+  /* Milestone table */
+  .stb th,.stb td{font-size:11px;padding:5px 8px;}
+  /* Sections */
+  .sec-h{padding:8px 12px;font-size:13px;flex-wrap:wrap;gap:6px;}
+  .sec-b{padding:12px;}
+  /* Modals */
+  .modal,.modal-lg{width:95vw;max-height:90vh;}
+  .mh{padding:10px 14px;}
+  .mbi{padding:14px;}
+  .mf{padding:10px 14px;}
+  /* Reminder banners */
+  .rbanner{flex-direction:column;align-items:flex-start;gap:8px;padding:10px 12px;}
+  .rbanner .rtxt{font-size:12px;}
+  /* Domain svc grid in modal */
+  .dsgr{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .ecm-header{padding:4px 8px;}
+  .nav-icons{display:none;}
+  .lookup-bar{flex-direction:column;align-items:flex-start;}
+  .lf{width:100%;}
+  .lfg{flex:1;}
+  .lfg input{width:100%;}
+  .ctab{padding:7px 10px;font-size:10px;}
+  .tp{padding:8px;}
+  .cost{grid-template-columns:1fr 1fr;gap:6px;}
+  .cocd{padding:10px;}
+  .cov{font-size:18px;}
+  .pnl{max-height:120px;}
+  .pnc{min-width:120px;padding:8px 10px;}
+  .pnc .pnd{font-size:11px;}
+  .legb{padding:6px 8px;}
+  .legb .lt{font-size:11px;}
+  .bdg{padding:2px 6px;font-size:9px;}
+}
 </style>
 </head>
 <body>
