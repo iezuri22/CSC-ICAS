@@ -308,20 +308,23 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
     <div style="position:relative;"><div style="position:absolute;right:0;top:0;z-index:10;display:flex;flex-direction:column;"><div style="writing-mode:vertical-rl;background:#f39c12;color:#fff;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;">Application List</div><div style="writing-mode:vertical-rl;background:#3d8fcf;color:#fff;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;margin-top:2px;">My Cases</div></div></div>
     <div class="ctabs">
       <div class="ctab active" onclick="switchTab('situation')">Current Situation</div>
+      <div class="ctab" onclick="switchTab('assessment')">Assessment</div>
       <div class="ctab" onclick="switchTab('goals')">Goal</div>
       <div class="ctab" onclick="switchTab('notes')">Progress Note</div>
-      <div class="ctab" onclick="switchTab('progress')">Progress</div>
       <div class="ctab" onclick="switchTab('closeout')">Close Out</div>
     </div>
     <div class="tc">
 
       <!-- CURRENT SITUATION -->
       <div class="tp active" id="tab-situation">
-        <div id="rBox"></div>
         <div class="sec"><div class="sec-h">DOMAIN HISTORY</div><div class="sec-b">
           <div style="display:flex;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;"><div class="appb"><div class="nm">Applicant: Koasia K Eldridge</div><div class="cs">CSC_CS Case Management [10299187]</div></div><div class="legb"><span class="lt">Scale Legend:</span><span class="bdg bc">In Crisis</span><span class="bdg bv">Vulnerable</span><span class="bdg bs">Stable</span><span class="bdg bsf">Safe</span><span class="bdg bt">Thriving</span></div></div>
           <table class="dtb"><thead><tr><th>Domains</th><th>Current</th><th>09/21/2020</th><th>11/20/2019</th><th>01/10/2019</th></tr></thead><tbody id="domBody"></tbody></table>
         </div></div>
+      </div>
+
+      <!-- ASSESSMENT -->
+      <div class="tp" id="tab-assessment">
         <div class="sec"><div class="sec-h">ASSESSMENT(S) <button class="abtn" onclick="showToast('New assessment form would open.')">+ ADD</button></div><div class="sec-b">
           <div class="appb" style="margin-bottom:14px;"><div class="nm">Applicant: Koasia K Eldridge</div><div class="cs">CSC_CS Case Management [10299187]</div></div>
           <div id="aBox"></div>
@@ -339,7 +342,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
         <div class="sec" style="overflow:hidden;">
           <div class="sec-h" style="padding:0;">
             <div style="padding:10px 16px;display:flex;align-items:center;gap:10px;"><span style="font-weight:700;">Progress Note</span><button class="abtn" onclick="openNoteM()">+ ADD</button></div>
-            <div style="display:flex;align-items:center;gap:8px;padding-right:14px;"><label style="font-size:12px;font-weight:700;">Filter By:</label><select class="fs" style="width:160px;" id="nFilt" onchange="renderNotes()"><option value="all">All Goals</option></select></div>
+            <div style="display:flex;align-items:center;gap:8px;padding-right:14px;"><label style="font-size:12px;font-weight:700;">Filter By:</label><select class="fs" style="width:160px;" id="nFilt" onchange="renderNotes()"><option value="all">All Domains</option></select></div>
           </div>
           <div class="pnlay">
             <div class="pnl" id="pnL"><div class="pnempty" style="padding:20px;font-size:12px;">No notes yet.</div></div>
@@ -348,20 +351,12 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
         </div>
       </div>
 
-      <!-- PROGRESS -->
-      <div class="tp" id="tab-progress">
-        <div class="cost"><div class="cocd"><div class="cov" id="coD">912</div><div class="col">Days Active</div></div><div class="cocd"><div class="cov" id="coG">0</div><div class="col">Goals Set</div></div><div class="cocd"><div class="cov" id="coN">0</div><div class="col">Progress Notes</div></div><div class="cocd"><div class="cov" id="coS">0</div><div class="col">Services Provided</div></div></div>
-        <!-- 30/60/90 Day Milestone Reviews -->
-        <div class="sec"><div class="sec-h">Milestone Reviews (30 / 60 / 90 Day)</div><div class="sec-b"><div id="msBox"></div></div></div>
-        <!-- Goal Achievement -->
-        <div class="sec"><div class="sec-h">Goal Achievement</div><div class="sec-b"><div id="gaBox"><div style="color:#888;font-size:12px;">No goals to review. Add goals first.</div></div></div></div>
-        <!-- Assessment Score Changes -->
-        <div class="sec"><div class="sec-h">Assessment Score Changes (Initial > Current)</div><div class="sec-b"><table class="stb"><thead><tr><th>Domain</th><th>Initial</th><th>Current</th><th>Change</th></tr></thead><tbody id="scBody"></tbody></table></div></div>
-      </div>
-
       <!-- CLOSE OUT -->
       <div class="tp" id="tab-closeout">
-        <div class="sec"><div class="sec-h">Close Out</div><div class="sec-b">
+        <div class="cost"><div class="cocd"><div class="cov" id="coD">912</div><div class="col">Days Active</div></div><div class="cocd"><div class="cov" id="coG">0</div><div class="col">Goals Set</div></div><div class="cocd"><div class="cov" id="coN">0</div><div class="col">Progress Notes</div></div><div class="cocd"><div class="cov" id="coS">0</div><div class="col">Services Provided</div></div></div>
+        <div class="sec"><div class="sec-h">Goal Achievement</div><div class="sec-b"><div id="gaBox"><div style="color:#888;font-size:12px;">No goals to review. Add goals first.</div></div></div></div>
+        <div class="sec"><div class="sec-h">Assessment Score Changes (Initial > Current)</div><div class="sec-b"><table class="stb"><thead><tr><th>Domain</th><th>Initial</th><th>Current</th><th>Change</th></tr></thead><tbody id="scBody"></tbody></table></div></div>
+        <div class="sec"><div class="sec-h">Close Out Details</div><div class="sec-b">
           <div class="fg"><label class="fl">Close Out Reason</label><select class="fs"><option value="">-- Select --</option><option>Goals Achieved</option><option>Client Request</option><option>Lost Contact</option><option>Moved Out of Area</option><option>Transferred</option><option>Non-Compliance</option><option>Other</option></select></div>
           <div class="fg"><label class="fl">Close Out Date</label><input type="date" class="fi" style="width:200px;"></div>
           <div class="fg"><label class="fl">Final Case Notes</label><textarea class="ft" placeholder="Enter final notes..."></textarea></div>
@@ -380,13 +375,27 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 <div class="mo" id="aM"><div class="modal modal-lg"><div class="mh"><h3 id="amT">Edit Assessment</h3><button class="mx" onclick="closeAM()">x</button></div><div class="mbi"><table class="atb" style="width:100%;"><thead><tr><th>Question</th><th>Answer</th><th>Comment</th></tr></thead><tbody id="amB"></tbody></table></div><div class="mf"><button class="btn bout" onclick="closeAM()">Cancel</button><button class="btn bblu" onclick="saveAE()">Save Assessment</button></div></div></div>
 
 <div class="mo" id="nM"><div class="modal modal-lg"><div class="mh"><h3>Add Progress Note</h3><button class="mx" onclick="closeNoteM()">x</button></div><div class="mbi">
-  <div class="shbar"><div class="sht">Shared Services (All Domains)</div><div class="shc"><label class="svl"><input type="checkbox" class="nsh" value="Advocacy"> Advocacy</label><label class="svl"><input type="checkbox" class="nsh" value="Follow up Call"> Follow up Call</label><label class="svl"><input type="checkbox" class="nsh" value="Letter Writing"> Letter Writing</label><label class="svl"><input type="checkbox" class="nsh" value="Translation"> Translation</label></div></div>
-  <div class="fg"><label class="fl">Link to Goals (select one or more)</label><div class="cbl" id="ngL" style="max-height:140px;"></div></div>
-  <div class="fg" id="nSG" style="display:none;"><label class="fl">Domain Services</label><div id="nSB"></div></div>
   <div class="fg"><label class="fl">Note Date</label><input type="date" class="fi" id="nDt" style="width:200px;"></div>
   <div class="fg"><label class="fl">Note</label><textarea class="ft" id="nTx" placeholder="Enter progress note..."></textarea></div>
+  <div class="fg"><label class="fl">Services by Domain</label><div id="nSvcAll"></div></div>
   <div class="fg"><label class="fl">Documents</label><input type="file" class="fi" id="nDoc" multiple style="padding:4px;"></div>
 </div><div class="mf"><button class="btn bout" onclick="closeNoteM()">Cancel</button><button class="btn bblu" onclick="saveNote()">Save Note</button></div></div></div>
+
+<div class="mo" id="enM"><div class="modal modal-lg"><div class="mh"><h3>Edit Progress Note</h3><button class="mx" onclick="closeENM()">x</button></div><div class="mbi">
+  <div id="enFollowupRow" style="display:none;">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-end;">
+      <div class="fg" style="margin-bottom:0;"><label class="fl">Day</label><input type="text" class="fi" id="enFuDay" readonly style="width:80px;background:#f0f4f8;cursor:not-allowed;font-weight:700;"></div>
+      <div class="fg" style="margin-bottom:0;"><label class="fl">Follow-Up Date</label><input type="date" class="fi" id="enFuDt" readonly style="width:170px;background:#f0f4f8;cursor:not-allowed;"></div>
+      <div class="fg" style="margin-bottom:0;"><label class="fl" id="enDtLabelFu">Status Date</label><input type="date" class="fi" id="enDtFu" style="width:170px;"></div>
+    </div>
+    <div id="enStatusErr" style="display:none;color:#e74c3c;font-size:11px;margin-bottom:10px;"></div>
+  </div>
+  <div id="enRegDateRow">
+    <div class="fg"><label class="fl" id="enDtLabel">Note Date</label><input type="date" class="fi" id="enDt" style="width:200px;"></div>
+  </div>
+  <div class="fg"><label class="fl">Note</label><textarea class="ft" id="enTx" style="min-height:100px;"></textarea></div>
+  <div class="fg"><label class="fl">Services by Domain</label><div id="enSvc"></div></div>
+</div><div class="mf"><button class="btn bout" onclick="closeENM()">Cancel</button><button class="btn bblu" onclick="saveEN()">Save Changes</button></div></div></div>
 
 <div class="mo" id="gaM"><div class="modal"><div class="mh"><h3 id="gaTitle">Edit Goal Achievement</h3><button class="mx" onclick="closeGAM()">x</button></div><div class="mbi">
   <div class="fg"><label class="fl">Goal</label><input class="fi" id="gaGoalName" readonly style="background:#f0f4f8;"></div>
@@ -413,24 +422,11 @@ const AHIST=[
 
 let dism={},goals=[],notes=[],gid=0,eidx=-1,sn=-1,eai=-1;
 
-function init(){buildDom();buildA();buildR();buildGS();buildF();setTD();}
+function init(){buildDom();buildA();buildGS();buildF();setTD();}
 function setTD(){document.getElementById('nDt').value=new Date().toISOString().split('T')[0];}
-function switchTab(t){document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active'));const m={situation:0,goals:1,notes:2,progress:3,closeout:4};document.querySelectorAll('.ctab')[m[t]].classList.add('active');document.getElementById('tab-'+t).classList.add('active');if(t==='progress')updateProgress();if(t==='situation'){buildDom();buildA();buildR();}}
+function switchTab(t){document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active'));const m={situation:0,assessment:1,goals:2,notes:3,closeout:4};document.querySelectorAll('.ctab')[m[t]].classList.add('active');document.getElementById('tab-'+t).classList.add('active');if(t==='closeout')updateProgress();if(t==='situation')buildDom();if(t==='assessment')buildA();}
 
-// REMINDERS
-function buildR(){
-  const box=document.getElementById('rBox');box.innerHTML='';
-  const ld=pAD(AHIST[0].date);const now=new Date();const ds=Math.floor((now-ld)/(864e5));
-  [30,60,90].forEach(m=>{
-    if(dism[m])return;
-    if(ds>=m){
-      const over=ds-m;
-      box.innerHTML+=`<div class="rbanner rover"><div><div class="rtxt">${m}-Day Assessment Review is ${over} day(s) overdue</div><div class="rsub">Last assessment completed: ${AHIST[0].date} (${ds} days ago)</div></div><div style="display:flex;gap:8px;align-items:center;"><button class="rbtn" onclick="showToast('Opening new assessment form...')">Start Assessment</button><button class="rx" onclick="dism[${m}]=true;buildR();" title="Dismiss">x</button></div></div>`;
-    } else if(m-ds<=7){
-      box.innerHTML+=`<div class="rbanner rdue"><div><div class="rtxt">${m}-Day Assessment Review due in ${m-ds} day(s)</div><div class="rsub">Last assessment completed: ${AHIST[0].date} (${ds} days ago)</div></div><div style="display:flex;gap:8px;align-items:center;"><button class="rbtn" onclick="showToast('Opening new assessment form...')">Start Assessment</button><button class="rx" onclick="dism[${m}]=true;buildR();" title="Dismiss">x</button></div></div>`;
-    }
-  });
-}
+// Reminders removed per client decision - reassessment timing is flexible
 function pAD(s){const p=s.split('/');return new Date(parseInt(p[2]),parseInt(p[0])-1,parseInt(p[1]));}
 
 function buildDom(){const b=document.getElementById('domBody');b.innerHTML='';ADOM.forEach(d=>{let r=`<tr><td class="dtn">${d}</td>`;AHIST.forEach(a=>{r+=`<td><div class="sc ${SC[a.scores[d]]}">${a===AHIST[0]?a.date:'&nbsp;'}</div></td>`;});r+='</tr>';b.innerHTML+=r;});}
@@ -443,11 +439,22 @@ function saveAE(){const a=AHIST[eai];document.querySelectorAll('.aeS').forEach(s
 
 // GOALS
 function buildGS(){const s=document.getElementById('gSel');Object.keys(GOALS).forEach(g=>s.innerHTML+=`<option value="${g}">${g}</option>`);}
-function buildF(){const gf=document.getElementById('gFilt');gf.innerHTML='<option value="all">All Goals</option>';Object.keys(GOALS).forEach(g=>gf.innerHTML+=`<option value="${g}">${g}</option>`);const nf=document.getElementById('nFilt');nf.innerHTML='<option value="all">All Goals</option>';Object.keys(GOALS).forEach(g=>nf.innerHTML+=`<option value="${g}">${g}</option>`);}
+function buildF(){const gf=document.getElementById('gFilt');gf.innerHTML='<option value="all">All Goals</option>';Object.keys(GOALS).forEach(g=>gf.innerHTML+=`<option value="${g}">${g}</option>`);const nf=document.getElementById('nFilt');nf.innerHTML='<option value="all">All Domains</option>';Object.keys(ALL_SVC_DOMAINS).forEach(d=>nf.innerHTML+=`<option value="${d}">${d}</option>`);}
 function onGC(){const g=document.getElementById('gSel').value;const l=document.getElementById('sList');if(!g){l.innerHTML='<div style="padding:10px;color:#888;font-size:12px;">Select a goal first.</div>';return;}if(goals.find(x=>x.name===g)){l.innerHTML='<div style="padding:10px;color:#e74c3c;font-size:12px;">This goal already exists. Edit it instead.</div>';return;}const subs=GOALS[g]||[];l.innerHTML='';subs.forEach((s,i)=>{l.innerHTML+=`<div class="cbi"><input type="checkbox" id="gs${i}" value="${s}"><label for="gs${i}">${s}</label></div>`;});}
 function openGoalM(){document.getElementById('goalM').classList.add('show');document.getElementById('gSel').value='';document.getElementById('sList').innerHTML='<div style="padding:10px;color:#888;font-size:12px;">Select a goal first.</div>';}
 function closeGoalM(){document.getElementById('goalM').classList.remove('show');}
-function saveGoal(){const g=document.getElementById('gSel').value;if(!g){showToast('Select a goal.');return;}if(goals.find(x=>x.name===g)){showToast('Goal already exists.');return;}const subs=Array.from(document.querySelectorAll('#sList input:checked')).map(c=>c.value);goals.push({id:gid++,name:g,subgoals:subs,date:new Date().toLocaleDateString()});closeGoalM();renderGoals();showToast('Goal added.');}
+function saveGoal(){const g=document.getElementById('gSel').value;if(!g){showToast('Select a goal.');return;}if(goals.find(x=>x.name===g)){showToast('Goal already exists.');return;}const subs=Array.from(document.querySelectorAll('#sList input:checked')).map(c=>c.value);const goalDate=new Date().toLocaleDateString();goals.push({id:gid++,name:g,subgoals:subs,date:goalDate});closeGoalM();renderGoals();showToast('Goal added.');
+// Auto-generate rental assistance follow-ups if applicable
+if(g==='Housing'&&subs.includes('Obtain Emergency Rental Assistance')){
+  const baseDate=new Date();
+  [30,60,90,120].forEach(days=>{
+    const fuDate=new Date(baseDate.getTime()+days*864e5);
+    const fmtDate=fuDate.getFullYear()+'-'+String(fuDate.getMonth()+1).padStart(2,'0')+'-'+String(fuDate.getDate()).padStart(2,'0');
+    notes.push({date:fmtDate,text:days+' days - maintain housing as result of Rental Assistance',domains:['Housing'],dsvc:['Rental Assistance 120 day followup (Ph. Cnt)'],svcGrouped:{'Housing':['Rental Assistance 120 day followup (Ph. Cnt)']},docs:[],author:'System',created:'Auto-generated',isFollowup:true,followupDay:days,followupDate:fmtDate,statusDate:''});
+  });
+  renderNotes();
+  showToast('Rental assistance follow-up notes auto-created at 30/60/90/120 days.');
+}}
 function renderGoals(){const c=document.getElementById('gBox');const f=document.getElementById('gFilt').value;const fl=f==='all'?goals:goals.filter(g=>g.name===f);document.getElementById('gCt').textContent=goals.length+' Goal'+(goals.length!==1?'s':'');if(!fl.length){c.innerHTML='<div class="emsg">'+(goals.length?'No match.':'No goals yet.')+'</div>';return;}c.innerHTML='';fl.forEach(g=>{const ri=goals.indexOf(g);const sh=g.subgoals.length?g.subgoals.map(s=>`<span class="sgt">${s}</span>`).join(''):'<span style="font-size:11px;color:#888;font-style:italic;">No sub-goals selected</span>';c.innerHTML+=`<div class="gc"><div class="gch"><span class="gn">${g.name}</span><div style="display:flex;gap:4px;"><button class="ibtn ie" onclick="openEG(${ri})" title="Edit">&#9998;</button><button class="ibtn id" onclick="delGoal(${ri})" title="Delete">x</button></div></div><div class="gcb"><div style="font-size:11px;color:#888;margin-bottom:4px;">Added: ${g.date}</div>${sh}</div></div>`;});}
 function delGoal(i){if(confirm('Delete?')){goals.splice(i,1);renderGoals();showToast('Deleted.');}}
 function openEG(i){eidx=i;const g=goals[i];document.getElementById('egN').value=g.name;const l=document.getElementById('egSL');l.innerHTML='';(GOALS[g.name]||[]).forEach((s,j)=>{const ch=g.subgoals.includes(s)?'checked':'';l.innerHTML+=`<div class="cbi"><input type="checkbox" id="es${j}" value="${s}" ${ch}><label for="es${j}">${s}</label></div>`;});document.getElementById('egM').classList.add('show');}
@@ -455,60 +462,74 @@ function closeEG(){document.getElementById('egM').classList.remove('show');}
 function saveEG(){goals[eidx].subgoals=Array.from(document.querySelectorAll('#egSL input:checked')).map(c=>c.value);closeEG();renderGoals();showToast('Updated.');}
 
 // PROGRESS NOTES
-function openNoteM(){document.getElementById('nM').classList.add('show');document.getElementById('nTx').value='';setTD();document.querySelectorAll('.nsh').forEach(c=>c.checked=false);document.getElementById('nDoc').value='';const l=document.getElementById('ngL');if(!goals.length){l.innerHTML='<div style="padding:10px;color:#888;font-size:12px;">No goals yet.</div>';document.getElementById('nSG').style.display='none';return;}l.innerHTML='';goals.forEach((g,i)=>{l.innerHTML+=`<div class="cbi"><input type="checkbox" id="ng${i}" value="${i}" onchange="uNS()"><label for="ng${i}">${g.name}</label></div>`;});document.getElementById('nSG').style.display='none';document.getElementById('nSB').innerHTML='';}
+// All service domains including shared services within each
+const ALL_SVC_DOMAINS={'Housing':['Rental Assistance','Rental Assistance 120 day followup (Ph. Cnt)','Foreclosure Assistance Refrl','Utility Assistance Refrl','Supprtv Housing Prgm Placement','Furniture Refrl','CRS Refrl','Legal Assist 4 Housing Refrl','Disaster Relocation Assistance','Bus Card Shltr Placmnt or Refrl','Starter Kit','Supprtv Housing Prgm Followup','Client Home Visit Service','Interim Housing Refrl','CARES Rental Assistance','Advocacy','Follow up Call','Letter Writing','Translation'],'Career Skills/Barriers':['Job Readiness Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Financial Well-Being':['Financial Education Refrl','EITC Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Employment':['Employment Placement Refrl','Bus Card Employment Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Education':['GED Program Refrl','ESL Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Food':['SNAP Benefits Refrl','Holiday Baskets','Pantry Refrl','Nutrition Education Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Other':['Other DFSS Division Refrl','State ID Application Assistance','RTA ID Application Assistance','Advocacy','Follow up Call','Letter Writing','Translation'],'Parenting Skills':['Headstart Refrl','Family Counseling Refrl','Autism Center Refrl','Parenting Skills Lead Workshop','Advocacy','Follow up Call','Letter Writing','Translation'],'Support System':['Support Group Refrl','Support Workshop Lead Workshop','Advocacy','Follow up Call','Letter Writing','Translation'],'Substance Abuse':['Substance Abuse Treatmnt Rfral','Advocacy','Follow up Call','Letter Writing','Translation'],'Health':['Medical Services Refrl','Mental Health Services Refrl','Health Education Refrl','Hygiene Kit','Bus Card Medical Services','Benefits Refrl','Crisis Counseling Service','Depression Workshop Lead Workshop','Dental Refrl','Advocacy','Follow up Call','Letter Writing','Translation']};
+
+function openNoteM(){
+  document.getElementById('nM').classList.add('show');
+  document.getElementById('nTx').value='';setTD();
+  document.getElementById('nDoc').value='';
+  // All services by domain (always shown)
+  const svcBox=document.getElementById('nSvcAll');svcBox.innerHTML='';
+  Object.keys(ALL_SVC_DOMAINS).forEach(d=>{
+    const svcs=ALL_SVC_DOMAINS[d];
+    let h=`<div class="dsg"><div class="dst">${d}</div><div class="dsgr">`;
+    svcs.forEach(s=>{h+=`<label><input type="checkbox" class="nds" data-domain="${d}" value="${s}"> ${s}</label>`;});
+    h+='</div></div>';svcBox.innerHTML+=h;
+  });
+}
 function closeNoteM(){document.getElementById('nM').classList.remove('show');}
-function uNS(){const ch=document.querySelectorAll('#ngL input:checked');const box=document.getElementById('nSB');const grp=document.getElementById('nSG');if(!ch.length){grp.style.display='none';box.innerHTML='';return;}grp.style.display='block';const doms=new Set();ch.forEach(cb=>{const g=goals[parseInt(cb.value)];const sd=G2S[g.name];if(sd)doms.add(sd);});box.innerHTML='';doms.forEach(d=>{const svcs=SVCS[d]||[];if(!svcs.length)return;let h=`<div class="dsg"><div class="dst">${d}</div><div class="dsgr">`;svcs.forEach(s=>{h+=`<label><input type="checkbox" class="nds" value="${s}"> ${s}</label>`;});h+='</div></div>';box.innerHTML+=h;});}
 
 function saveNote(){
   const text=document.getElementById('nTx').value.trim();const date=document.getElementById('nDt').value;
   if(!text){showToast('Enter a note.');return;}
-  const linked=Array.from(document.querySelectorAll('#ngL input:checked')).map(cb=>{const g=goals[parseInt(cb.value)];return{name:g.name,subgoals:[...g.subgoals]};});
-  const shared=Array.from(document.querySelectorAll('.nsh:checked')).map(c=>c.value);
-  const dsvc=Array.from(document.querySelectorAll('.nds:checked')).map(c=>c.value);
-  // Group dsvc by domain for display
-  const svcGrouped={};
-  linked.forEach(lg=>{const dk=G2S[lg.name];if(dk&&!svcGrouped[dk])svcGrouped[dk]=[];});
-  dsvc.forEach(s=>{for(const[dk,svcs] of Object.entries(SVCS)){if(svcs.includes(s)){if(!svcGrouped[dk])svcGrouped[dk]=[];svcGrouped[dk].push(s);break;}}});
-  // Docs
+  const svcGrouped={};const allSvcs=[];
+  document.querySelectorAll('.nds:checked').forEach(cb=>{
+    const d=cb.dataset.domain;const s=cb.value;
+    if(!svcGrouped[d])svcGrouped[d]=[];
+    svcGrouped[d].push(s);allSvcs.push(s);
+  });
   const docInput=document.getElementById('nDoc');
   const docs=docInput.files?Array.from(docInput.files).map(f=>f.name):[];
-
-  notes.unshift({date,text,goals:linked,shared,dsvc,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()});
+  // Determine domains from services for filtering
+  const domains=Object.keys(svcGrouped);
+  notes.unshift({date,text,domains,dsvc:allSvcs,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()});
   closeNoteM();sn=0;renderNotes();showToast('Note saved.');
 }
 
-function renderNotes(){const left=document.getElementById('pnL');const right=document.getElementById('pnR');const f=document.getElementById('nFilt').value;const fl=f==='all'?notes:notes.filter(n=>n.goals.some(g=>g.name===f));if(!fl.length){left.innerHTML='<div style="padding:20px;text-align:center;color:#888;font-size:12px;">No notes.</div>';right.innerHTML='<div class="pnempty">No notes to display.</div>';sn=-1;return;}if(sn<0||sn>=fl.length)sn=0;left.innerHTML='';fl.forEach((n,i)=>{const act=i===sn?'active':'';const ri=notes.indexOf(n);left.innerHTML+=`<div class="pnc ${act}" onclick="sn=${i};renderNotes();">
-  <div class="pnd">${fD(n.date)}</div><div class="pnp">${n.text.substring(0,35)}</div>
-  <div class="pnacts"><button class="pnact pna-edit" onclick="event.stopPropagation();" title="Edit">&#9998;</button><button class="pnact pna-del" onclick="event.stopPropagation();delNote(${ri});" title="Delete">x</button></div>
+function renderNotes(){const left=document.getElementById('pnL');const right=document.getElementById('pnR');const f=document.getElementById('nFilt').value;const fl=f==='all'?notes:notes.filter(n=>n.domains&&n.domains.includes(f));if(!fl.length){left.innerHTML='<div style="padding:20px;text-align:center;color:#888;font-size:12px;">No notes.</div>';right.innerHTML='<div class="pnempty">No notes to display.</div>';sn=-1;return;}if(sn<0||sn>=fl.length)sn=0;left.innerHTML='';fl.forEach((n,i)=>{const act=i===sn?'active':'';const ri=notes.indexOf(n);left.innerHTML+=`<div class="pnc ${act}" onclick="sn=${i};renderNotes();">
+  <div class="pnd">${fD(n.date)}${n.isFollowup?'<div style="font-size:9px;background:#f39c12;color:#fff;display:inline-block;padding:1px 5px;border-radius:2px;margin-left:4px;">'+n.followupDay+'-Day</div>':''}</div><div class="pnp">${n.text.substring(0,35)}</div>
+  <div class="pnacts"><button class="pnact pna-edit" onclick="event.stopPropagation();openENM(${ri});" title="Edit">&#9998;</button><button class="pnact pna-del" onclick="event.stopPropagation();delNote(${ri});" title="Delete">x</button></div>
 </div>`;});showND(fl[sn]);}
 
 function showND(n){
   const r=document.getElementById('pnR');const ri=notes.indexOf(n);
+  const isAuto=n.isFollowup?'<span style="display:inline-block;background:#f39c12;color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;margin-left:8px;">'+n.followupDay+'-Day Follow-Up</span>':'';
 
   // Notes section
-  let h=`<div class="nd-card"><div class="nd-sec"><div class="nd-sec-hdr"><span>Notes</span><div class="nd-meta"><strong>Created By:</strong> <a href="#">${n.author}</a> &nbsp; <strong>Created Date:</strong> ${n.created}</div></div><div class="nd-note-text">${n.text}</div></div>`;
+  let h=`<div class="nd-card"><div class="nd-sec"><div class="nd-sec-hdr"><span>Notes${isAuto}</span><div class="nd-meta"><strong>Created By:</strong> <a href="#">${n.author}</a> &nbsp; <strong>Created Date:</strong> ${n.created}</div></div>`;
+  // Show follow-up day, follow-up date, and status date for follow-up notes
+  if(n.isFollowup){
+    h+=`<div style="padding:6px 12px;background:#fef9e7;border-bottom:1px solid #f0dea0;font-size:12px;display:flex;gap:24px;align-items:center;">`;
+    h+=`<span><strong>Day:</strong> ${n.followupDay}-Day</span>`;
+    h+=`<span><strong>Follow-Up Date:</strong> ${fD(n.followupDate||n.date)}</span>`;
+    h+=`<span><strong>Status Date:</strong> ${n.statusDate?fD(n.statusDate):'<span style="color:#888;font-style:italic;">Not yet completed</span>'}</span>`;
+    h+=`</div>`;
+  }
+  h+=`<div class="nd-note-text">${n.text}</div></div>`;
 
-  // Goals as horizontal tags (no sub-goals)
-  h+=`<div class="nd-sec"><div class="nd-sec-hdr">Goals</div><div class="nd-sec-body"><div class="nd-goal-tags">`;
-  if(n.goals.length){n.goals.forEach(g=>{h+=`<span class="nd-goal-tag">${g.name}</span>`;});}
-  else{h+=`<span style="color:#888;font-size:11px;">No goals linked.</span>`;}
-  h+=`</div></div></div>`;
-
-  // Services: domain headers horizontal, sub-services underneath each
+  // Services: horizontal domain columns with items underneath
   h+=`<div class="nd-sec"><div class="nd-sec-hdr">Services</div><div class="nd-sec-body"><div class="nd-svc-flow">`;
-  if(n.shared.length){
-    h+=`<div class="nd-svc-col"><div class="nd-svc-col-hdr">Shared Services <span class="info">i</span></div>`;
-    n.shared.forEach(s=>{h+=`<div class="nd-svc-item">${s}</div>`;});h+='</div>';
-  }
   const sg=n.svcGrouped||{};
-  n.goals.forEach(g=>{const dk=G2S[g.name];if(dk&&!sg[dk])sg[dk]=[];});
-  for(const[dk,svcs] of Object.entries(sg)){
-    h+=`<div class="nd-svc-col"><div class="nd-svc-col-hdr">${dk} <span class="info">i</span></div>`;
-    if(svcs&&svcs.length){svcs.forEach(s=>{h+=`<div class="nd-svc-item">${s}</div>`;});}
-    else{h+=`<div style="color:#888;font-style:italic;font-size:11px;">No service saved.</div>`;}
-    h+='</div>';
-  }
-  if(!n.shared.length&&!Object.keys(sg).length)h+='<span style="color:#888;font-size:11px;">No services.</span>';
+  if(Object.keys(sg).length){
+    for(const[dk,svcs] of Object.entries(sg)){
+      if(svcs&&svcs.length){
+        h+=`<div class="nd-svc-col"><div class="nd-svc-col-hdr">${dk} <span class="info">i</span></div>`;
+        svcs.forEach(s=>{h+=`<div class="nd-svc-item">${s}</div>`;});
+        h+='</div>';
+      }
+    }
+  } else h+='<span style="color:#888;font-size:11px;">No services.</span>';
   h+=`</div></div></div>`;
 
   // Documents
@@ -520,35 +541,74 @@ function showND(n){
   r.innerHTML=h;
 }
 
+let enIdx=-1;
+function openENM(i){
+  enIdx=i;const n=notes[i];
+  document.getElementById('enTx').value=n.text;
+  document.getElementById('enStatusErr').style.display='none';
+  if(n.isFollowup){
+    document.getElementById('enFollowupRow').style.display='block';
+    document.getElementById('enRegDateRow').style.display='none';
+    document.getElementById('enFuDay').value=n.followupDay+'-Day';
+    document.getElementById('enFuDt').value=n.followupDate||n.date;
+    document.getElementById('enDtFu').value=n.statusDate||'';
+    document.getElementById('enDtFu').min=n.followupDate||n.date;
+    document.getElementById('enDtFu').max=new Date().toISOString().split('T')[0];
+  } else {
+    document.getElementById('enFollowupRow').style.display='none';
+    document.getElementById('enRegDateRow').style.display='block';
+    document.getElementById('enDt').value=n.date;
+  }
+  const svcBox=document.getElementById('enSvc');svcBox.innerHTML='';
+  Object.keys(ALL_SVC_DOMAINS).forEach(d=>{
+    const svcs=ALL_SVC_DOMAINS[d];
+    const checked=n.svcGrouped&&n.svcGrouped[d]?n.svcGrouped[d]:[];
+    let h=`<div class="dsg"><div class="dst">${d}</div><div class="dsgr">`;
+    svcs.forEach(s=>{h+=`<label><input type="checkbox" class="ends" data-domain="${d}" value="${s}" ${checked.includes(s)?'checked':''}> ${s}</label>`;});
+    h+='</div></div>';svcBox.innerHTML+=h;
+  });
+  document.getElementById('enM').classList.add('show');
+}
+function closeENM(){document.getElementById('enM').classList.remove('show');}
+function saveEN(){
+  const n=notes[enIdx];
+  const errEl=document.getElementById('enStatusErr');
+  errEl.style.display='none';
+
+  if(n.isFollowup){
+    const dateVal=document.getElementById('enDtFu').value;
+    if(dateVal){
+      const fuDate=n.followupDate||n.date;
+      const today=new Date().toISOString().split('T')[0];
+      if(dateVal<fuDate){errEl.textContent='Status date cannot be before the follow-up date ('+fD(fuDate)+').';errEl.style.display='block';return;}
+      if(dateVal>today){errEl.textContent='Status date cannot be after today.';errEl.style.display='block';return;}
+    }
+    n.statusDate=dateVal;
+  } else {
+    n.date=document.getElementById('enDt').value;
+  }
+
+  n.text=document.getElementById('enTx').value.trim();
+  const svcGrouped={};const allSvcs=[];
+  document.querySelectorAll('.ends:checked').forEach(cb=>{
+    const d=cb.dataset.domain;const s=cb.value;
+    if(!svcGrouped[d])svcGrouped[d]=[];
+    svcGrouped[d].push(s);allSvcs.push(s);
+  });
+  n.svcGrouped=svcGrouped;n.dsvc=allSvcs;n.domains=Object.keys(svcGrouped);
+  n.author=n.isFollowup?'CLS_MPereyra':n.author;
+  n.created=new Date().toLocaleString()+' (edited)';
+  closeENM();renderNotes();showToast('Note updated.');
+}
+
 function delNote(i){if(confirm('Delete?')){notes.splice(i,1);sn=0;renderNotes();showToast('Deleted.');}}
 function fD(d){if(!d)return'';const p=d.split('-');return p[1]+'/'+p[2]+'/'+p[0];}
 
 function updateProgress(){
   document.getElementById('coG').textContent=goals.length;
   document.getElementById('coN').textContent=notes.length;
-  const s=new Set();notes.forEach(n=>{n.dsvc.forEach(x=>s.add(x));n.shared.forEach(x=>s.add(x));});
+  const s=new Set();notes.forEach(n=>{if(n.dsvc)n.dsvc.forEach(x=>s.add(x));});
   document.getElementById('coS').textContent=s.size;
-
-  // Milestone Reviews
-  const ms=document.getElementById('msBox');
-  const ld=pAD(AHIST[0].date);const now=new Date();const ds=Math.floor((now-ld)/864e5);
-  let msH='<table class="stb"><thead><tr><th>Milestone</th><th>Due Date</th><th>Status</th><th>Goals Achieved at Review</th></tr></thead><tbody>';
-  [30,60,90].forEach(m=>{
-    const due=new Date(ld.getTime()+m*864e5);
-    const dueFmt=(due.getMonth()+1)+'/'+due.getDate()+'/'+due.getFullYear();
-    const isOverdue=ds>=m;
-    const isDue=m-ds<=7&&m-ds>=0;
-    let status,statusStyle;
-    if(isOverdue){status='Overdue';statusStyle='color:#e74c3c;font-weight:600;';}
-    else if(isDue){status='Due Soon';statusStyle='color:#f39c12;font-weight:600;';}
-    else{status='Upcoming';statusStyle='color:#888;';}
-    // Count achieved goals at this point
-    let achievedCount=0;let totalSubs=0;
-    goals.forEach(g=>{if(g.subgoals)totalSubs+=g.subgoals.length;if(g.achieved)achievedCount+=g.achieved.length;});
-    const achievedTxt=totalSubs?achievedCount+'/'+totalSubs+' sub-goals':'No sub-goals defined';
-    msH+=`<tr><td style="font-weight:600;">${m}-Day Review</td><td>${dueFmt}</td><td style="${statusStyle}">${status}</td><td>${isOverdue?achievedTxt:'--'}</td></tr>`;
-  });
-  msH+='</tbody></table>';ms.innerHTML=msH;
 
   // Goal Achievement
   const ga=document.getElementById('gaBox');
