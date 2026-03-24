@@ -353,9 +353,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 
       <!-- CLOSE OUT -->
       <div class="tp" id="tab-closeout">
-        <div class="cost"><div class="cocd"><div class="cov" id="coD">912</div><div class="col">Days Active</div></div><div class="cocd"><div class="cov" id="coG">0</div><div class="col">Goals Set</div></div><div class="cocd"><div class="cov" id="coN">0</div><div class="col">Progress Notes</div></div><div class="cocd"><div class="cov" id="coS">0</div><div class="col">Services Provided</div></div></div>
-        <div class="sec"><div class="sec-h">Goal Achievement</div><div class="sec-b"><div id="gaBox"><div style="color:#888;font-size:12px;">No goals to review. Add goals first.</div></div></div></div>
-        <div class="sec"><div class="sec-h">Assessment Score Changes (Initial > Current)</div><div class="sec-b"><table class="stb"><thead><tr><th>Domain</th><th>Initial</th><th>Current</th><th>Change</th></tr></thead><tbody id="scBody"></tbody></table></div></div>
         <div class="sec"><div class="sec-h">Close Out Details</div><div class="sec-b">
           <div class="fg"><label class="fl">Close Out Reason</label><select class="fs"><option value="">-- Select --</option><option>Goals Achieved</option><option>Client Request</option><option>Lost Contact</option><option>Moved Out of Area</option><option>Transferred</option><option>Non-Compliance</option><option>Other</option></select></div>
           <div class="fg"><label class="fl">Close Out Date</label><input type="date" class="fi" style="width:200px;"></div>
@@ -397,11 +394,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
   <div class="fg"><label class="fl">Services by Domain</label><div id="enSvc"></div></div>
 </div><div class="mf"><button class="btn bout" onclick="closeENM()">Cancel</button><button class="btn bblu" onclick="saveEN()">Save Changes</button></div></div></div>
 
-<div class="mo" id="gaM"><div class="modal"><div class="mh"><h3 id="gaTitle">Edit Goal Achievement</h3><button class="mx" onclick="closeGAM()">x</button></div><div class="mbi">
-  <div class="fg"><label class="fl">Goal</label><input class="fi" id="gaGoalName" readonly style="background:#f0f4f8;"></div>
-  <div class="fg"><label class="fl">Sub-Goal Status</label><div id="gaSubList" style="max-height:300px;overflow-y:auto;"></div></div>
-</div><div class="mf"><button class="btn bout" onclick="closeGAM()">Cancel</button><button class="btn bblu" onclick="saveGA()">Save</button></div></div></div>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -424,7 +416,7 @@ let dism={},goals=[],notes=[],gid=0,eidx=-1,sn=-1,eai=-1;
 
 function init(){buildDom();buildA();buildGS();buildF();setTD();}
 function setTD(){document.getElementById('nDt').value=new Date().toISOString().split('T')[0];}
-function switchTab(t){document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active'));const m={situation:0,assessment:1,goals:2,notes:3,closeout:4};document.querySelectorAll('.ctab')[m[t]].classList.add('active');document.getElementById('tab-'+t).classList.add('active');if(t==='closeout')updateProgress();if(t==='situation')buildDom();if(t==='assessment')buildA();}
+function switchTab(t){document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active'));const m={situation:0,assessment:1,goals:2,notes:3,closeout:4};document.querySelectorAll('.ctab')[m[t]].classList.add('active');document.getElementById('tab-'+t).classList.add('active');if(t==='situation')buildDom();if(t==='assessment')buildA();}
 
 // Reminders removed per client decision - reassessment timing is flexible
 function pAD(s){const p=s.split('/');return new Date(parseInt(p[2]),parseInt(p[0])-1,parseInt(p[1]));}
@@ -603,84 +595,6 @@ function saveEN(){
 
 function delNote(i){if(confirm('Delete?')){notes.splice(i,1);sn=0;renderNotes();showToast('Deleted.');}}
 function fD(d){if(!d)return'';const p=d.split('-');return p[1]+'/'+p[2]+'/'+p[0];}
-
-function updateProgress(){
-  document.getElementById('coG').textContent=goals.length;
-  document.getElementById('coN').textContent=notes.length;
-  const s=new Set();notes.forEach(n=>{if(n.dsvc)n.dsvc.forEach(x=>s.add(x));});
-  document.getElementById('coS').textContent=s.size;
-
-  // Goal Achievement
-  const ga=document.getElementById('gaBox');
-  if(!goals.length){ga.innerHTML='<div style="color:#888;font-size:12px;">No goals to review. Add goals first.</div>';}
-  else{ga.innerHTML='';goals.forEach((g,gi)=>{
-    if(!g.subStatus)g.subStatus={};
-    const totalSub=g.subgoals.length;
-    let achievedCt=0,notAchievedCt=0;
-    g.subgoals.forEach(sg=>{const st=g.subStatus[sg];if(st&&st.status==='achieved')achievedCt++;if(st&&st.status==='not-achieved')notAchievedCt++;});
-    const reviewedCt=achievedCt+notAchievedCt;
-    const statusCls=totalSub&&achievedCt===totalSub?'complete':(reviewedCt>0?'progress':'none');
-    const statusTxt=totalSub?(achievedCt+'/'+totalSub+' Achieved'+(notAchievedCt?' | '+notAchievedCt+' Not Achieved':'')):'No sub-goals';
-    let card=`<div class="ga-card"><div class="ga-hdr"><span class="ga-goal">${g.name}</span><div style="display:flex;align-items:center;gap:8px;"><span class="ga-status ${statusCls}">${statusTxt}</span><button class="ibtn ie" onclick="openGAM(${gi})" title="Edit">&#9998;</button></div></div><div class="ga-body">`;
-    if(totalSub){
-      card+=`<table class="ga-table"><thead><tr><th>Sub-Goal</th><th style="width:110px;">Status</th><th style="width:110px;">Date</th></tr></thead><tbody>`;
-      g.subgoals.forEach(sg=>{
-        const st=g.subStatus[sg]||{};
-        let stTxt,stCls;
-        if(st.status==='achieved'){stTxt='Achieved';stCls='ga-achieved';}
-        else if(st.status==='not-achieved'){stTxt='Not Achieved';stCls='ga-notachieved';}
-        else{stTxt='Pending';stCls='ga-pending';}
-        const dateTxt=st.date||'--';
-        card+=`<tr><td>${sg}</td><td class="${stCls}">${stTxt}</td><td style="font-size:11px;color:#555;">${dateTxt}</td></tr>`;
-      });
-      card+=`</tbody></table>`;
-    }else{card+=`<div style="color:#888;font-size:12px;font-style:italic;padding:8px;">No sub-goals defined.</div>`;}
-    card+=`</div></div>`;ga.innerHTML+=card;
-  });}
-
-  // Score changes
-  const b=document.getElementById('scBody');b.innerHTML='';const cur=AHIST[0].scores;const ini=AHIST[AHIST.length-1].scores;ADOM.forEach(d=>{const i=ini[d],c=cur[d],ch=c-i;b.innerHTML+=`<tr><td style="font-weight:600;">${d}</td><td><div class="sc ${SC[i]}" style="display:inline-block;min-width:70px;">${SL[i]}</div></td><td><div class="sc ${SC[c]}" style="display:inline-block;min-width:70px;">${SL[c]}</div></td><td class="${ch>0?'cp':'cn'}">${ch>0?'+'+ch:(ch===0?'No change':ch)}</td></tr>`;});
-}
-
-let gaIdx=-1;
-function openGAM(gi){
-  gaIdx=gi;const g=goals[gi];
-  document.getElementById('gaTitle').textContent='Edit Goal Achievement - '+g.name;
-  document.getElementById('gaGoalName').value=g.name;
-  if(!g.subStatus)g.subStatus={};
-  const list=document.getElementById('gaSubList');list.innerHTML='';
-  g.subgoals.forEach((sg,si)=>{
-    const st=g.subStatus[sg]||{};
-    const curStatus=st.status||'pending';
-    const curDate=st.date||'';
-    list.innerHTML+=`<div style="padding:8px;border-bottom:1px solid #e8eef4;">
-      <div style="font-size:12px;font-weight:600;color:#2c3e50;margin-bottom:6px;">${sg}</div>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <select class="fs ga-sel" data-sg="${sg}" style="width:160px;">
-          <option value="pending" ${curStatus==='pending'?'selected':''}>Pending</option>
-          <option value="achieved" ${curStatus==='achieved'?'selected':''}>Achieved</option>
-          <option value="not-achieved" ${curStatus==='not-achieved'?'selected':''}>Did Not Achieve</option>
-        </select>
-        <div style="display:flex;align-items:center;gap:4px;"><label style="font-size:11px;color:#555;">Date:</label><input type="date" class="fi ga-date" data-sg="${sg}" value="${curDate}" style="width:150px;padding:4px 6px;"></div>
-      </div>
-    </div>`;
-  });
-  document.getElementById('gaM').classList.add('show');
-}
-function closeGAM(){document.getElementById('gaM').classList.remove('show');}
-function saveGA(){
-  const g=goals[gaIdx];if(!g.subStatus)g.subStatus={};
-  // Also maintain achieved array for backward compat
-  g.achieved=[];
-  document.querySelectorAll('.ga-sel').forEach(sel=>{
-    const sg=sel.dataset.sg;const status=sel.value;
-    const dateEl=document.querySelector(`.ga-date[data-sg="${sg}"]`);
-    const date=dateEl?dateEl.value:'';
-    g.subStatus[sg]={status,date};
-    if(status==='achieved')g.achieved.push(sg);
-  });
-  closeGAM();updateProgress();showToast('Goal achievement updated.');
-}
 
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 init();
