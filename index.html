@@ -74,70 +74,90 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 .sgt{display:inline-block;background:#d6eaf8;color:#2471a3;padding:3px 10px;border-radius:12px;font-size:11px;margin:2px 4px 2px 0;font-weight:500;}
 .emsg{text-align:center;padding:40px;color:#888;font-size:13px;}
 
-/* REMINDER */
-.rbanner{padding:12px 16px;margin-bottom:12px;border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.rbanner.rdue{background:#fef3cd;border:1px solid #ffc107;color:#856404;}
-.rbanner.rover{background:#f8d7da;border:1px solid #e74c3c;color:#721c24;}
-.rbanner .rtxt{font-size:13px;font-weight:600;}.rbanner .rsub{font-size:11px;font-weight:400;margin-top:2px;}
-.rbanner .rbtn{background:#fff;border:1px solid currentColor;padding:5px 14px;border-radius:3px;font-size:12px;font-weight:600;cursor:pointer;color:inherit;white-space:nowrap;}.rbanner .rbtn:hover{opacity:.8;}
-.rbanner .rx{background:none;border:none;font-size:16px;cursor:pointer;color:inherit;opacity:.6;padding:0 4px;}.rbanner .rx:hover{opacity:1;}
-
-/* PROGRESS NOTES */
-.pntool{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.pnlay{display:flex;gap:0;border:1px solid #d0dbe5;border-radius:4px;overflow:hidden;min-height:520px;background:#eef2f6;}
-.pnl{width:220px;flex-shrink:0;border-right:1px solid #d0dbe5;background:#f7f9fb;overflow-y:auto;}
-.pnc{padding:12px 14px;border-bottom:1px solid #e0e8f0;cursor:pointer;text-align:center;}
-.pnc:hover{background:#e4edf5;}
-.pnc.active{background:#3d8fcf;color:#fff;}
-.pnc .pnd{font-size:13px;font-weight:700;}
-.pnc .pnp{font-size:11px;margin-top:3px;opacity:.75;}
-.pnc.active .pnd,.pnc.active .pnp{color:#fff;}
-.pnc .pnacts{display:flex;justify-content:center;gap:4px;margin-top:6px;}
-.pnc .pnact{width:22px;height:22px;border-radius:3px;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;color:#fff;}
-.pnc .pna-edit{background:#3d8fcf;}.pnc .pna-del{background:#e74c3c;}
-.pnc.active .pna-edit{background:rgba(255,255,255,.3);}.pnc.active .pna-del{background:rgba(255,255,255,.3);}
+/* ── PROGRESS NOTE LAYOUT ── */
+.pnlay{display:flex;border:1px solid #d0dbe5;border-radius:4px;overflow:hidden;min-height:580px;background:#eef2f6;}
+.pnl{width:236px;flex-shrink:0;border-right:1px solid #d0dbe5;background:#f7f9fb;overflow-y:auto;display:flex;flex-direction:column;}
 .pnr{flex:1;overflow-y:auto;padding:16px;background:#eef2f6;}
-.pnempty{padding:40px;text-align:center;color:#888;font-size:13px;}
+.pnempty-msg{padding:40px;text-align:center;color:#888;font-size:13px;}
 
-/* Note detail - compact card */
+/* Section headers in left panel */
+.pnl-sec-hdr{
+  padding:5px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:#4a7699;background:#deeaf4;border-bottom:1px solid #c8d9e9;
+  position:sticky;top:0;z-index:2;user-select:none;
+}
+
+/* Pinned program card */
+.pn-pinned{background:#fff;border-bottom:2px solid #aed6f1;cursor:pointer;transition:background .12s;}
+.pn-pinned:hover{background:#f0f7fd;}
+.pn-pinned.active{background:#1e5f8a;}
+.pn-pinned-inner{padding:8px 10px 6px;}
+.pn-pinned-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.pn-pinned-label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#1e5f8a;}
+.pn-pinned.active .pn-pinned-label{color:#fff;}
+.pn-icon{width:20px;height:20px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+.icon-rental{background:#1e5f8a;}
+.icon-snap{background:#1e8a4a;}
+.pn-pinned-count{font-size:10px;color:#888;}
+.pn-pinned.active .pn-pinned-count{color:rgba(255,255,255,.7);}
+/* Progress pips */
+.pn-pips{display:flex;gap:3px;padding:0 0 6px;}
+.pip{flex:1;height:4px;border-radius:2px;background:#d8e3ec;}
+.pip.done{background:#27ae60;}
+.pip.overdue{background:#e67e22;}
+.pip.upcoming{background:#d8e3ec;}
+
+/* Regular note card */
+.pnc{padding:9px 12px;border-bottom:1px solid #e5edf4;cursor:pointer;}
+.pnc:hover{background:#e8f0f8;}
+.pnc.active{background:#3d8fcf;}
+.pnc-date{font-size:12px;font-weight:700;color:#2c3e50;}
+.pnc-preview{font-size:11px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:196px;}
+.pnc.active .pnc-date,.pnc.active .pnc-preview{color:#fff;}
+.pnc-actions{display:flex;justify-content:flex-end;gap:3px;margin-top:5px;}
+.pnc-btn{width:20px;height:20px;border-radius:2px;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;color:#fff;}
+.pnc-btn.edit{background:#3d8fcf;}.pnc-btn.del{background:#e74c3c;}
+.pnc.active .pnc-btn.edit{background:rgba(255,255,255,.3);}
+.pnc.active .pnc-btn.del{background:rgba(255,255,255,.3);}
+
+/* Note detail */
 .nd-card{background:#fff;border:1px solid #d0dbe5;border-radius:3px;margin-bottom:10px;}
 .nd-sec{border-bottom:1px solid #e8edf2;}
 .nd-sec:last-child{border-bottom:none;}
 .nd-sec-hdr{padding:7px 12px;background:#f0f3f6;font-size:12px;font-weight:700;color:#333;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e6ec;}
-.nd-sec-body{padding:8px 12px;}
-.nd-meta{font-size:11px;color:#555;}.nd-meta a{color:#3d8fcf;font-weight:600;text-decoration:none;}
-.nd-note-text{font-size:13px;color:#3d8fcf;line-height:1.5;padding:6px 12px 8px;}
-/* Goals as horizontal tags */
-.nd-goal-tags{display:flex;flex-wrap:wrap;gap:5px;}
-.nd-goal-tag{display:inline-flex;align-items:center;gap:4px;background:#d6eaf8;color:#2471a3;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;}
-/* Services: horizontal domain headers with services underneath */
-.nd-svc-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;}
+.nd-meta{font-size:11px;color:#555;}
+.nd-meta a{color:#3d8fcf;font-weight:600;text-decoration:none;}
+.nd-note-text{font-size:13px;color:#3d8fcf;line-height:1.5;padding:8px 14px 10px;}
+.nd-svc-flow{display:flex;flex-wrap:wrap;gap:8px;}
 .nd-svc-col{flex:0 0 auto;min-width:140px;max-width:220px;}
 .nd-svc-col-hdr{font-size:12px;font-weight:700;color:#333;display:flex;align-items:center;gap:4px;padding-bottom:4px;border-bottom:1px solid #e8edf2;margin-bottom:4px;}
 .nd-svc-col-hdr .info{width:14px;height:14px;background:#3d8fcf;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
-.nd-svc-item{color:#3d8fcf;font-size:11px;padding:2px 0 2px 0;}
+.nd-svc-item{color:#3d8fcf;font-size:11px;padding:2px 0;}
 .nd-svc-item::before{content:"";display:inline-block;width:4px;height:4px;background:#3d8fcf;border-radius:50%;margin-right:5px;vertical-align:middle;}
-/* Documents */
-.nd-doc-add{display:inline-flex;align-items:center;gap:4px;background:#3d8fcf;color:#fff;border:none;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;cursor:pointer;margin-left:8px;}.nd-doc-add:hover{background:#2e7ab8;}
-/* Goal Achievement (Close Out) - ECM style */
-.ga-card{background:#fff;border:1px solid #d0dbe5;margin-bottom:12px;border-radius:0;overflow:hidden;}
-.ga-hdr{padding:8px 14px;background:#d6eaf8;border-bottom:1px solid #aed6f1;display:flex;align-items:center;justify-content:space-between;}
-.ga-goal{font-size:13px;font-weight:700;color:#2471a3;}
-.ga-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:3px;}
-.ga-status.complete{background:#27ae60;color:#fff;}
-.ga-status.progress{background:#f39c12;color:#fff;}
-.ga-status.none{background:#bdc3c7;color:#fff;}
-.ga-body{padding:0;}
-.ga-table{width:100%;border-collapse:collapse;}
-.ga-table th{background:#eaf4fb;padding:7px 12px;text-align:left;font-size:11px;font-weight:700;color:#2c3e50;border:1px solid #d4e6f1;}
-.ga-table td{padding:7px 12px;border:1px solid #e0e8f0;font-size:12px;}
-.ga-table tr:nth-child(even){background:#f8fbfd;}
-.ga-achieved{color:#27ae60;font-weight:600;}.ga-pending{color:#888;}.ga-notachieved{color:#e74c3c;font-weight:600;}
+.nd-doc-add{display:inline-flex;align-items:center;gap:4px;background:#3d8fcf;color:#fff;border:none;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;cursor:pointer;margin-left:8px;}
+.nd-doc-add:hover{background:#2e7ab8;}
+
+/* Follow-up overview cards */
+.fu-grid{display:flex;flex-direction:column;gap:0;padding:0;}
+.fu-card{border-bottom:1px solid #d0dbe5;}
+.fu-card:last-child{border-bottom:none;}
+.fu-card-hdr{padding:8px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.fu-card-hdr.done{background:#d4edda;color:#155724;border-bottom:1px solid #c3e6cb;}
+.fu-card-hdr.overdue{background:#fff3cd;color:#856404;border-bottom:1px solid #ffeeba;}
+.fu-card-hdr.upcoming{background:#f0f4f8;color:#555;border-bottom:1px solid #d8e3ec;}
+.fu-card-body{padding:10px 14px;background:#fff;font-size:12px;}
+.fu-card-body .fu-label{font-size:11px;color:#888;margin-bottom:3px;}
+.fu-card-body .fu-val{color:#2c3e50;font-weight:600;margin-bottom:8px;}
+.fu-card-body .fu-note-text{color:#555;font-style:italic;line-height:1.4;font-size:11px;}
+.fu-card-body .fu-empty{color:#bbb;font-style:italic;font-size:11px;}
+.fu-update-btn{margin-top:8px;background:#3d8fcf;color:#fff;border:none;padding:5px 14px;border-radius:3px;font-size:11px;font-weight:600;cursor:pointer;}
+.fu-update-btn:hover{background:#2e7ab8;}
+.fu-prog-banner{padding:10px 16px;border-bottom:1px solid #d0dbe5;font-size:12px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
 
 /* Modals */
 .mo{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:1000;justify-content:center;align-items:center;}.mo.show{display:flex;}
-.modal{background:#fff;border-radius:4px;width:580px;max-height:82vh;overflow-y:auto;box-shadow:0 15px 50px rgba(0,0,0,.3);}
-.modal-lg{width:680px;}
+.modal{background:#fff;border-radius:4px;width:580px;max-height:85vh;overflow-y:auto;box-shadow:0 15px 50px rgba(0,0,0,.3);}
+.modal-lg{width:700px;}
 .mh{background:#3d8fcf;color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2;}
 .mh h3{font-size:14px;font-weight:700;}
 .mx{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;opacity:.8;}.mx:hover{opacity:1;}
@@ -151,142 +171,40 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 .cbl{max-height:200px;overflow-y:auto;border:1px solid #d0dbe5;border-radius:3px;padding:4px;background:#fff;}
 .cbi{display:flex;align-items:flex-start;gap:6px;padding:5px 8px;border-radius:3px;cursor:pointer;font-size:12px;}.cbi:hover{background:#eaf2f8;}
 .cbi input{margin-top:2px;accent-color:#3d8fcf;}.cbi label{cursor:pointer;flex:1;}
-.shbar{background:#fef9e7;border:1px solid #f9e79f;border-radius:3px;padding:10px 14px;margin-bottom:14px;}
-.shbar .sht{font-size:11px;font-weight:700;color:#7d6608;margin-bottom:6px;text-transform:uppercase;}
-.shbar .shc{display:flex;gap:16px;flex-wrap:wrap;}
-.svl{display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;}.svl input{accent-color:#3d8fcf;}
 .dsg{margin-top:6px;padding:8px;background:#f8fafb;border:1px solid #e8eef4;border-radius:3px;}
 .dst{font-size:11px;font-weight:700;color:#2c3e50;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #e8eef4;}
 .dsgr{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
 .dsgr label{font-size:11px;padding:3px 4px;display:flex;align-items:center;gap:4px;cursor:pointer;border-radius:2px;}.dsgr label:hover{background:#eaf2f8;}
-.cost{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
-.cocd{background:#fff;border:1px solid #d0dbe5;border-radius:4px;padding:16px;text-align:center;}
-.cov{font-size:26px;font-weight:700;color:#2c3e50;}.col{font-size:11px;color:#666;margin-top:4px;}
-.stb{width:100%;border-collapse:collapse;border:1px solid #d0dbe5;}
-.stb th{background:#d6eaf8;padding:8px 12px;font-size:12px;font-weight:700;color:#2c3e50;border:1px solid #aed6f1;text-align:left;}
-.stb td{padding:7px 12px;border:1px solid #e0e8f0;font-size:12px;}
-.cp{color:#27ae60;font-weight:600;}.cn{color:#888;}
 .toast{position:fixed;bottom:20px;right:20px;background:#2c3e50;color:#fff;padding:10px 20px;border-radius:4px;font-size:13px;z-index:2000;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);}
 .toast.show{display:block;animation:ti .3s ease;}
 @keyframes ti{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-/* === MOBILE RESPONSIVE === */
-@media(max-width:900px){
-  .main-layout{flex-direction:column;}
-  .sidebar{width:100%;display:flex;flex-wrap:wrap;padding:4px 8px;gap:0;}
-  .sbt{padding:6px 10px;font-size:12px;}
-  .sbi{padding:6px 10px 6px 14px;font-size:12px;}
-  .sbd{display:none;}
-  .sidebar{flex-direction:row;align-items:center;overflow-x:auto;}
-  .sbt,.sbi{white-space:nowrap;}
-  /* Hide non-essential sidebar items on mobile */
-  .sbi:not(.active),.sbt:not(:first-child){display:none;}
-  .sidebar{justify-content:flex-start;gap:4px;padding:6px 10px;}
-  .sbi.active{border-left:none;padding-left:10px;border-radius:3px;}
-}
+
 @media(max-width:768px){
-  /* Header */
   .ecm-header{height:auto;flex-wrap:wrap;padding:6px 10px;gap:6px;}
-  .ecm-logo{font-size:16px;}
-  .ecm-logo svg{width:24px;height:24px;}
-  .nav-icons{gap:1px;}
-  .nav-btn{padding:3px 6px;font-size:9px;}
-  .nav-btn svg{width:16px;height:16px;}
   .nav-btn span{display:none;}
-  .acct{gap:6px;}
-  .av{width:28px;height:28px;font-size:11px;}
-  .owner-name{font-size:11px;}
-  .owner-label{display:none;}
-  /* Lookup */
   .lookup-bar{flex-wrap:wrap;padding:8px 10px;gap:8px;}
-  .lookup-label{padding:6px 12px;font-size:13px;}
   .lf{flex-wrap:wrap;gap:6px;}
   .lfg input{width:100px;}
-  .sbtn{padding:6px 16px;font-size:12px;}
-  /* Tabs */
-  .ctabs{overflow-x:auto;padding:0 4px;-webkit-overflow-scrolling:touch;}
+  .ctabs{overflow-x:auto;padding:0 4px;}
   .ctab{padding:8px 12px;font-size:11px;white-space:nowrap;flex-shrink:0;}
-  /* Vertical side tabs - hide on mobile */
-  .content>div:first-child{display:none !important;}
-  /* Tab content */
-  .tp{padding:12px;}
-  /* Domain table */
-  .dtb{font-size:11px;display:block;overflow-x:auto;}
-  .dtb th,.dtb td{padding:5px 6px;font-size:10px;}
-  .sc{min-width:60px;font-size:10px;padding:3px 4px;}
-  /* Applicant + Legend */
-  .appb{display:block;margin-bottom:10px;}
-  .legb{margin-left:0;display:flex;flex-wrap:wrap;gap:4px;}
-  .bdg{padding:3px 8px;font-size:10px;}
-  /* Assessment tables */
-  .atb{display:block;overflow-x:auto;}
-  .atb th,.atb td{padding:6px 8px;font-size:11px;}
-  .abar{flex-wrap:wrap;gap:6px;padding:6px 10px;}
-  .abar .al{font-size:11px;}
-  .abar .ar{font-size:11px;flex-wrap:wrap;gap:6px;}
-  /* Stats grid */
-  .cost{grid-template-columns:repeat(2,1fr);gap:8px;}
-  .cov{font-size:20px;}
-  /* Score table */
-  .stb{display:block;overflow-x:auto;}
-  /* Goal cards */
-  .gch{flex-wrap:wrap;gap:6px;padding:8px 12px;}
-  .gn{font-size:12px;}
-  .gcb{padding:8px 12px;}
-  .sgt{font-size:10px;padding:2px 8px;}
-  /* Progress Notes layout */
   .pnlay{flex-direction:column;min-height:auto;}
-  .pnl{width:100%;border-right:none;border-bottom:1px solid #d0dbe5;max-height:150px;display:flex;overflow-x:auto;overflow-y:hidden;}
-  .pnc{min-width:140px;flex-shrink:0;text-align:center;border-bottom:none;border-right:1px solid #e0e8f0;}
-  .pnr{padding:10px;}
-  .nd-card{margin-bottom:8px;}
-  /* Services flow */
-  .nd-svc-flow{flex-direction:column;gap:6px;}
-  .nd-svc-col{max-width:100%;min-width:0;}
-  /* Goal achievement tables */
-  .ga-table{display:block;overflow-x:auto;}
-  .ga-hdr{flex-wrap:wrap;gap:6px;padding:6px 10px;}
-  /* Milestone table */
-  .stb th,.stb td{font-size:11px;padding:5px 8px;}
-  /* Sections */
-  .sec-h{padding:8px 12px;font-size:13px;flex-wrap:wrap;gap:6px;}
-  .sec-b{padding:12px;}
-  /* Modals */
+  .pnl{width:100%;max-height:220px;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:none;border-bottom:1px solid #d0dbe5;}
+  .pnl-sec-hdr{display:none;}
+  .pn-pinned{min-width:170px;flex-shrink:0;border-right:1px solid #aed6f1;border-bottom:none;}
+  .pnc{min-width:150px;flex-shrink:0;border-bottom:none;border-right:1px solid #e0e8f0;}
+  .fu-grid{grid-template-columns:1fr;}
   .modal,.modal-lg{width:95vw;max-height:90vh;}
-  .mh{padding:10px 14px;}
-  .mbi{padding:14px;}
-  .mf{padding:10px 14px;}
-  /* Reminder banners */
-  .rbanner{flex-direction:column;align-items:flex-start;gap:8px;padding:10px 12px;}
-  .rbanner .rtxt{font-size:12px;}
-  /* Domain svc grid in modal */
   .dsgr{grid-template-columns:1fr;}
+  .tp{padding:12px;}
 }
-@media(max-width:480px){
-  .ecm-header{padding:4px 8px;}
-  .nav-icons{display:none;}
-  .lookup-bar{flex-direction:column;align-items:flex-start;}
-  .lf{width:100%;}
-  .lfg{flex:1;}
-  .lfg input{width:100%;}
-  .ctab{padding:7px 10px;font-size:10px;}
-  .tp{padding:8px;}
-  .cost{grid-template-columns:1fr 1fr;gap:6px;}
-  .cocd{padding:10px;}
-  .cov{font-size:18px;}
-  .pnl{max-height:120px;}
-  .pnc{min-width:120px;padding:8px 10px;}
-  .pnc .pnd{font-size:11px;}
-  .legb{padding:6px 8px;}
-  .legb .lt{font-size:11px;}
-  .bdg{padding:2px 6px;font-size:9px;}
-}
+@media(max-width:480px){.nav-icons{display:none;}.ctab{padding:7px 10px;font-size:10px;}}
 </style>
 </head>
 <body>
 
 <div class="ecm-header">
   <div style="display:flex;align-items:center;gap:16px;"><div class="ecm-logo"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="none" stroke="#fff" stroke-width="2"/><circle cx="10" cy="12" r="2" fill="#fff"/><circle cx="15" cy="8" r="2" fill="#fff"/><circle cx="20" cy="12" r="2" fill="#fff"/><circle cx="12" cy="18" r="2" fill="#fff"/><circle cx="18" cy="18" r="2" fill="#fff"/><line x1="10" y1="12" x2="15" y2="8" stroke="#fff" stroke-width="1.5"/><line x1="15" y1="8" x2="20" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="10" y1="12" x2="12" y2="18" stroke="#fff" stroke-width="1.5"/><line x1="20" y1="12" x2="18" y2="18" stroke="#fff" stroke-width="1.5"/><line x1="12" y1="18" x2="18" y2="18" stroke="#fff" stroke-width="1.5"/></svg>ECM</div></div>
-  <div class="nav-icons"><a class="nav-btn"><svg viewBox="0 0 20 20"><path d="M10 2L2 8v10h6v-6h4v6h6V8L10 2z"/></svg><span>Home</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>User Roles</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3zM3 7h14M7 3v14"/></svg><span>Forms</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><rect x="2" y="3" width="16" height="14" rx="1" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M2 7h16" stroke="#fff" stroke-width="1.5"/></svg><span>Calendar</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#fff" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">?</text></svg><span>Help</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>My Profile</span></a></div>
+  <div class="nav-icons"><a class="nav-btn"><svg viewBox="0 0 20 20"><path d="M10 2L2 8v10h6v-6h4v6h6V8L10 2z"/></svg><span>Home</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>User Roles</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3zM3 7h14M7 3v14"/></svg><span>Forms</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><rect x="2" y="3" width="16" height="14" rx="1" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M2 7h16" stroke="#fff" stroke-width="1.5"/></svg><span>Calendar</span></a><a class="nav-btn"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#fff" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">?</text></svg><span>Help</span></a></div>
   <div class="acct"><div style="text-align:right"><div style="font-size:10px;opacity:.8">Account Owner</div><div style="font-weight:700;font-size:12px">Koasia K Eldridge</div></div><div class="av">KE</div></div>
 </div>
 
@@ -333,20 +251,43 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 
       <!-- GOAL -->
       <div class="tp" id="tab-goals">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><button class="btn bblu" onclick="openGoalM()">+ Add Goal</button><span style="font-size:12px;color:#666;" id="gCt">0 Goals</span></div><div style="display:flex;align-items:center;gap:8px;"><label style="font-size:12px;font-weight:600;">Filter:</label><select class="fs" style="width:160px;" id="gFilt" onchange="renderGoals()"><option value="all">All Goals</option></select></div></div>
-        <div id="gBox"><div class="emsg">No goals added yet.</div></div>
+        <div style="background:#fff;border:1px solid #d0dbe5;margin-bottom:14px;">
+          <div style="background:#f8fafb;border-bottom:1px solid #d0dbe5;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:14px;font-weight:700;color:#2c3e50;">CLIENT GOAL</span>
+              <button class="abtn" onclick="openGoalM()" style="border-radius:50px;padding:4px 14px;display:flex;align-items:center;gap:4px;"><span style="font-size:16px;line-height:1;">&#43;</span> ADD</button>
+              <span style="font-size:12px;color:#888;" id="gCt">0 Goals</span>
+            </div>
+            <div style="display:flex;gap:0;border:1px solid #d0dbe5;border-radius:3px;overflow:hidden;">
+              <div style="background:#3d8fcf;color:#fff;padding:6px 16px;font-size:12px;font-weight:700;">Goal Progress</div>
+              <div style="padding:6px 16px;font-size:12px;border-left:1px solid #d0dbe5;"><span style="font-weight:600;color:#555;">Goal Status</span><br><span style="color:#f39c12;font-weight:700;" id="gStatusSummary">—</span></div>
+              <div style="padding:6px 16px;font-size:12px;border-left:1px solid #d0dbe5;"><span style="font-weight:600;color:#555;">Task Progress</span><br><span id="gTaskSummary" style="font-weight:700;color:#2c3e50;">0 / 0</span></div>
+              <div style="padding:6px 16px;font-size:12px;border-left:1px solid #d0dbe5;"><span style="font-weight:600;color:#555;">Overall Progress</span><br><span id="gOverallSummary" style="font-weight:700;color:#2c3e50;">0%</span></div>
+            </div>
+          </div>
+          <div style="padding:12px 16px;">
+            <div class="appb" style="margin-bottom:14px;"><div class="nm">Applicant: Koasia K Eldridge</div><div class="cs">CSC_CS Case Management [10299187]</div></div>
+            <div id="gBox"><div class="emsg">No goals added yet.</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- PROGRESS NOTE -->
       <div class="tp" id="tab-notes">
         <div class="sec" style="overflow:hidden;">
           <div class="sec-h" style="padding:0;">
-            <div style="padding:10px 16px;display:flex;align-items:center;gap:10px;"><span style="font-weight:700;">Progress Note</span><button class="abtn" onclick="openNoteM()">+ ADD</button></div>
-            <div style="display:flex;align-items:center;gap:8px;padding-right:14px;"><label style="font-size:12px;font-weight:700;">Filter By:</label><select class="fs" style="width:160px;" id="nFilt" onchange="renderNotes()"><option value="all">All Domains</option></select></div>
+            <div style="padding:10px 16px;display:flex;align-items:center;gap:10px;">
+              <span style="font-weight:700;">Progress Note</span>
+              <button class="abtn" onclick="openNoteM()">+ ADD</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding-right:14px;">
+              <label style="font-size:12px;font-weight:700;">Filter By:</label>
+              <select class="fs" style="width:160px;" id="nFilt" onchange="renderNotes()"><option value="all">All Domains</option></select>
+            </div>
           </div>
           <div class="pnlay">
-            <div class="pnl" id="pnL"><div class="pnempty" style="padding:20px;font-size:12px;">No notes yet.</div></div>
-            <div class="pnr" id="pnR"><div class="pnempty">Select a note to view details.</div></div>
+            <div class="pnl" id="pnL"></div>
+            <div class="pnr" id="pnR"><div class="pnempty-msg">Select a note to view details.</div></div>
           </div>
         </div>
       </div>
@@ -360,243 +301,1037 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
           <button class="btn bblu" onclick="showToast('Case closed.')">Submit Close Out</button>
         </div></div>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- MODALS -->
-<div class="mo" id="goalM"><div class="modal"><div class="mh"><h3>Add Goal</h3><button class="mx" onclick="closeGoalM()">x</button></div><div class="mbi"><div class="fg"><label class="fl">Goal</label><select class="fs" id="gSel" onchange="onGC()"><option value="">-- Select Goal --</option></select></div><div class="fg"><label class="fl">Sub-Goals (select applicable)</label><div class="cbl" id="sList"><div style="padding:10px;color:#888;font-size:12px;">Select a goal first.</div></div></div></div><div class="mf"><button class="btn bout" onclick="closeGoalM()">Cancel</button><button class="btn bblu" onclick="saveGoal()">Save Goal</button></div></div></div>
+<!-- Goal Modal -->
+<div class="mo" id="goalM"><div class="modal modal-lg"><div class="mh"><h3 id="goalMTitle">Add Goal</h3><button class="mx" onclick="closeGoalM()">&#x2715;</button></div><div class="mbi">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="flex:1;min-width:160px;"><label class="fl">Goal Category</label><select class="fs" id="gSel" onchange="onGC()"><option value="">-- Select Category --</option></select></div>
+    <div style="flex:1;min-width:160px;"><label class="fl">Primary Goal</label><select class="fs" id="gGoalSel" onchange="onGoalSel()"><option value="">-- Select Goal --</option></select></div>
+  </div>
+  <div id="gSubgoalsSection" style="display:none;margin-bottom:14px;">
+    <label class="fl">Additional Sub-Goals <span style="font-weight:400;color:#888;">(optional — select any others from this category)</span></label>
+    <div class="cbl" id="gSubgoalsList"></div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="flex:1;min-width:140px;"><label class="fl">Consent</label><select class="fs" id="gConsent"><option value="Private">Private</option><option value="Public">Public</option></select></div>
+    <div style="flex:1;min-width:140px;"><label class="fl">Staff</label><input class="fi" id="gStaff" value="CSC_DCassell"></div>
+    <div style="flex:1;min-width:140px;"><label class="fl">Date</label><input type="date" class="fi" id="gDate"></div>
+  </div>
+  <div class="fg"><label class="fl">Comments</label><textarea class="ft" id="gComments" placeholder="Additional comments..." style="min-height:60px;"></textarea></div>
+</div><div class="mf"><button class="btn bout" onclick="closeGoalM()">Cancel</button><button class="btn bblu" onclick="saveGoal()">Save Goal</button></div></div></div>
 
-<div class="mo" id="egM"><div class="modal"><div class="mh"><h3>Edit Sub-Goals</h3><button class="mx" onclick="closeEG()">x</button></div><div class="mbi"><div class="fg"><label class="fl">Goal</label><input class="fi" id="egN" readonly style="background:#f0f4f8;"></div><div class="fg"><label class="fl">Sub-Goals</label><div class="cbl" id="egSL"></div></div></div><div class="mf"><button class="btn bout" onclick="closeEG()">Cancel</button><button class="btn bblu" onclick="saveEG()">Save</button></div></div></div>
+<!-- Intervention Edit Modal -->
+<div class="mo" id="intM"><div class="modal"><div class="mh"><h3>Edit Intervention</h3><button class="mx" onclick="closeIntM()">&#x2715;</button></div><div class="mbi">
+  <div id="intDomainLabel" style="font-size:12px;color:#555;margin-bottom:12px;"></div>
+  <div id="intDomains"></div>
+</div><div class="mf"><button class="btn bout" onclick="closeIntM()">Cancel</button><button class="btn bblu" onclick="saveIntM()">Save</button></div></div></div>
 
-<div class="mo" id="aM"><div class="modal modal-lg"><div class="mh"><h3 id="amT">Edit Assessment</h3><button class="mx" onclick="closeAM()">x</button></div><div class="mbi"><table class="atb" style="width:100%;"><thead><tr><th>Question</th><th>Answer</th><th>Comment</th></tr></thead><tbody id="amB"></tbody></table></div><div class="mf"><button class="btn bout" onclick="closeAM()">Cancel</button><button class="btn bblu" onclick="saveAE()">Save Assessment</button></div></div></div>
+<!-- Assessment Modal -->
+<div class="mo" id="aM"><div class="modal modal-lg"><div class="mh"><h3 id="amT">Edit Assessment</h3><button class="mx" onclick="closeAM()">&#x2715;</button></div><div class="mbi"><table class="atb"><thead><tr><th>Question</th><th>Answer</th><th>Comment</th></tr></thead><tbody id="amB"></tbody></table></div><div class="mf"><button class="btn bout" onclick="closeAM()">Cancel</button><button class="btn bblu" onclick="saveAE()">Save Assessment</button></div></div></div>
 
-<div class="mo" id="nM"><div class="modal modal-lg"><div class="mh"><h3>Add Progress Note</h3><button class="mx" onclick="closeNoteM()">x</button></div><div class="mbi">
-  <div class="fg"><label class="fl">Note Date</label><input type="date" class="fi" id="nDt" style="width:200px;"></div>
+<!-- Add Progress Note Modal -->
+<div class="mo" id="nM"><div class="modal modal-lg"><div class="mh"><h3>Add Progress Note</h3><button class="mx" onclick="closeNoteM()">&#x2715;</button></div><div class="mbi">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:4px;"><label class="fl" style="margin-bottom:0;">Note Date</label><input type="date" class="fi" id="nDt" style="width:160px;"></div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;"><label class="fl" style="margin-bottom:0;">Location</label><select class="fs" id="nLoc"><option value="">-- Select Location --</option></select></div>
+  </div>
   <div class="fg"><label class="fl">Note</label><textarea class="ft" id="nTx" placeholder="Enter progress note..."></textarea></div>
   <div class="fg"><label class="fl">Services by Domain</label><div id="nSvcAll"></div></div>
   <div class="fg"><label class="fl">Documents</label><input type="file" class="fi" id="nDoc" multiple style="padding:4px;"></div>
 </div><div class="mf"><button class="btn bout" onclick="closeNoteM()">Cancel</button><button class="btn bblu" onclick="saveNote()">Save Note</button></div></div></div>
 
-<div class="mo" id="enM"><div class="modal modal-lg"><div class="mh"><h3>Edit Progress Note</h3><button class="mx" onclick="closeENM()">x</button></div><div class="mbi">
-  <div id="enFollowupRow" style="display:none;">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-end;">
-      <div class="fg" style="margin-bottom:0;"><label class="fl">Day</label><input type="text" class="fi" id="enFuDay" readonly style="width:80px;background:#f0f4f8;cursor:not-allowed;font-weight:700;"></div>
-      <div class="fg" style="margin-bottom:0;"><label class="fl">Follow-Up Date</label><input type="date" class="fi" id="enFuDt" readonly style="width:170px;background:#f0f4f8;cursor:not-allowed;"></div>
-      <div class="fg" style="margin-bottom:0;"><label class="fl" id="enDtLabelFu">Status Date</label><input type="date" class="fi" id="enDtFu" style="width:170px;"></div>
-    </div>
-    <div id="enStatusErr" style="display:none;color:#e74c3c;font-size:11px;margin-bottom:10px;"></div>
-  </div>
-  <div id="enRegDateRow">
-    <div class="fg"><label class="fl" id="enDtLabel">Note Date</label><input type="date" class="fi" id="enDt" style="width:200px;"></div>
+<!-- Edit General Note Modal -->
+<div class="mo" id="enM"><div class="modal modal-lg"><div class="mh"><h3>Edit Progress Note</h3><button class="mx" onclick="closeENM()">&#x2715;</button></div><div class="mbi">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:4px;"><label class="fl" style="margin-bottom:0;">Note Date</label><input type="date" class="fi" id="enDt" style="width:160px;"></div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;"><label class="fl" style="margin-bottom:0;">Location</label><select class="fs" id="enLoc"><option value="">-- Select Location --</option></select></div>
   </div>
   <div class="fg"><label class="fl">Note</label><textarea class="ft" id="enTx" style="min-height:100px;"></textarea></div>
   <div class="fg"><label class="fl">Services by Domain</label><div id="enSvc"></div></div>
 </div><div class="mf"><button class="btn bout" onclick="closeENM()">Cancel</button><button class="btn bblu" onclick="saveEN()">Save Changes</button></div></div></div>
 
+<!-- Follow-Up Update Modal -->
+<div class="mo" id="fuM"><div class="modal"><div class="mh"><h3 id="fuMTitle">Update Follow-Up</h3><button class="mx" onclick="closeFuM()">&#x2715;</button></div><div class="mbi">
+  <div style="background:#f0f6fb;border:1px solid #c8d9eb;border-radius:3px;padding:10px 14px;margin-bottom:14px;font-size:12px;display:flex;gap:20px;flex-wrap:wrap;">
+    <span><strong>Service:</strong> <span id="fuMProgram" style="color:#1e5f8a;font-weight:700;"></span></span>
+    <span><strong>Day:</strong> <span id="fuMDay" style="font-weight:700;"></span></span>
+    <span><strong>Follow-Up Date:</strong> <span id="fuMDate" style="font-weight:600;"></span></span>
+  </div>
+  <!-- Row 1: Status Date + Location -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <label class="fl" style="margin-bottom:0;">Status Date <span style="font-weight:400;color:#888;font-size:10px;">(completed date)</span></label>
+      <input type="date" class="fi" id="fuMStatusDate" style="width:170px;">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;">
+      <label class="fl" style="margin-bottom:0;">Location</label>
+      <select class="fs" id="fuMLoc"><option value="">-- Select Location --</option></select>
+    </div>
+  </div>
+  <div id="fuMStatusErr" style="display:none;color:#e74c3c;font-size:11px;margin-bottom:10px;font-weight:600;"></div>
+  <!-- Row 2: Service Outcome + Contact Outcome -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;">
+      <label class="fl" style="margin-bottom:0;">Service Outcome</label>
+      <select class="fs" id="fuMOutcome"><option value="">-- Select Service Outcome --</option></select>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;">
+      <label class="fl" style="margin-bottom:0;">Contact Outcome</label>
+      <select class="fs" id="fuMContact"><option value="">-- Select Contact Outcome --</option></select>
+    </div>
+  </div>
+  <div class="fg"><label class="fl">Notes</label><textarea class="ft" id="fuMNote" placeholder="Enter follow-up notes..." style="min-height:90px;"></textarea></div>
+</div><div class="mf"><button class="btn bout" onclick="closeFuM()">Cancel</button><button class="btn bblu" onclick="saveFuM()">Save</button></div></div></div>
+
 <div class="toast" id="toast"></div>
 
+<!-- General Note Modal (for tracked services) -->
+<div class="mo" id="genNoteM"><div class="modal"><div class="mh"><h3 id="genNoteMTitle">Add General Note</h3><button class="mx" onclick="closeGenNoteM()">&#x2715;</button></div><div class="mbi">
+  <div style="background:#f0f6fb;border:1px solid #c8d9eb;border-radius:3px;padding:8px 14px;margin-bottom:14px;font-size:12px;">
+    <strong>Service:</strong> <span id="genNoteMService" style="color:#1e5f8a;font-weight:700;"></span>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:4px;"><label class="fl" style="margin-bottom:0;">Date</label><input type="date" class="fi" id="genNoteMDate" style="width:160px;"></div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;"><label class="fl" style="margin-bottom:0;">Location</label><select class="fs" id="genNoteMloc"><option value="">-- Select Location --</option></select></div>
+  </div>
+  <div class="fg"><label class="fl">Note</label><textarea class="ft" id="genNoteMText" placeholder="Enter note..." style="min-height:110px;"></textarea></div>
+</div><div class="mf"><button class="btn bout" onclick="closeGenNoteM()">Cancel</button><button class="btn bblu" onclick="saveGenNoteM()">Save Note</button></div></div></div>
+
 <script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
 const ADOM=['Substance Abuse','Mental Health','Housing','Food','Education','Employment','Support System','Financial Well-Being','Career Skills/Barriers','Parenting Skills'];
 const ANS={'Substance Abuse':[{v:1,l:'In Crisis: Abuses substances frequently'},{v:2,l:'Vulnerable: Significant abuse causing difficulties'},{v:3,l:'Stable: Using, causing some problems'},{v:4,l:'Safe: Had problem, in recovery'},{v:5,l:'Thriving: No substance abuse problem'}],'Mental Health':[{v:1,l:'In Crisis: Severe mental health symptoms'},{v:2,l:'Vulnerable: Symptoms limiting function'},{v:3,l:'Stable: Needs partially met'},{v:4,l:'Safe: Minimal needs, stable'},{v:5,l:'Thriving: Does not need assistance'}],'Housing':[{v:1,l:'In Crisis: Homeless or eviction threat'},{v:2,l:'Vulnerable: Unstable housing'},{v:3,l:'Stable: Adequate subsidized housing'},{v:4,l:'Safe: Good condition, safe housing'},{v:5,l:'Thriving: Safe unsubsidized housing'}],'Food':[{v:1,l:'In Crisis: No food or means'},{v:2,l:'Vulnerable: Insufficient nutrition'},{v:3,l:'Stable: Basic needs met with help'},{v:4,l:'Safe: Adequate without assistance'},{v:5,l:'Thriving: Obtains any food desired'}],'Education':[{v:1,l:'In Crisis: No diploma, not enrolled'},{v:2,l:'Vulnerable: Enrolled, issues'},{v:3,l:'Stable: Has GED/diploma'},{v:4,l:'Safe: Post-secondary enrolled'},{v:5,l:'Thriving: Post high school obtained'}],'Employment':[{v:1,l:'In Crisis: No job'},{v:2,l:'Vulnerable: Temp/part-time'},{v:3,l:'Stable: Full-time, low wages'},{v:4,l:'Safe: Full-time adequate wages'},{v:5,l:'Thriving: Maintains adequate job'}],'Support System':[{v:1,l:'In Crisis: No support'},{v:2,l:'Vulnerable: Limited support'},{v:3,l:'Stable: Some support'},{v:4,l:'Safe: Several supports'},{v:5,l:'Thriving: Abundant support'}],'Financial Well-Being':[{v:1,l:'In Crisis: No income'},{v:2,l:'Vulnerable: Inadequate income'},{v:3,l:'Stable: Basic needs with help'},{v:4,l:'Safe: Adequate income'},{v:5,l:'Thriving: Sufficient income'}],'Career Skills/Barriers':[{v:1,l:'In Crisis: No work history'},{v:2,l:'Vulnerable: Limited work history'},{v:3,l:'Stable: Developing skills'},{v:4,l:'Safe: Positive history developing'},{v:5,l:'Thriving: Positive work history'}],'Parenting Skills':[{v:1,l:'In Crisis: Inadequate parenting'},{v:2,l:'Vulnerable: Limited skills'},{v:3,l:'Stable: Adequate skills'},{v:4,l:'Safe: Good skills'},{v:5,l:'Thriving: Knowledgeable parenting'}]};
 const GOALS={'Housing':['30 days - maintain housing as result of Rental Assistance','60 days - maintain housing as result of Rental Assistance','90 days - maintain housing as result of Rental Assistance','120 days - maintain housing as result of Rental Assistance','Housing - Maintain good, safe, adequate housing','Housing - Obtain adequate housing','Housing - Obtain stable, moderate housing','Obtain Emergency Rental Assistance','Purchase Home','Secure Unsubsidized Permanent Housing'],'Employment':['Employment - Maintain adequate full-time job','Employment - Obtain full time employment','Employment - Obtain temporary/part time work','Obtain employment','Obtain a Promotion','Increase Wage/Salary','Increase Work Hours','Decrease Work Hours','Change Working Shift'],'Career Skills & Training':['Career Skills/Barrier - Obtain limited work history','Career Skills/Barrier - Obtain positive work history','Career Skills/Barrier - Maintain positive work history','Complete Entrepreneurship Training','Complete Job Readiness Training','Enroll in Vocational Training','Enroll in WIA Training/Placement Program'],'Education':['Education - Obtain educational program','Education - Obtain GED or high school diploma','Education - Obtain Post high school education'],'Financial Well-Being':['Financial Well-Being - Maintain sufficient income','Financial Well-Being - Obtain adequate income','Financial Well-Being - Obtain inadequate income'],'Food':['Food - Obtain any food household desires','Food - Obtain basic food needs without help','Food - Obtain SNAP benefits'],'Health & Mental Health':['Obtain Health Coverage','Mental Health - Identify mental health needs','Mental Health - Maintain mental health needs','Mental Health - Obtain mental health services'],'Substance Abuse':['Substance Abuse - Maintain substance abuse free','Substance Abuse - Maintain substance abuse service','Substance Abuse - Obtain substance abuse service'],'Parenting Skills':['Parenting Skills - Maintain knowledgeable parenting','Parenting Skills - Obtain adequate parenting skills','Parenting Skills - Obtain child development concepts'],'Support System':['Support System - Maintain abundant personal support','Support System - Obtain limited personal support','Support System - Obtain several personal support'],'General Categories (Default Goals)':['Employment','Benefits','Stabilization','Housing']};
-const G2S={'Housing':'Housing','Employment':'Employment','Career Skills & Training':'Career Skills/Barriers','Education':'Education','Financial Well-Being':'Financial Well-Being','Food':'Food','Health & Mental Health':'Health','Substance Abuse':'Substance Abuse','Parenting Skills':'Parenting Skills','Support System':'Support System'};
-const SVCS={'Housing':['Rental Assistance','Rental Assistance 120 day followup (Ph. Cnt)','Foreclosure Assistance Refrl','Utility Assistance Refrl','Supprtv Housing Prgm Placement','Furniture Refrl','CRS Refrl','Legal Assist 4 Housing Refrl','Disaster Relocation Assistance','Bus Card Shltr Placmnt or Refrl','Starter Kit','Supprtv Housing Prgm Followup','Client Home Visit Service','Interim Housing Refrl','CARES Rental Assistance'],'Career Skills/Barriers':['Job Readiness Refrl'],'Financial Well-Being':['Financial Education Refrl','EITC Program Refrl'],'Employment':['Employment Placement Refrl','Bus Card Employment Refrl'],'Education':['GED Program Refrl','ESL Program Refrl'],'Food':['SNAP Benefits Refrl','Holiday Baskets','Pantry Refrl','Nutrition Education Refrl'],'Other':['Other DFSS Division Refrl','State ID Application Assistance','RTA ID Application Assistance'],'Parenting Skills':['Headstart Refrl','Family Counseling Refrl','Autism Center Refrl','Parenting Skills Lead Workshop'],'Support System':['Support Group Refrl','Support Workshop Lead Workshop'],'Substance Abuse':['Substance Abuse Treatmnt Rfral'],'Health':['Medical Services Refrl','Mental Health Services Refrl','Health Education Refrl','Hygiene Kit','Bus Card Medical Services','Benefits Refrl','Crisis Counseling Service','Depression Workshop Lead Workshop','Dental Refrl']};
-const SL=['','In Crisis','Vulnerable','Stable','Safe','Thriving'],SC=['','c1','c2','c3','c4','c5'];
 
-// Use a past date so reminders actually fire
-const AHIST=[
-  {date:'12/15/2025',staff:'CSC_DCassell',scores:{'Substance Abuse':2,'Mental Health':5,'Housing':4,'Food':2,'Education':3,'Employment':1,'Support System':3,'Financial Well-Being':4,'Career Skills/Barriers':3,'Parenting Skills':4},comments:{}},
-  {date:'09/21/2020',staff:'CSC_DCassell',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':4,'Food':4,'Education':3,'Employment':1,'Support System':3,'Financial Well-Being':4,'Career Skills/Barriers':3,'Parenting Skills':4},comments:{}},
-  {date:'11/20/2019',staff:'CSC_JSmith',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':2,'Food':3,'Education':3,'Employment':3,'Support System':3,'Financial Well-Being':2,'Career Skills/Barriers':3,'Parenting Skills':3},comments:{}},
-  {date:'01/10/2019',staff:'CSC_JSmith',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':2,'Food':4,'Education':3,'Employment':3,'Support System':3,'Financial Well-Being':2,'Career Skills/Barriers':4,'Parenting Skills':3},comments:{}}
+// Intervention domain target levels (one domain, one target per goal)
+const INT_TARGETS = {
+  'Substance Abuse': [
+    'In-Crisis: Abuses substances; creating chronic family/work difficulties',
+    'Vulnerable: Significant abuse causing difficulties',
+    'Stable: Occasional abuse causing some problems',
+    'Secure: Had problem, currently in recovery',
+    'Empowered/Thriving: No substance abuse problem'
+  ],
+  'Mental Health': [
+    'In-Crisis: Severe mental health symptoms affecting daily life',
+    'Vulnerable: Symptoms significantly limiting function',
+    'Stable: Needs partially met with assistance',
+    'Secure: Minimal needs, stable with support',
+    'Empowered/Thriving: Does not need mental health assistance'
+  ],
+  'Housing': [
+    'In-Crisis: Currently Homeless, in temporary housing or shelter but time is ending',
+    'Vulnerable: Current rent/mortgage is >50%. Housing conditions are inadequate/unsafe',
+    'Stable: In stable housing that is moderate condition and safe but only marginally adequate',
+    'Secure: Household is in good condition. Safe, adequate, subsidized housing',
+    'Empowered/Thriving: Rent is below 30% of monthly net income'
+  ],
+  'Food': [
+    'In-Crisis: No food or means to obtain food',
+    'Vulnerable: Insufficient food/nutrition regularly',
+    'Stable: Basic food needs met with assistance',
+    'Secure: Adequate food without consistent assistance',
+    'Empowered/Thriving: Obtains any food household desires'
+  ],
+  'Education': [
+    'In-Crisis: No diploma, not enrolled, no pursuit',
+    'Vulnerable: Enrolled but experiencing significant issues',
+    'Stable: Has GED or high school diploma',
+    'Secure: Currently enrolled in post-secondary education',
+    'Empowered/Thriving: Post high school education obtained'
+  ],
+  'Employment': [
+    'In-Crisis: No job, not seeking employment',
+    'Vulnerable: Temporary or part-time work only',
+    'Stable: Full-time employment, low wages',
+    'Secure: Full-time employment with adequate wages',
+    'Empowered/Thriving: Maintains adequate full-time employment'
+  ],
+  'Support System': [
+    'In-Crisis: No personal support system',
+    'Vulnerable: Very limited support system',
+    'Stable: Some informal support available',
+    'Secure: Several personal and community supports',
+    'Empowered/Thriving: Abundant personal and community support'
+  ],
+  'Financial Well-Being': [
+    'In-Crisis: No income or means of financial support',
+    'Vulnerable: Inadequate income to meet basic needs',
+    'Stable: Basic needs met with financial assistance',
+    'Secure: Adequate income, some financial stability',
+    'Empowered/Thriving: Sufficient income and financially stable'
+  ],
+  'Career Skills/Barriers': [
+    'In-Crisis: No work history or significant barriers to employment',
+    'Vulnerable: Limited work history, multiple barriers',
+    'Stable: Developing skills, some barriers remain',
+    'Secure: Positive work history, developing further',
+    'Empowered/Thriving: Strong positive work history, minimal barriers'
+  ],
+  'Parenting Skills': [
+    'In-Crisis: Inadequate parenting; child safety may be at risk',
+    'Vulnerable: Limited parenting skills affecting child wellbeing',
+    'Stable: Adequate parenting skills with some support',
+    'Secure: Good parenting skills, largely independent',
+    'Empowered/Thriving: Knowledgeable, confident parenting'
+  ]
+};
+const TRACKED_SVCS = {
+  'DFSS Rental Assistance Program': 'rental',
+  'SNAP Benefits Refrl': 'snap'
+};
+
+const ALL_SVC_DOMAINS={
+  'Housing':['DFSS Rental Assistance Program','Foreclosure Assistance Refrl','Utility Assistance Refrl','Supprtv Housing Prgm Placement','Furniture Refrl','CRS Refrl','Legal Assist 4 Housing Refrl','Disaster Relocation Assistance','Starter Kit','Interim Housing Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Career Skills/Barriers':['Job Readiness Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Financial Well-Being':['Financial Education Refrl','EITC Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Employment':['Employment Placement Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Education':['GED Program Refrl','ESL Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Food':['SNAP Benefits Refrl','Holiday Baskets','Pantry Refrl','Nutrition Education Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Other':['Other DFSS Division Refrl','Clothing','Bus Card','Advocacy','Follow up Call','Letter Writing','Translation'],
+  'Health':['Medical Services Refrl','Mental Health Services Refrl','Health Education Refrl','Hygiene Kit','Dental Refrl','Advocacy','Follow up Call','Letter Writing','Translation']
+};
+
+// Program metadata
+const PROG = {
+  rental: { label:'DFSS Rental Assistance', shortLabel:'Rental Asst.', svc:'DFSS Rental Assistance Program', iconClass:'icon-rental', iconLetter:'R', accentColor:'#1e5f8a', days:[30,60,90] },
+  snap:   { label:'SNAP Benefits', shortLabel:'SNAP Benefits', svc:'SNAP Benefits Refrl', iconClass:'icon-snap', iconLetter:'S', accentColor:'#1e8a4a', days:[30,60,90] }
+};
+
+// Service-specific outcome options for follow-up dropdowns
+const FU_OUTCOMES = {
+  rental: [
+    'Housing Maintained',
+    'Housing Lost',
+    'Eviction Notice Received',
+    'Relocated – New Housing Secured',
+    'Client Referred to Additional Services',
+    'Client Requested Closure',
+    'Other'
+  ],
+  snap: [
+    'Benefits Active',
+    'Benefits Terminated',
+    'Application Pending',
+    'Application Approved',
+    'Application Denied – Appeal Filed',
+    'Application Denied – No Appeal',
+    'Benefits Renewed',
+    'Client Referred to Additional Services',
+    'Client Requested Closure',
+    'Other'
+  ]
+};
+
+// Contact outcomes — same across all tracked services
+const CONTACT_OUTCOMES = [
+  'Spoke with Client',
+  'Left Voicemail',
+  'Unable to Reach – No Voicemail/Disconnected',
+  'Unable to Reach – Text/Email Sent, No Response',
+  'Home Visit Completed',
+  'Client Came Into Office'
 ];
 
-let dism={},goals=[],notes=[],gid=0,eidx=-1,sn=-1,eai=-1;
+// CSC Locations
+const CSC_LOCATIONS = [
+  'Englewood Community Service Center',
+  'Garfield Community Service Center',
+  'King Community Service Center',
+  'North Area Community Service Center',
+  'South Chicago Community Service Center',
+  'Trina Davila Community Service Center',
+  'Humboldt Park Community Service Center'
+];
 
-function init(){buildDom();buildA();buildGS();buildF();setTD();}
-function setTD(){document.getElementById('nDt').value=new Date().toISOString().split('T')[0];}
-function switchTab(t){document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active'));const m={situation:0,assessment:1,goals:2,notes:3,closeout:4};document.querySelectorAll('.ctab')[m[t]].classList.add('active');document.getElementById('tab-'+t).classList.add('active');if(t==='situation')buildDom();if(t==='assessment')buildA();}
+const AHIST=[{date:'12/15/2025',staff:'CSC_DCassell',scores:{'Substance Abuse':2,'Mental Health':5,'Housing':4,'Food':2,'Education':3,'Employment':1,'Support System':3,'Financial Well-Being':4,'Career Skills/Barriers':3,'Parenting Skills':4},comments:{}},{date:'09/21/2020',staff:'CSC_DCassell',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':4,'Food':4,'Education':3,'Employment':1,'Support System':3,'Financial Well-Being':4,'Career Skills/Barriers':3,'Parenting Skills':4},comments:{}},{date:'11/20/2019',staff:'CSC_JSmith',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':2,'Food':3,'Education':3,'Employment':3,'Support System':3,'Financial Well-Being':2,'Career Skills/Barriers':3,'Parenting Skills':3},comments:{}},{date:'01/10/2019',staff:'CSC_JSmith',scores:{'Substance Abuse':3,'Mental Health':3,'Housing':2,'Food':4,'Education':3,'Employment':3,'Support System':3,'Financial Well-Being':2,'Career Skills/Barriers':4,'Parenting Skills':3},comments:{}}];
+const SL=['','In Crisis','Vulnerable','Stable','Safe','Thriving'], SC=['','c1','c2','c3','c4','c5'];
 
-// Reminders removed per client decision - reassessment timing is flexible
-function pAD(s){const p=s.split('/');return new Date(parseInt(p[2]),parseInt(p[0])-1,parseInt(p[1]));}
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let goals=[], notes=[], gid=0, eidx=-1, eai=-1, enIdx=-1;
+let activeView = null;
+let fuEditPk='', fuEditDayIdx=0;
+let defaultLocation = ''; // persists across all note modals
+let pinned = {
+  rental: { active:false, startDate:'', days:[] },
+  snap:   { active:false, startDate:'', days:[] }
+};
 
-function buildDom(){const b=document.getElementById('domBody');b.innerHTML='';ADOM.forEach(d=>{let r=`<tr><td class="dtn">${d}</td>`;AHIST.forEach(a=>{r+=`<td><div class="sc ${SC[a.scores[d]]}">${a===AHIST[0]?a.date:'&nbsp;'}</div></td>`;});r+='</tr>';b.innerHTML+=r;});}
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function today(){ return new Date().toISOString().split('T')[0]; }
+function addDays(ds, n){ const d=new Date(ds); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
+function fD(d){ if(!d)return'—'; const p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
+function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function switchTab(t){ document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active')); const m={situation:0,assessment:1,goals:2,notes:3,closeout:4}; document.querySelectorAll('.ctab')[m[t]].classList.add('active'); document.getElementById('tab-'+t).classList.add('active'); if(t==='situation')buildDom(); if(t==='assessment')buildA(); }
 
-function buildA(){const c=document.getElementById('aBox');c.innerHTML='';AHIST.forEach((a,i)=>{const t=Object.values(a.scores).reduce((s,v)=>s+v,0);let h=`<div class="abar"><div class="al">Koasia Eldridge: CSC_CS Case Management [${a.date}]</div><div class="ar"><strong>Score: ${t}/50</strong><strong>Staff: ${a.staff}</strong><strong>Date: ${a.date}</strong><button class="ibtn ie" onclick="openAE(${i})" title="Edit">&#9998;</button></div></div><table class="atb"><thead><tr><th>Question</th><th>Answer</th><th>Comment</th><th>User/Date</th></tr></thead><tbody>`;ADOM.forEach(d=>{const ans=ANS[d];const f=ans?ans.find(x=>x.v===a.scores[d]):null;h+=`<tr><td style="font-weight:500;">${d}</td><td>${f?f.l:SL[a.scores[d]]}</td><td>${a.comments[d]||''}</td><td style="font-size:11px;color:#555;">${a.staff} [${a.date}]</td></tr>`;});h+=`</tbody></table>`;c.innerHTML+=h;});}
-
-function openAE(i){eai=i;const a=AHIST[i];document.getElementById('amT').textContent='Edit Assessment - '+a.date;const b=document.getElementById('amB');b.innerHTML='';ADOM.forEach(d=>{const ans=ANS[d]||[];let o=ans.map(x=>`<option value="${x.v}" ${x.v===a.scores[d]?'selected':''}>${x.l}</option>`).join('');b.innerHTML+=`<tr><td style="font-weight:500;">${d}</td><td><select class="fs aeS" data-d="${d}">${o}</select></td><td><input class="fi aeC" data-d="${d}" value="${a.comments[d]||''}" placeholder="Comment..."></td></tr>`;});document.getElementById('aM').classList.add('show');}
-function closeAM(){document.getElementById('aM').classList.remove('show');}
-function saveAE(){const a=AHIST[eai];document.querySelectorAll('.aeS').forEach(s=>{a.scores[s.dataset.d]=parseInt(s.value);});document.querySelectorAll('.aeC').forEach(c=>{if(c.value.trim())a.comments[c.dataset.d]=c.value.trim();});closeAM();buildDom();buildA();showToast('Assessment updated.');}
-
-// GOALS
-function buildGS(){const s=document.getElementById('gSel');Object.keys(GOALS).forEach(g=>s.innerHTML+=`<option value="${g}">${g}</option>`);}
-function buildF(){const gf=document.getElementById('gFilt');gf.innerHTML='<option value="all">All Goals</option>';Object.keys(GOALS).forEach(g=>gf.innerHTML+=`<option value="${g}">${g}</option>`);const nf=document.getElementById('nFilt');nf.innerHTML='<option value="all">All Domains</option>';Object.keys(ALL_SVC_DOMAINS).forEach(d=>nf.innerHTML+=`<option value="${d}">${d}</option>`);}
-function onGC(){const g=document.getElementById('gSel').value;const l=document.getElementById('sList');if(!g){l.innerHTML='<div style="padding:10px;color:#888;font-size:12px;">Select a goal first.</div>';return;}if(goals.find(x=>x.name===g)){l.innerHTML='<div style="padding:10px;color:#e74c3c;font-size:12px;">This goal already exists. Edit it instead.</div>';return;}const subs=GOALS[g]||[];l.innerHTML='';subs.forEach((s,i)=>{l.innerHTML+=`<div class="cbi"><input type="checkbox" id="gs${i}" value="${s}"><label for="gs${i}">${s}</label></div>`;});}
-function openGoalM(){document.getElementById('goalM').classList.add('show');document.getElementById('gSel').value='';document.getElementById('sList').innerHTML='<div style="padding:10px;color:#888;font-size:12px;">Select a goal first.</div>';}
-function closeGoalM(){document.getElementById('goalM').classList.remove('show');}
-function saveGoal(){const g=document.getElementById('gSel').value;if(!g){showToast('Select a goal.');return;}if(goals.find(x=>x.name===g)){showToast('Goal already exists.');return;}const subs=Array.from(document.querySelectorAll('#sList input:checked')).map(c=>c.value);const goalDate=new Date().toLocaleDateString();goals.push({id:gid++,name:g,subgoals:subs,date:goalDate});closeGoalM();renderGoals();showToast('Goal added.');
-// Auto-generate rental assistance follow-ups if applicable
-if(g==='Housing'&&subs.includes('Obtain Emergency Rental Assistance')){
-  const baseDate=new Date();
-  [30,60,90,120].forEach(days=>{
-    const fuDate=new Date(baseDate.getTime()+days*864e5);
-    const fmtDate=fuDate.getFullYear()+'-'+String(fuDate.getMonth()+1).padStart(2,'0')+'-'+String(fuDate.getDate()).padStart(2,'0');
-    notes.push({date:fmtDate,text:days+' days - maintain housing as result of Rental Assistance',domains:['Housing'],dsvc:['Rental Assistance 120 day followup (Ph. Cnt)'],svcGrouped:{'Housing':['Rental Assistance 120 day followup (Ph. Cnt)']},docs:[],author:'System',created:'Auto-generated',isFollowup:true,followupDay:days,followupDate:fmtDate,statusDate:''});
+// Populate a location <select> with the default pre-selected; update defaultLocation on change
+function populateLocSelect(id, overrideVal){
+  const sel = document.getElementById(id);
+  const val = overrideVal !== undefined ? overrideVal : defaultLocation;
+  sel.innerHTML = '<option value="">-- Select Location --</option>';
+  CSC_LOCATIONS.forEach(l => {
+    sel.innerHTML += `<option value="${l}" ${val===l?'selected':''}>${l}</option>`;
   });
-  renderNotes();
-  showToast('Rental assistance follow-up notes auto-created at 30/60/90/120 days.');
-}}
-function renderGoals(){const c=document.getElementById('gBox');const f=document.getElementById('gFilt').value;const fl=f==='all'?goals:goals.filter(g=>g.name===f);document.getElementById('gCt').textContent=goals.length+' Goal'+(goals.length!==1?'s':'');if(!fl.length){c.innerHTML='<div class="emsg">'+(goals.length?'No match.':'No goals yet.')+'</div>';return;}c.innerHTML='';fl.forEach(g=>{const ri=goals.indexOf(g);const sh=g.subgoals.length?g.subgoals.map(s=>`<span class="sgt">${s}</span>`).join(''):'<span style="font-size:11px;color:#888;font-style:italic;">No sub-goals selected</span>';c.innerHTML+=`<div class="gc"><div class="gch"><span class="gn">${g.name}</span><div style="display:flex;gap:4px;"><button class="ibtn ie" onclick="openEG(${ri})" title="Edit">&#9998;</button><button class="ibtn id" onclick="delGoal(${ri})" title="Delete">x</button></div></div><div class="gcb"><div style="font-size:11px;color:#888;margin-bottom:4px;">Added: ${g.date}</div>${sh}</div></div>`;});}
-function delGoal(i){if(confirm('Delete?')){goals.splice(i,1);renderGoals();showToast('Deleted.');}}
-function openEG(i){eidx=i;const g=goals[i];document.getElementById('egN').value=g.name;const l=document.getElementById('egSL');l.innerHTML='';(GOALS[g.name]||[]).forEach((s,j)=>{const ch=g.subgoals.includes(s)?'checked':'';l.innerHTML+=`<div class="cbi"><input type="checkbox" id="es${j}" value="${s}" ${ch}><label for="es${j}">${s}</label></div>`;});document.getElementById('egM').classList.add('show');}
-function closeEG(){document.getElementById('egM').classList.remove('show');}
-function saveEG(){goals[eidx].subgoals=Array.from(document.querySelectorAll('#egSL input:checked')).map(c=>c.value);closeEG();renderGoals();showToast('Updated.');}
+  sel.onchange = () => { defaultLocation = sel.value; };
+}
 
-// PROGRESS NOTES
-// All service domains including shared services within each
-const ALL_SVC_DOMAINS={'Housing':['Rental Assistance','Rental Assistance 120 day followup (Ph. Cnt)','Foreclosure Assistance Refrl','Utility Assistance Refrl','Supprtv Housing Prgm Placement','Furniture Refrl','CRS Refrl','Legal Assist 4 Housing Refrl','Disaster Relocation Assistance','Bus Card Shltr Placmnt or Refrl','Starter Kit','Supprtv Housing Prgm Followup','Client Home Visit Service','Interim Housing Refrl','CARES Rental Assistance','Advocacy','Follow up Call','Letter Writing','Translation'],'Career Skills/Barriers':['Job Readiness Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Financial Well-Being':['Financial Education Refrl','EITC Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Employment':['Employment Placement Refrl','Bus Card Employment Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Education':['GED Program Refrl','ESL Program Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Food':['SNAP Benefits Refrl','Holiday Baskets','Pantry Refrl','Nutrition Education Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],'Other':['Other DFSS Division Refrl','State ID Application Assistance','RTA ID Application Assistance','Advocacy','Follow up Call','Letter Writing','Translation'],'Parenting Skills':['Headstart Refrl','Family Counseling Refrl','Autism Center Refrl','Parenting Skills Lead Workshop','Advocacy','Follow up Call','Letter Writing','Translation'],'Support System':['Support Group Refrl','Support Workshop Lead Workshop','Advocacy','Follow up Call','Letter Writing','Translation'],'Substance Abuse':['Substance Abuse Treatmnt Rfral','Advocacy','Follow up Call','Letter Writing','Translation'],'Health':['Medical Services Refrl','Mental Health Services Refrl','Health Education Refrl','Hygiene Kit','Bus Card Medical Services','Benefits Refrl','Crisis Counseling Service','Depression Workshop Lead Workshop','Dental Refrl','Advocacy','Follow up Call','Letter Writing','Translation']};
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init(){ buildDom(); buildA(); buildGS(); buildF(); document.getElementById('nDt').value=today(); renderNotes(); }
 
-function openNoteM(){
-  document.getElementById('nM').classList.add('show');
-  document.getElementById('nTx').value='';setTD();
-  document.getElementById('nDoc').value='';
-  // All services by domain (always shown)
-  const svcBox=document.getElementById('nSvcAll');svcBox.innerHTML='';
-  Object.keys(ALL_SVC_DOMAINS).forEach(d=>{
-    const svcs=ALL_SVC_DOMAINS[d];
-    let h=`<div class="dsg"><div class="dst">${d}</div><div class="dsgr">`;
-    svcs.forEach(s=>{h+=`<label><input type="checkbox" class="nds" data-domain="${d}" value="${s}"> ${s}</label>`;});
-    h+='</div></div>';svcBox.innerHTML+=h;
+// ── ACTIVATE TRACKED PROGRAM ─────────────────────────────────────────────────
+function activateProgram(pk, startDate){
+  const p = PROG[pk];
+  pinned[pk].active = true;
+  pinned[pk].startDate = startDate;
+  pinned[pk].days = p.days.map(d=>({ day:d, fuDate:addDays(startDate,d), statusDate:'', outcome:'', contactOutcome:'', note:'' }));
+}
+
+// ── DOMAIN HISTORY ───────────────────────────────────────────────────────────
+function buildDom(){ const b=document.getElementById('domBody'); b.innerHTML=''; ADOM.forEach(d=>{ let r=`<tr><td class="dtn">${d}</td>`; AHIST.forEach(a=>{ r+=`<td><div class="sc ${SC[a.scores[d]]}">${a===AHIST[0]?a.date:'&nbsp;'}</div></td>`; }); r+='</tr>'; b.innerHTML+=r; }); }
+
+// ── ASSESSMENT ───────────────────────────────────────────────────────────────
+function buildA(){ const c=document.getElementById('aBox'); c.innerHTML=''; AHIST.forEach((a,i)=>{ const t=Object.values(a.scores).reduce((s,v)=>s+v,0); let h=`<div class="abar"><div class="al">Koasia Eldridge: CSC_CS Case Management [${a.date}]</div><div class="ar"><strong>Score: ${t}/50</strong><strong>Staff: ${a.staff}</strong><strong>Date: ${a.date}</strong><button class="ibtn ie" onclick="openAE(${i})" title="Edit">&#9998;</button></div></div><table class="atb"><thead><tr><th>Question</th><th>Answer</th><th>Comment</th><th>User/Date</th></tr></thead><tbody>`; ADOM.forEach(d=>{ const ans=ANS[d]; const f=ans?ans.find(x=>x.v===a.scores[d]):null; h+=`<tr><td style="font-weight:500;">${d}</td><td>${f?f.l:SL[a.scores[d]]}</td><td>${a.comments[d]||''}</td><td style="font-size:11px;color:#555;">${a.staff} [${a.date}]</td></tr>`; }); h+=`</tbody></table>`; c.innerHTML+=h; }); }
+function openAE(i){ eai=i; const a=AHIST[i]; document.getElementById('amT').textContent='Edit Assessment - '+a.date; const b=document.getElementById('amB'); b.innerHTML=''; ADOM.forEach(d=>{ const ans=ANS[d]||[]; let o=ans.map(x=>`<option value="${x.v}" ${x.v===a.scores[d]?'selected':''}>${x.l}</option>`).join(''); b.innerHTML+=`<tr><td style="font-weight:500;">${d}</td><td><select class="fs aeS" data-d="${d}">${o}</select></td><td><input class="fi aeC" data-d="${d}" value="${a.comments[d]||''}" placeholder="Comment..."></td></tr>`; }); document.getElementById('aM').classList.add('show'); }
+function closeAM(){ document.getElementById('aM').classList.remove('show'); }
+function saveAE(){ const a=AHIST[eai]; document.querySelectorAll('.aeS').forEach(s=>{ a.scores[s.dataset.d]=parseInt(s.value); }); document.querySelectorAll('.aeC').forEach(c=>{ if(c.value.trim()) a.comments[c.dataset.d]=c.value.trim(); }); closeAM(); buildDom(); buildA(); showToast('Assessment updated.'); }
+
+// ── GOALS ─────────────────────────────────────────────────────────────────────
+let intEditIdx = -1;
+
+// Map goal category → INT_TARGETS domain key
+const CAT_TO_DOMAIN = {
+  'Housing': 'Housing',
+  'Employment': 'Employment',
+  'Career Skills & Training': 'Career Skills/Barriers',
+  'Education': 'Education',
+  'Financial Well-Being': 'Financial Well-Being',
+  'Food': 'Food',
+  'Health & Mental Health': 'Mental Health',
+  'Substance Abuse': 'Substance Abuse',
+  'Parenting Skills': 'Parenting Skills',
+  'Support System': 'Support System'
+};
+
+// Category accent colors for prominent display
+const CAT_COLORS = {
+  'Housing':                    '#1e5f8a',
+  'Employment':                 '#1e7a45',
+  'Career Skills & Training':   '#5a6b7e',
+  'Education':                  '#6b4a8a',
+  'Financial Well-Being':       '#1e7a6a',
+  'Food':                       '#8a6b1e',
+  'Health & Mental Health':     '#7a2e65',
+  'Substance Abuse':            '#7a3020',
+  'Parenting Skills':           '#1e4a7a',
+  'Support System':             '#4a6e2e',
+  'General Categories (Default Goals)': '#555'
+};
+
+// Map intervention target text → score (1–5)
+const TARGET_SCORE = { 'In-Crisis':1, 'Vulnerable':2, 'Stable':3, 'Secure':4, 'Empowered':5 };
+// Score level labels shown on scale
+const SCORE_LABELS = ['','In Crisis','Vulnerable','Stable','Secure','Thriving'];
+const SCORE_COLORS = ['','#e74c3c','#f39c12','#f1c40f','#2ecc71','#27ae60'];
+
+function buildGS(){
+  const s=document.getElementById('gSel');
+  Object.keys(GOALS).forEach(g=>s.innerHTML+=`<option value="${g}">${g}</option>`);
+}
+function buildF(){
+  const nf=document.getElementById('nFilt');
+  nf.innerHTML='<option value="all">All Domains</option>';
+  Object.keys(ALL_SVC_DOMAINS).forEach(d=>nf.innerHTML+=`<option value="${d}">${d}</option>`);
+}
+function onGC(){
+  const cat=document.getElementById('gSel').value;
+  const gs=document.getElementById('gGoalSel');
+  gs.innerHTML='<option value="">-- Select Goal --</option>';
+  document.getElementById('gSubgoalsSection').style.display='none';
+  document.getElementById('gSubgoalsList').innerHTML='';
+  if(!cat) return;
+  (GOALS[cat]||[]).forEach(s=>{ gs.innerHTML+=`<option value="${s}">${s}</option>`; });
+}
+function onGoalSel(){
+  const cat=document.getElementById('gSel').value;
+  const primary=document.getElementById('gGoalSel').value;
+  const sec=document.getElementById('gSubgoalsSection');
+  const list=document.getElementById('gSubgoalsList');
+  if(!primary){ sec.style.display='none'; return; }
+  const others=(GOALS[cat]||[]).filter(s=>s!==primary);
+  if(!others.length){ sec.style.display='none'; return; }
+  list.innerHTML='';
+  others.forEach((s,i)=>{
+    const checked=(document.getElementById('goalM')._editSubgoals||[]).includes(s);
+    list.innerHTML+=`<div class="cbi"><input type="checkbox" id="sg${i}" value="${s}" ${checked?'checked':''}><label for="sg${i}">${s}</label></div>`;
+  });
+  sec.style.display='block';
+}
+
+function openGoalM(idx){
+  document.getElementById('goalMTitle').textContent=idx!==undefined?'Edit Goal':'Add Goal';
+  const gSel=document.getElementById('gSel');
+  gSel.innerHTML='<option value="">-- Select Category --</option>';
+  Object.keys(GOALS).forEach(g=>gSel.innerHTML+=`<option value="${g}">${g}</option>`);
+  document.getElementById('gGoalSel').innerHTML='<option value="">-- Select Goal --</option>';
+  document.getElementById('gSubgoalsSection').style.display='none';
+  document.getElementById('gSubgoalsList').innerHTML='';
+  document.getElementById('gDate').value=today();
+  document.getElementById('gComments').value='';
+  document.getElementById('gStaff').value='CSC_DCassell';
+  document.getElementById('gConsent').value='Private';
+  document.getElementById('goalM')._editIdx=undefined;
+  document.getElementById('goalM')._editSubgoals=[];
+  if(idx!==undefined){
+    const g=goals[idx];
+    gSel.value=g.category||'';
+    if(g.category){ onGC(); document.getElementById('gGoalSel').value=g.goalText; }
+    document.getElementById('goalM')._editSubgoals=g.subgoals||[];
+    onGoalSel();
+    // Re-check previously saved subgoals
+    (g.subgoals||[]).forEach(s=>{
+      const cb=[...document.querySelectorAll('#gSubgoalsList input')].find(i=>i.value===s);
+      if(cb) cb.checked=true;
+    });
+    document.getElementById('gConsent').value=g.consent||'Private';
+    document.getElementById('gStaff').value=g.staff||'CSC_DCassell';
+    document.getElementById('gDate').value=g.date||today();
+    document.getElementById('gComments').value=g.comments||'';
+    document.getElementById('goalM')._editIdx=idx;
+  }
+  document.getElementById('goalM').classList.add('show');
+}
+function closeGoalM(){ document.getElementById('goalM').classList.remove('show'); }
+
+function saveGoal(){
+  const category=document.getElementById('gSel').value;
+  const goalText=document.getElementById('gGoalSel').value;
+  if(!category){showToast('Select a category.');return;}
+  if(!goalText){showToast('Select a goal.');return;}
+  const subgoals=Array.from(document.querySelectorAll('#gSubgoalsList input:checked')).map(c=>c.value);
+  const editIdx=document.getElementById('goalM')._editIdx;
+  const prev=editIdx!==undefined?goals[editIdx]:{};
+  // Preserve existing progress when editing, init to Not Started for new
+  const prevProgress=prev.subgoalProgress||{};
+  const subgoalProgress={};
+  subgoals.forEach(s=>{ subgoalProgress[s]=prevProgress[s]||'Not Started'; });
+  const obj={
+    id:editIdx!==undefined?prev.id:gid++,
+    category, goalText, subgoals, subgoalProgress,
+    mainProgress: prev.mainProgress||'Not Started',
+    consent:document.getElementById('gConsent').value,
+    staff:document.getElementById('gStaff').value,
+    date:document.getElementById('gDate').value,
+    comments:document.getElementById('gComments').value.trim(),
+    status:'In Process',
+    interventionStatus: prev.interventionStatus||'',
+    interventionCurrentLevel: prev.interventionCurrentLevel||0,
+    intervention:editIdx!==undefined?prev.intervention:{domain:'',target:'',currentDate:today()}
+  };
+  if(editIdx!==undefined){ goals[editIdx]=obj; } else { goals.push(obj); }
+  closeGoalM(); renderGoals(); showToast(editIdx!==undefined?'Goal updated.':'Goal added.');
+}
+
+const PROGRESS_OPTS=['Not Started','In Progress','Achieved','No Longer Needed','Unable to Achieve'];
+const PROGRESS_COLORS={'Not Started':'#b0bec5','In Progress':'#3d8fcf','Achieved':'#27ae60','No Longer Needed':'#f39c12','Unable to Achieve':'#e74c3c'};
+const PROGRESS_BG={'Not Started':'#f5f7f8','In Progress':'#e8f4fb','Achieved':'#eafaf1','No Longer Needed':'#fef9e7','Unable to Achieve':'#fdf0f0'};
+
+function updateGoalProgress(goalIdx, subgoal, val){
+  if(subgoal==='__main__') goals[goalIdx].mainProgress=val;
+  else goals[goalIdx].subgoalProgress[subgoal]=val;
+  renderGoals();
+}
+
+function updateIntStatus(goalIdx, val){
+  goals[goalIdx].interventionStatus = val;
+  // Target Met — pre-fill current level to target level
+  if(val==='Target Met'){
+    const g=goals[goalIdx];
+    const int=g.intervention||{};
+    const levelKey=Object.keys(TARGET_SCORE).find(k=>int.target&&int.target.startsWith(k));
+    if(levelKey) goals[goalIdx].interventionCurrentLevel=TARGET_SCORE[levelKey];
+    // Auto-update current situation
+    if(int.domain&&levelKey){
+      AHIST[0].scores[int.domain]=TARGET_SCORE[levelKey];
+      buildDom(); buildA();
+    }
+  }
+  // Progress Made — clear pre-fill so worker must choose
+  if(val==='Progress Made, Target Not Met') goals[goalIdx].interventionCurrentLevel=0;
+  // No Progress — clear any stored level
+  if(val==='No Progress, Target Not Met') goals[goalIdx].interventionCurrentLevel=0;
+  renderGoals();
+}
+
+function updateIntLevel(goalIdx, val){
+  const level=parseInt(val);
+  if(!level) return;
+  goals[goalIdx].interventionCurrentLevel=level;
+  const domain=goals[goalIdx].intervention&&goals[goalIdx].intervention.domain;
+  if(domain){
+    AHIST[0].scores[domain]=level;
+    buildDom(); buildA();
+    showToast('Current Situation updated: '+domain+' → '+SCORE_LABELS[level]);
+  }
+  renderGoals();
+}
+
+
+function renderGoals(){
+  const c=document.getElementById('gBox');
+  document.getElementById('gCt').textContent=goals.length+' Goal'+(goals.length!==1?'s':'');
+
+  let totalItems=0, achievedItems=0;
+  goals.forEach(g=>{
+    totalItems++; if(g.mainProgress==='Achieved') achievedItems++;
+    (g.subgoals||[]).forEach(s=>{ totalItems++; if((g.subgoalProgress||{})[s]==='Achieved') achievedItems++; });
+  });
+  const inProcess=goals.filter(g=>g.status==='In Process').length;
+  document.getElementById('gStatusSummary').textContent=goals.length?(inProcess+' In Process'):'—';
+  document.getElementById('gTaskSummary').textContent=achievedItems+' / '+totalItems;
+  document.getElementById('gOverallSummary').textContent=totalItems?Math.round((achievedItems/totalItems)*100)+'%':'0%';
+
+  if(!goals.length){c.innerHTML='<div class="emsg">No goals added yet.</div>';return;}
+  c.innerHTML='';
+
+  goals.forEach((g,i)=>{
+    const int=g.intervention||{};
+    const hasInt=!!int.domain;
+    const catColor=CAT_COLORS[g.category]||'#555';
+    const sp=g.subgoalProgress||{};
+    const mp=g.mainProgress||'Not Started';
+    const intStatus=g.interventionStatus||'';
+
+    // Intervention comparison scale
+    let intScaleHtml='';
+    if(hasInt){
+      const currentScore=AHIST[0].scores[int.domain]||0;
+      const levelKey=Object.keys(TARGET_SCORE).find(k=>int.target&&int.target.startsWith(k));
+      const targetScore=levelKey?TARGET_SCORE[levelKey]:0;
+
+      const intStatusOpts=['','In Progress','Target Met','Progress Made, Target Not Met','No Progress, Target Not Met'].map(o=>
+        `<option value="${o}" ${intStatus===o?'selected':''}>${o||'-- Set Status --'}</option>`).join('');
+      const intStatusColor={'In Progress':'#3d8fcf','Target Met':'#27ae60','Progress Made, Target Not Met':'#f39c12','No Progress, Target Not Met':'#e74c3c'}[intStatus]||'#888';
+      const intStatusBg={'In Progress':'#e8f4fb','Target Met':'#eafaf1','Progress Made, Target Not Met':'#fef9e7','No Progress, Target Not Met':'#fdf0f0'}[intStatus]||'#f8fafb';
+
+      const showLevelUpdate = intStatus==='Target Met'||intStatus==='Progress Made, Target Not Met';
+      const preFill = intStatus==='Target Met'&&levelKey ? TARGET_SCORE[levelKey] : 0;
+      const currentLevel = g.interventionCurrentLevel||0;
+      const levelOpts=[1,2,3,4,5].map(n=>`<option value="${n}" ${(currentLevel||preFill)===n?'selected':''}>${SCORE_LABELS[n]}</option>`).join('');
+
+      intScaleHtml=`
+        <div style="margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;color:#555;font-weight:600;">Current:</span>
+          <span style="background:${SCORE_COLORS[currentScore]||'#bbb'};color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:3px;">${SCORE_LABELS[currentScore]||'—'}</span>
+          <span style="font-size:14px;color:#bbb;">→</span>
+          <span style="font-size:11px;color:#555;font-weight:600;">Target:</span>
+          <span style="background:${levelKey?SCORE_COLORS[targetScore]:'#bbb'};color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:3px;">${levelKey||'Not set'}</span>
+        </div>
+        <div style="font-size:11px;color:#666;font-style:italic;margin-bottom:8px;padding-left:2px;">${int.target}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:${showLevelUpdate?'10px':'0'};">
+          <span style="font-size:11px;font-weight:700;color:#555;">Intervention Status:</span>
+          <select onchange="updateIntStatus(${i},this.value)"
+            style="border:1px solid #d0dbe5;border-radius:3px;padding:4px 8px;font-size:12px;font-weight:600;background:${intStatusBg};color:${intStatusColor};cursor:pointer;">
+            ${intStatusOpts}
+          </select>
+        </div>
+        ${showLevelUpdate?`
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;background:#f5f8fb;border:1px solid #e0e8f0;border-radius:3px;">
+          <span style="font-size:11px;font-weight:700;color:#555;">Update current level to:</span>
+          <select onchange="updateIntLevel(${i},this.value)"
+            style="border:1px solid #d0dbe5;border-radius:3px;padding:4px 8px;font-size:12px;cursor:pointer;">
+            <option value="">-- Select --</option>${levelOpts}
+          </select>
+          ${currentLevel?`<span style="font-size:11px;color:#27ae60;font-weight:700;">✓ Current Situation updated to ${SCORE_LABELS[currentLevel]}</span>`:''}
+        </div>`:''}`;
+    }
+
+    const pdrop=(label,current,key)=>{
+      const opts=PROGRESS_OPTS.map(o=>`<option value="${o}" ${current===o?'selected':''}>${o}</option>`).join('');
+      return `<select onchange="updateGoalProgress(${i},'${key.replace(/'/g,"\\'")}',this.value)"
+        style="border:1px solid #d0dbe5;border-radius:3px;padding:3px 6px;font-size:11px;font-weight:600;
+               background:${PROGRESS_BG[current]};color:${PROGRESS_COLORS[current]};cursor:pointer;min-width:140px;">${opts}</select>`;
+    };
+
+    const subRows=(g.subgoals||[]).map(s=>`
+      <tr style="border-bottom:1px solid #eef2f6;">
+        <td style="padding:7px 12px 7px 24px;font-size:12px;color:#444;"><span style="color:#bbb;margin-right:6px;">↳</span>${s}</td>
+        <td style="padding:7px 12px;text-align:right;">${pdrop(s,sp[s]||'Not Started',s)}</td>
+      </tr>`).join('');
+
+    c.innerHTML+=`
+    <div style="border:1px solid #d0dbe5;margin-bottom:14px;background:#fff;border-radius:2px;overflow:hidden;">
+
+      <!-- Category band -->
+      <div style="background:${catColor};padding:7px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;">${g.category||'Goal'}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button onclick="openGoalM(${i})" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:2px 10px;font-size:11px;cursor:pointer;">&#9998; Edit</button>
+          <button onclick="delGoal(${i})" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:11px;cursor:pointer;">&#x2715;</button>
+        </div>
+      </div>
+
+      <!-- Primary goal -->
+      <div style="padding:10px 14px;border-bottom:1px solid #e8edf2;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;border-left:4px solid ${catColor};">
+        <div>
+          <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">Primary Goal</div>
+          <div style="font-size:14px;font-weight:700;color:#1e2d4a;">${g.goalText}</div>
+        </div>
+        <div style="flex-shrink:0;">${pdrop(g.goalText,mp,'__main__')}</div>
+      </div>
+
+      <!-- Sub-goals -->
+      ${g.subgoals&&g.subgoals.length?`
+      <div style="border-bottom:1px solid #e8edf2;">
+        <div style="padding:5px 14px;background:#f5f8fb;border-bottom:1px solid #eef2f6;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;">Sub-Goals</div>
+        <table style="width:100%;border-collapse:collapse;">${subRows}</table>
+      </div>`:''}
+
+      <!-- Meta -->
+      <div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:0;font-size:12px;background:#fafbfc;border-bottom:1px solid #e8edf2;">
+        <div style="padding:0 14px 0 0;border-right:1px solid #d8e3ec;margin-right:14px;"><span style="font-weight:700;color:#555;">CONSENT</span>&nbsp;<span style="color:#3d8fcf;">${g.consent}</span></div>
+        <div style="padding:0 14px 0 0;border-right:1px solid #d8e3ec;margin-right:14px;"><span style="font-weight:700;color:#555;">STAFF</span>&nbsp;<span style="color:#3d8fcf;">${g.staff}</span></div>
+        <div><span style="font-weight:700;color:#555;">DATE</span>&nbsp;<span style="color:#3d8fcf;">${fD(g.date)}</span></div>
+      </div>
+
+      <!-- Comments -->
+      <div style="padding:7px 14px;border-bottom:1px solid #e8edf2;font-size:12px;">
+        <span style="font-weight:700;color:#555;">COMMENTS</span>${g.comments?`&nbsp;<span style="color:#333;">${g.comments}</span>`:''}
+      </div>
+
+      <!-- Intervention -->
+      <div style="padding:10px 14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:${hasInt?'10px':'4px'};">
+          <span style="font-weight:700;font-size:12px;color:#555;">INTERVENTION</span>
+          <button class="ibtn ie" style="width:20px;height:20px;font-size:11px;" onclick="openIntM(${i})">&#9998;</button>
+          ${hasInt?`<span style="font-size:12px;color:${catColor};font-weight:600;">${int.domain}</span>`:''}
+        </div>
+        ${hasInt?intScaleHtml:`<div style="font-size:11px;color:#aaa;font-style:italic;">No intervention set. Click edit to add.</div>`}
+      </div>
+    </div>`;
   });
 }
-function closeNoteM(){document.getElementById('nM').classList.remove('show');}
+
+function delGoal(i){ if(confirm('Delete this goal?')){ goals.splice(i,1); renderGoals(); showToast('Deleted.'); } }
+
+// ── INTERVENTION MODAL ────────────────────────────────────────────────────────
+function openIntM(goalIdx){
+  intEditIdx=goalIdx;
+  const g=goals[goalIdx];
+  const int=g.intervention||{};
+  const domain=CAT_TO_DOMAIN[g.category]||'';
+  const targets=INT_TARGETS[domain]||[];
+  const lbl=document.getElementById('intDomainLabel');
+  const box=document.getElementById('intDomains');
+
+  if(!domain||!targets.length){
+    lbl.innerHTML='<span style="color:#e74c3c;">No intervention domain mapped for this goal category.</span>';
+    box.innerHTML='';
+    document.getElementById('intM').classList.add('show');
+    return;
+  }
+
+  lbl.innerHTML=`<strong>Domain:</strong> <span style="color:#1e5f8a;font-weight:700;">${domain}</span> &nbsp;— Select one target level.`;
+  box.innerHTML=targets.map((t,ti)=>`
+    <label style="display:flex;align-items:flex-start;gap:8px;padding:8px 12px;cursor:pointer;font-size:12px;border:1px solid #e0e8f0;border-radius:3px;margin-bottom:6px;background:${int.target===t?'#eaf4fb':'#fff'};">
+      <input type="radio" name="intTarget" value="${t}" ${int.target===t?'checked':''} style="margin-top:2px;accent-color:#3d8fcf;"> ${t}
+    </label>`).join('');
+  document.getElementById('intM').classList.add('show');
+}
+function closeIntM(){ document.getElementById('intM').classList.remove('show'); }
+function saveIntM(){
+  const tgtSel=document.querySelector('input[name="intTarget"]:checked');
+  if(!tgtSel){showToast('Select a target level.');return;}
+  const domain=CAT_TO_DOMAIN[goals[intEditIdx].category]||'';
+  goals[intEditIdx].intervention={domain, target:tgtSel.value, currentDate:today()};
+  closeIntM(); renderGoals(); showToast('Intervention saved.');
+}
+
+// ── BUILD SERVICE SELECTOR (used in Add/Edit note modals) ────────────────────
+function buildSvcSelector(containerId, existingGrouped){
+  const box = document.getElementById(containerId);
+  box.innerHTML = '';
+  Object.keys(ALL_SVC_DOMAINS).forEach(domain=>{
+    const svcs = ALL_SVC_DOMAINS[domain];
+    let h = `<div class="dsg"><div class="dst">${domain}</div><div class="dsgr">`;
+    svcs.forEach(svc=>{
+      const trackedKey = TRACKED_SVCS[svc];
+      const alreadyTracked = trackedKey && pinned[trackedKey] && pinned[trackedKey].active;
+      const preChecked = existingGrouped && existingGrouped[domain] && existingGrouped[domain].includes(svc);
+      if(alreadyTracked){
+        // Already tracked — show bolded, no checkbox interaction
+        h += `<label style="opacity:.45;pointer-events:none;cursor:not-allowed;display:flex;align-items:center;gap:4px;">
+          <input type="checkbox" disabled ${preChecked?'checked':''}> <strong>${svc}</strong>
+        </label>`;
+      } else {
+        const willActivate = trackedKey && !pinned[trackedKey].active;
+        h += `<label style="display:flex;align-items:center;gap:4px;">
+          <input type="checkbox" class="svc-cb" data-domain="${domain}" value="${svc}" ${preChecked?'checked':''}${willActivate?` data-activates="${trackedKey}"`:''}> 
+          ${svc}${willActivate?`<span style="background:#1e5f8a;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;white-space:nowrap;margin-left:2px;">+ TRACK</span>`:''}
+        </label>`;
+      }
+    });
+    h += `</div></div>`;
+    box.innerHTML += h;
+  });
+}
+
+// ── PROGRESS NOTES ───────────────────────────────────────────────────────────
+function renderNotes(){
+  const left = document.getElementById('pnL');
+  left.innerHTML = '';
+
+  const activePinnedKeys = Object.keys(pinned).filter(k=>pinned[k].active);
+
+  // ── Pinned programs (always at top) ──
+  if(activePinnedKeys.length){
+    left.innerHTML += `<div class="pnl-sec-hdr">&#x1F4CC; Tracked Services</div>`;
+    activePinnedKeys.forEach(pk=>{
+      const p = PROG[pk];
+      const prog = pinned[pk];
+      const isActive = activeView && activeView.type==='pinned' && activeView.program===pk;
+      const completedCount = prog.days.filter(d=>d.statusDate).length;
+      const pipHtml = prog.days.map(d=>{
+        const isPast = d.fuDate <= today();
+        const pipCls = d.statusDate ? 'pip done' : (isPast ? 'pip overdue' : 'pip upcoming');
+        return `<div class="${pipCls}" title="${d.day}-Day: ${fD(d.fuDate)}"></div>`;
+      }).join('');
+      left.innerHTML += `
+        <div class="pn-pinned${isActive?' active':''}" onclick="selectPinned('${pk}')">
+          <div class="pn-pinned-inner">
+            <div class="pn-pinned-top">
+              <div class="pn-pinned-label">
+                <span class="pn-icon ${p.iconClass}">${p.iconLetter}</span>
+                ${p.shortLabel}
+              </div>
+              <span class="pn-pinned-count">${completedCount}/${prog.days.length} done</span>
+            </div>
+            <div class="pn-pips">${pipHtml}</div>
+          </div>
+        </div>`;
+    });
+  }
+
+  // ── General notes ──
+  const filt = document.getElementById('nFilt').value;
+  const filtered = filt==='all' ? notes : notes.filter(n=>n.domains&&n.domains.includes(filt));
+
+  if(filtered.length){
+    left.innerHTML += `<div class="pnl-sec-hdr">Progress Notes</div>`;
+    filtered.forEach((n,filtIdx)=>{
+      const ri = notes.indexOf(n);
+      const isActive = activeView && activeView.type==='general' && activeView.idx===ri;
+      left.innerHTML += `
+        <div class="pnc${isActive?' active':''}" onclick="selectNote(${ri})">
+          <div class="pnc-date">${fD(n.date)}</div>
+          <div class="pnc-preview">${n.text.substring(0,45)}</div>
+          <div class="pnc-actions">
+            <button class="pnc-btn edit" onclick="event.stopPropagation();openENM(${ri});" title="Edit">&#9998;</button>
+            <button class="pnc-btn del" onclick="event.stopPropagation();delNote(${ri});" title="Delete">&#x2715;</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  if(!activePinnedKeys.length && !filtered.length){
+    left.innerHTML = `<div class="pnempty-msg">No notes yet.<br><br>Click <strong>+ ADD</strong> to create a note.<br>Selecting DFSS Rental Assistance or SNAP Benefits will activate 30/60/90-day tracking.</div>`;
+  }
+
+  renderRight();
+}
+
+function selectPinned(pk){ activeView={type:'pinned',program:pk}; renderNotes(); }
+function selectNote(ri){ activeView={type:'general',idx:ri}; renderNotes(); }
+
+function renderRight(){
+  const right = document.getElementById('pnR');
+  if(!activeView){ right.innerHTML='<div class="pnempty-msg">Select a note or tracked program to view details.</div>'; return; }
+  if(activeView.type==='pinned') renderPinnedDetail(activeView.program);
+  else renderNoteDetail(activeView.idx);
+}
+
+// ── PINNED DETAIL ────────────────────────────────────────────────────────────
+function renderPinnedDetail(pk){
+  const right = document.getElementById('pnR');
+  const p = PROG[pk];
+  const prog = pinned[pk];
+  const completedCount = prog.days.filter(d=>d.statusDate).length;
+
+  // Find the originating note (the one that triggered this program)
+  const originNote = notes.find(n=>n.dsvc&&n.dsvc.includes(p.svc));
+
+  let h = `<div class="nd-card">
+    <!-- Banner -->
+    <div style="background:${p.accentColor};padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="pn-icon ${p.iconClass}" style="width:24px;height:24px;font-size:13px;">${p.iconLetter}</span>
+        <span style="color:#fff;font-size:14px;font-weight:700;">${p.label}</span>
+        <span style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;">${p.svc}</span>
+      </div>
+      <div style="color:rgba(255,255,255,.85);font-size:11px;">Started: ${fD(prog.startDate)} &nbsp;|&nbsp; ${completedCount}/${prog.days.length} follow-ups completed</div>
+    </div>`;
+
+  // Originating note
+  if(originNote){
+    h += `<div style="border-bottom:1px solid #d0dbe5;">
+      <div style="padding:6px 14px;background:#f8fafb;border-bottom:1px solid #e8edf2;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;">Initial Note</div>
+      <div style="padding:8px 14px;font-size:13px;color:#3d8fcf;line-height:1.5;">${originNote.text}</div>
+      <div style="padding:0 14px 8px;font-size:11px;color:#888;"><strong>By:</strong> ${originNote.author} &nbsp; <strong>Date:</strong> ${fD(originNote.date)}</div>
+    </div>`;
+  }
+
+  // Follow-up cards — vertical stack
+  h += `<div class="fu-grid">`;
+
+  prog.days.forEach((d,i)=>{
+    const isPast = d.fuDate <= today();
+    const isDone = !!d.statusDate;
+    const hdrCls = isDone ? 'done' : (isPast ? 'overdue' : 'upcoming');
+    const statusTxt = isDone ? `Completed ${fD(d.statusDate)}` : (isPast ? 'Overdue — not yet completed' : 'Upcoming');
+    h += `<div class="fu-card">
+      <div class="fu-card-hdr ${hdrCls}">
+        <span>${d.day}-Day Follow-Up</span>
+        <span style="font-size:10px;font-weight:400;">${statusTxt}</span>
+      </div>
+      <div class="fu-card-body">
+        <div class="fu-label">Follow-Up Date</div>
+        <div class="fu-val">${fD(d.fuDate)}</div>
+        ${d.location?`<div class="fu-label">Location</div><div style="font-size:12px;color:#2c3e50;margin-bottom:8px;">${d.location}</div>`:''}
+        ${(d.outcome||d.contactOutcome) ? `
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+            ${d.outcome?`<div><div class="fu-label">Service Outcome</div><span style="display:inline-block;background:#e8f4fb;border:1px solid #aed6f1;color:#1e5f8a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${d.outcome}</span></div>`:''}
+            ${d.contactOutcome?`<div><div class="fu-label">Contact Outcome</div><span style="display:inline-block;background:#f0f7ee;border:1px solid #b2d8a8;color:#1e6e2f;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${d.contactOutcome}</span></div>`:''}
+          </div>` : ''}
+        ${d.note ? `<div class="fu-label">General Notes</div><div class="fu-note-text">${d.note}</div>` : (!d.outcome && !d.contactOutcome ? `<div class="fu-empty">No outcome or notes entered yet.</div>` : '')}
+        <button class="fu-update-btn" onclick="openFuM('${pk}',${i})">${isDone?'&#9998; Edit':'&#9998; Update'}</button>
+      </div>
+    </div>`;
+  });
+
+  h += `</div>
+    <!-- General Notes for this tracked service -->
+    <div style="border-top:2px solid #d0dbe5;">
+      <div style="padding:8px 14px;background:#f8fafb;border-bottom:1px solid #e8edf2;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;">General Notes</span>
+        <button class="abtn" style="padding:3px 12px;font-size:11px;" onclick="openGenNoteM('${pk}')">+ Add Note</button>
+      </div>
+      <div style="padding:10px 14px;">`;
+
+  const genNotes = prog.generalNotes || [];
+  if(genNotes.length){
+    genNotes.forEach((gn,gi)=>{
+      h += `<div style="border:1px solid #e0e8f0;border-radius:3px;padding:8px 12px;margin-bottom:8px;background:#fff;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;color:#2c3e50;">${fD(gn.date)}${gn.location?`<span style="font-weight:400;color:#888;"> — ${gn.location}</span>`:''}</span>
+          <div style="display:flex;gap:4px;">
+            <button style="background:#3d8fcf;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="openEditGenNoteM('${pk}',${gi})">&#9998;</button>
+            <button style="background:#e74c3c;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="delGenNote('${pk}',${gi})">&#x2715;</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#333;line-height:1.5;">${gn.text}</div>
+        <div style="font-size:10px;color:#aaa;margin-top:4px;">${gn.author}</div>
+      </div>`;
+    });
+  } else {
+    h += `<div style="color:#aaa;font-size:12px;font-style:italic;">No general notes yet. Use this space for notes not tied to a specific follow-up day.</div>`;
+  }
+
+  h += `</div></div></div>`;
+  right.innerHTML = h;
+}
+
+// ── GENERAL NOTE DETAIL ──────────────────────────────────────────────────────
+function renderNoteDetail(ri){
+  const right = document.getElementById('pnR');
+  const n = notes[ri];
+  if(!n){ right.innerHTML='<div class="pnempty-msg">Note not found.</div>'; return; }
+  let h=`<div class="nd-card">
+    <div class="nd-sec">
+      <div class="nd-sec-hdr">
+        <span>Notes</span>
+        <div class="nd-meta"><strong>Created By:</strong> <a href="#">${n.author}</a>&nbsp; <strong>Date:</strong> ${n.created}</div>
+      </div>
+      <div class="nd-note-text">${n.text}</div>
+      ${n.location?`<div style="padding:0 14px 8px;font-size:11px;color:#555;"><strong>Location:</strong> ${n.location}</div>`:''}
+    </div>
+    <div class="nd-sec">
+      <div class="nd-sec-hdr">Services</div>
+      <div style="padding:10px 14px;"><div class="nd-svc-flow">`;
+  const sg=n.svcGrouped||{};
+  if(Object.keys(sg).length){ for(const[dk,svcs] of Object.entries(sg)){ if(svcs&&svcs.length){ h+=`<div class="nd-svc-col"><div class="nd-svc-col-hdr">${dk} <span class="info">i</span></div>`; svcs.forEach(s=>{h+=`<div class="nd-svc-item">${s}</div>`;}); h+='</div>'; } } }
+  else h+='<span style="color:#888;font-size:11px;">No services recorded.</span>';
+  h+=`</div></div></div>
+    <div class="nd-sec">
+      <div class="nd-sec-hdr">Documents <button class="nd-doc-add" onclick="showToast('Document upload would open.')">+</button></div>
+      <div style="padding:8px 14px;">`;
+  if(n.docs&&n.docs.length) n.docs.forEach(d=>{h+=`<div style="font-size:11px;color:#3d8fcf;">${d}</div>`;});
+  else h+=`<div style="color:#888;font-size:11px;font-style:italic;">No documents attached.</div>`;
+  h+=`</div></div></div>`;
+  right.innerHTML=h;
+}
+
+// ── FOLLOW-UP MODAL ──────────────────────────────────────────────────────────
+function openFuM(pk, dayIdx){
+  fuEditPk=pk; fuEditDayIdx=dayIdx;
+  const p=PROG[pk], prog=pinned[pk], d=prog.days[dayIdx];
+  document.getElementById('fuMTitle').textContent=`Update ${d.day}-Day Follow-Up`;
+  document.getElementById('fuMProgram').textContent=p.label;
+  document.getElementById('fuMDay').textContent=d.day+'-Day';
+  document.getElementById('fuMDate').textContent=fD(d.fuDate);
+  document.getElementById('fuMStatusDate').value=d.statusDate||'';
+  document.getElementById('fuMNote').value=d.note||'';
+  document.getElementById('fuMStatusErr').style.display='none';
+  // Populate location dropdown
+  populateLocSelect('fuMLoc', d.location||defaultLocation);
+  // Populate service outcome dropdown
+  const sel=document.getElementById('fuMOutcome');
+  sel.innerHTML='<option value="">-- Select Service Outcome --</option>';
+  (FU_OUTCOMES[pk]||[]).forEach(o=>{ sel.innerHTML+=`<option value="${o}" ${d.outcome===o?'selected':''}>${o}</option>`; });
+  // Populate contact outcome dropdown
+  const csel=document.getElementById('fuMContact');
+  csel.innerHTML='<option value="">-- Select Contact Outcome --</option>';
+  CONTACT_OUTCOMES.forEach(o=>{ csel.innerHTML+=`<option value="${o}" ${d.contactOutcome===o?'selected':''}>${o}</option>`; });
+  document.getElementById('fuM').classList.add('show');
+}
+function closeFuM(){ document.getElementById('fuM').classList.remove('show'); }
+function saveFuM(){
+  const d=pinned[fuEditPk].days[fuEditDayIdx];
+  const errEl=document.getElementById('fuMStatusErr');
+  errEl.style.display='none';
+  const sd=document.getElementById('fuMStatusDate').value;
+  if(sd){
+    if(sd < pinned[fuEditPk].startDate){ errEl.textContent='Status date cannot be before the service start date.'; errEl.style.display='block'; return; }
+    if(sd > today()){ errEl.textContent='Status date cannot be in the future.'; errEl.style.display='block'; return; }
+  }
+  const noteVal = document.getElementById('fuMNote').value.trim();
+  if(!noteVal){ errEl.textContent='Please enter a note.'; errEl.style.display='block'; return; }
+  d.statusDate=sd;
+  d.location=document.getElementById('fuMLoc').value;
+  d.outcome=document.getElementById('fuMOutcome').value;
+  d.contactOutcome=document.getElementById('fuMContact').value;
+  d.note=noteVal;
+  closeFuM(); renderNotes(); showToast('Follow-up updated.');
+}
+
+// ── BUILD LOCATION DROPDOWN ──────────────────────────────────────────────────
+function buildLocationSelect(id, selectedVal){
+  let opts='<option value="">-- Select Location --</option>';
+  CSC_LOCATIONS.forEach(l=>{ opts+=`<option value="${l}" ${selectedVal===l?'selected':''}>${l}</option>`; });
+  return `<div class="fg"><label class="fl">Location</label><select class="fs" id="${id}">${opts}</select></div>`;
+}
+function openNoteM(){
+  document.getElementById('nDt').value=today();
+  document.getElementById('nTx').value='';
+  document.getElementById('nDoc').value='';
+  populateLocSelect('nLoc');
+  buildSvcSelector('nSvcAll', null);
+  document.getElementById('nM').classList.add('show');
+}
+function closeNoteM(){ document.getElementById('nM').classList.remove('show'); }
 
 function saveNote(){
-  const text=document.getElementById('nTx').value.trim();const date=document.getElementById('nDt').value;
+  const text=document.getElementById('nTx').value.trim();
+  const date=document.getElementById('nDt').value;
+  const location=document.getElementById('nLoc').value;
   if(!text){showToast('Enter a note.');return;}
-  const svcGrouped={};const allSvcs=[];
-  document.querySelectorAll('.nds:checked').forEach(cb=>{
-    const d=cb.dataset.domain;const s=cb.value;
-    if(!svcGrouped[d])svcGrouped[d]=[];
-    svcGrouped[d].push(s);allSvcs.push(s);
+  const svcGrouped={}, allSvcs=[], toActivate=[];
+  document.querySelectorAll('#nSvcAll .svc-cb:checked').forEach(cb=>{
+    const d=cb.dataset.domain, s=cb.value;
+    if(!svcGrouped[d]) svcGrouped[d]=[];
+    svcGrouped[d].push(s); allSvcs.push(s);
+    if(cb.dataset.activates) toActivate.push(cb.dataset.activates);
   });
-  const docInput=document.getElementById('nDoc');
-  const docs=docInput.files?Array.from(docInput.files).map(f=>f.name):[];
-  // Determine domains from services for filtering
-  const domains=Object.keys(svcGrouped);
-  notes.unshift({date,text,domains,dsvc:allSvcs,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()});
-  closeNoteM();sn=0;renderNotes();showToast('Note saved.');
-}
-
-function renderNotes(){const left=document.getElementById('pnL');const right=document.getElementById('pnR');const f=document.getElementById('nFilt').value;const fl=f==='all'?notes:notes.filter(n=>n.domains&&n.domains.includes(f));if(!fl.length){left.innerHTML='<div style="padding:20px;text-align:center;color:#888;font-size:12px;">No notes.</div>';right.innerHTML='<div class="pnempty">No notes to display.</div>';sn=-1;return;}if(sn<0||sn>=fl.length)sn=0;left.innerHTML='';fl.forEach((n,i)=>{const act=i===sn?'active':'';const ri=notes.indexOf(n);left.innerHTML+=`<div class="pnc ${act}" onclick="sn=${i};renderNotes();">
-  <div class="pnd">${fD(n.date)}${n.isFollowup?'<div style="font-size:9px;background:#f39c12;color:#fff;display:inline-block;padding:1px 5px;border-radius:2px;margin-left:4px;">'+n.followupDay+'-Day</div>':''}</div><div class="pnp">${n.text.substring(0,35)}</div>
-  <div class="pnacts"><button class="pnact pna-edit" onclick="event.stopPropagation();openENM(${ri});" title="Edit">&#9998;</button><button class="pnact pna-del" onclick="event.stopPropagation();delNote(${ri});" title="Delete">x</button></div>
-</div>`;});showND(fl[sn]);}
-
-function showND(n){
-  const r=document.getElementById('pnR');const ri=notes.indexOf(n);
-  const isAuto=n.isFollowup?'<span style="display:inline-block;background:#f39c12;color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;margin-left:8px;">'+n.followupDay+'-Day Follow-Up</span>':'';
-
-  // Notes section
-  let h=`<div class="nd-card"><div class="nd-sec"><div class="nd-sec-hdr"><span>Notes${isAuto}</span><div class="nd-meta"><strong>Created By:</strong> <a href="#">${n.author}</a> &nbsp; <strong>Created Date:</strong> ${n.created}</div></div>`;
-  // Show follow-up day, follow-up date, and status date for follow-up notes
-  if(n.isFollowup){
-    h+=`<div style="padding:6px 12px;background:#fef9e7;border-bottom:1px solid #f0dea0;font-size:12px;display:flex;gap:24px;align-items:center;">`;
-    h+=`<span><strong>Day:</strong> ${n.followupDay}-Day</span>`;
-    h+=`<span><strong>Follow-Up Date:</strong> ${fD(n.followupDate||n.date)}</span>`;
-    h+=`<span><strong>Status Date:</strong> ${n.statusDate?fD(n.statusDate):'<span style="color:#888;font-style:italic;">Not yet completed</span>'}</span>`;
-    h+=`</div>`;
-  }
-  h+=`<div class="nd-note-text">${n.text}</div></div>`;
-
-  // Services: horizontal domain columns with items underneath
-  h+=`<div class="nd-sec"><div class="nd-sec-hdr">Services</div><div class="nd-sec-body"><div class="nd-svc-flow">`;
-  const sg=n.svcGrouped||{};
-  if(Object.keys(sg).length){
-    for(const[dk,svcs] of Object.entries(sg)){
-      if(svcs&&svcs.length){
-        h+=`<div class="nd-svc-col"><div class="nd-svc-col-hdr">${dk} <span class="info">i</span></div>`;
-        svcs.forEach(s=>{h+=`<div class="nd-svc-item">${s}</div>`;});
-        h+='</div>';
-      }
-    }
-  } else h+='<span style="color:#888;font-size:11px;">No services.</span>';
-  h+=`</div></div></div>`;
-
-  // Documents
-  h+=`<div class="nd-sec"><div class="nd-sec-hdr">Documents <button class="nd-doc-add" onclick="showToast('Document upload would open.')">+</button></div><div class="nd-sec-body" style="padding:6px 12px;">`;
-  if(n.docs&&n.docs.length){n.docs.forEach(d=>{h+=`<div style="font-size:11px;color:#3d8fcf;padding:1px 0;">${d}</div>`;});}
-  else{h+=`<div style="color:#888;font-size:11px;font-style:italic;">No documents attached.</div>`;}
-  h+=`</div></div></div>`;
-
-  r.innerHTML=h;
-}
-
-let enIdx=-1;
-function openENM(i){
-  enIdx=i;const n=notes[i];
-  document.getElementById('enTx').value=n.text;
-  document.getElementById('enStatusErr').style.display='none';
-  if(n.isFollowup){
-    document.getElementById('enFollowupRow').style.display='block';
-    document.getElementById('enRegDateRow').style.display='none';
-    document.getElementById('enFuDay').value=n.followupDay+'-Day';
-    document.getElementById('enFuDt').value=n.followupDate||n.date;
-    document.getElementById('enDtFu').value=n.statusDate||'';
-    document.getElementById('enDtFu').min=n.followupDate||n.date;
-    document.getElementById('enDtFu').max=new Date().toISOString().split('T')[0];
+  const docs=Array.from((document.getElementById('nDoc').files||[])).map(f=>f.name);
+  notes.unshift({date,location,text,domains:Object.keys(svcGrouped),dsvc:allSvcs,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()});
+  toActivate.forEach(pk=>activateProgram(pk, date));
+  closeNoteM();
+  if(toActivate.length){
+    activeView={type:'pinned',program:toActivate[0]};
+    showToast('Note saved. Tracking activated: '+toActivate.map(k=>PROG[k].label).join(', '));
   } else {
-    document.getElementById('enFollowupRow').style.display='none';
-    document.getElementById('enRegDateRow').style.display='block';
-    document.getElementById('enDt').value=n.date;
+    activeView={type:'general',idx:0};
+    showToast('Note saved.');
   }
-  const svcBox=document.getElementById('enSvc');svcBox.innerHTML='';
-  Object.keys(ALL_SVC_DOMAINS).forEach(d=>{
-    const svcs=ALL_SVC_DOMAINS[d];
-    const checked=n.svcGrouped&&n.svcGrouped[d]?n.svcGrouped[d]:[];
-    let h=`<div class="dsg"><div class="dst">${d}</div><div class="dsgr">`;
-    svcs.forEach(s=>{h+=`<label><input type="checkbox" class="ends" data-domain="${d}" value="${s}" ${checked.includes(s)?'checked':''}> ${s}</label>`;});
-    h+='</div></div>';svcBox.innerHTML+=h;
-  });
+  renderNotes();
+}
+
+// ── EDIT NOTE MODAL ──────────────────────────────────────────────────────────
+function openENM(ri){
+  enIdx=ri; const n=notes[ri];
+  document.getElementById('enDt').value=n.date;
+  document.getElementById('enTx').value=n.text;
+  populateLocSelect('enLoc', n.location||defaultLocation);
+  buildSvcSelector('enSvc', n.svcGrouped||{});
   document.getElementById('enM').classList.add('show');
 }
-function closeENM(){document.getElementById('enM').classList.remove('show');}
+function closeENM(){ document.getElementById('enM').classList.remove('show'); }
 function saveEN(){
   const n=notes[enIdx];
-  const errEl=document.getElementById('enStatusErr');
-  errEl.style.display='none';
-
-  if(n.isFollowup){
-    const dateVal=document.getElementById('enDtFu').value;
-    if(dateVal){
-      const fuDate=n.followupDate||n.date;
-      const today=new Date().toISOString().split('T')[0];
-      if(dateVal<fuDate){errEl.textContent='Status date cannot be before the follow-up date ('+fD(fuDate)+').';errEl.style.display='block';return;}
-      if(dateVal>today){errEl.textContent='Status date cannot be after today.';errEl.style.display='block';return;}
-    }
-    n.statusDate=dateVal;
-  } else {
-    n.date=document.getElementById('enDt').value;
-  }
-
+  n.date=document.getElementById('enDt').value;
+  n.location=document.getElementById('enLoc').value;
   n.text=document.getElementById('enTx').value.trim();
-  const svcGrouped={};const allSvcs=[];
-  document.querySelectorAll('.ends:checked').forEach(cb=>{
-    const d=cb.dataset.domain;const s=cb.value;
-    if(!svcGrouped[d])svcGrouped[d]=[];
-    svcGrouped[d].push(s);allSvcs.push(s);
-  });
-  n.svcGrouped=svcGrouped;n.dsvc=allSvcs;n.domains=Object.keys(svcGrouped);
-  n.author=n.isFollowup?'CLS_MPereyra':n.author;
+  const svcGrouped={}, allSvcs=[];
+  document.querySelectorAll('#enSvc .svc-cb:checked').forEach(cb=>{ const d=cb.dataset.domain,s=cb.value; if(!svcGrouped[d])svcGrouped[d]=[]; svcGrouped[d].push(s); allSvcs.push(s); });
+  n.svcGrouped=svcGrouped; n.dsvc=allSvcs; n.domains=Object.keys(svcGrouped);
   n.created=new Date().toLocaleString()+' (edited)';
-  closeENM();renderNotes();showToast('Note updated.');
+  closeENM(); renderNotes(); showToast('Note updated.');
 }
 
-function delNote(i){if(confirm('Delete?')){notes.splice(i,1);sn=0;renderNotes();showToast('Deleted.');}}
-function fD(d){if(!d)return'';const p=d.split('-');return p[1]+'/'+p[2]+'/'+p[0];}
+function delNote(ri){
+  if(confirm('Delete this note?')){
+    notes.splice(ri,1);
+    if(activeView&&activeView.type==='general'){ activeView=notes.length?{type:'general',idx:0}:null; }
+    renderNotes(); showToast('Deleted.');
+  }
+}
 
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+// ── GENERAL NOTES ON TRACKED SERVICES ───────────────────────────────────────
+let genNoteEditPk='', genNoteEditIdx=-1;
+
+function openGenNoteM(pk){
+  genNoteEditPk=pk; genNoteEditIdx=-1;
+  document.getElementById('genNoteMTitle').textContent='Add General Note';
+  document.getElementById('genNoteMService').textContent=PROG[pk].label;
+  document.getElementById('genNoteMDate').value=today();
+  document.getElementById('genNoteMText').value='';
+  populateLocSelect('genNoteMloc');
+  document.getElementById('genNoteM').classList.add('show');
+}
+function openEditGenNoteM(pk, idx){
+  genNoteEditPk=pk; genNoteEditIdx=idx;
+  const gn=pinned[pk].generalNotes[idx];
+  document.getElementById('genNoteMTitle').textContent='Edit General Note';
+  document.getElementById('genNoteMService').textContent=PROG[pk].label;
+  document.getElementById('genNoteMDate').value=gn.date;
+  document.getElementById('genNoteMText').value=gn.text;
+  populateLocSelect('genNoteMloc', gn.location||defaultLocation);
+  document.getElementById('genNoteM').classList.add('show');
+}
+function closeGenNoteM(){ document.getElementById('genNoteM').classList.remove('show'); }
+function saveGenNoteM(){
+  const text=document.getElementById('genNoteMText').value.trim();
+  const date=document.getElementById('genNoteMDate').value;
+  const location=document.getElementById('genNoteMloc').value;
+  if(!text){ showToast('Enter a note.'); return; }
+  if(!pinned[genNoteEditPk].generalNotes) pinned[genNoteEditPk].generalNotes=[];
+  const entry={date, location, text, author:'CLS_MPereyra'};
+  if(genNoteEditIdx===-1){
+    pinned[genNoteEditPk].generalNotes.unshift(entry);
+  } else {
+    pinned[genNoteEditPk].generalNotes[genNoteEditIdx]=entry;
+  }
+  closeGenNoteM(); renderNotes(); showToast('Note saved.');
+}
+function delGenNote(pk, idx){
+  if(confirm('Delete this note?')){
+    pinned[pk].generalNotes.splice(idx,1);
+    renderNotes(); showToast('Deleted.');
+  }
+}
+
 init();
 </script>
 </body>
