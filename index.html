@@ -296,45 +296,21 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 
       <!-- CLOSE OUT -->
       <div class="tp" id="tab-closeout">
-        <div class="sec"><div class="sec-h">Application Activity</div><div class="sec-b">
-          <div id="coActivity"></div>
-        </div></div>
-
         <div class="sec"><div class="sec-h">Close Out Details</div><div class="sec-b">
           <div class="fg"><label class="fl">Close Out Reason</label>
             <select class="fs" id="coReason">
               <option value="">-- Select --</option>
-              <optgroup label="Manual Close Out">
-                <option>Goals Achieved</option>
-                <option>Client Request</option>
-                <option>Lost Contact</option>
-                <option>Moved Out of Area</option>
-                <option>Transferred</option>
-                <option>Non-Compliance</option>
-                <option>Other</option>
-              </optgroup>
-              <optgroup label="System (applied automatically — not selectable)">
-                <option disabled>System Close Out — 90 Days No Activity</option>
-              </optgroup>
+              <option>Goals Achieved</option>
+              <option>Client Request</option>
+              <option>Lost Contact</option>
+              <option>Moved Out of Area</option>
+              <option>Transferred</option>
+              <option>Non-Compliance</option>
+              <option>Other</option>
             </select>
-            <div style="font-size:11px;color:#888;margin-top:5px;">Auto-closed applications carry one generic system reason, kept distinct from the manual reasons above.</div>
           </div>
           <div class="fg"><label class="fl">Close Out Date</label><input type="date" class="fi" id="coDate" style="width:200px;"></div>
-          <div class="fg"><label class="fl">Final Case Notes</label><textarea class="ft" placeholder="Enter final notes..."></textarea></div>
-          <button class="btn bblu" onclick="showToast('Case closed.')">Submit Close Out</button>
-        </div></div>
-
-        <div class="sec"><div class="sec-h">Auto-Closeout Rules</div><div class="sec-b">
-          <ul style="margin:0 0 0 18px;font-size:12px;color:#444;line-height:1.7;">
-            <li>90 days with no activity closes the application automatically; a warning goes out at 60 days to the case manager who opened it.</li>
-            <li>Services, referrals and case notes recorded under the application all reset the 90-day clock.</li>
-            <li>Manual close out stays available at any point.</li>
-            <li>A returning client gets a new application. Closed applications still count in reports.</li>
-            <li>Scope is CSC Case Management and Short-Term Intervention. CS Encounter is excluded; retired programs are handled by a separate one-time manual closeout.</li>
-          </ul>
-          <div style="margin-top:12px;padding:10px 12px;background:#fff8e1;border:1px solid #ffe0a3;border-radius:3px;font-size:11px;color:#7a5b00;line-height:1.6;">
-            <strong>Open from 8/26:</strong> whether a recent assessment on its own should also reset the clock. STARS revalidates every 30 days against ECM’s 90 — the group accepted the mismatch.
-          </div>
+          <button class="btn bblu" onclick="showToast('Case closed.')">Close</button>
         </div></div>
       </div>
 
@@ -427,7 +403,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 <div class="mo" id="ecM"><div class="modal"><div class="mh"><h3>Close Out Service Early</h3><button class="mx" onclick="closeEcM()">&#x2715;</button></div><div class="mbi">
   <div style="background:#fff8e1;border:1px solid #ffe0a3;border-radius:3px;padding:8px 12px;font-size:12px;color:#7a5b00;margin-bottom:14px;line-height:1.6;">
     <strong>Service:</strong> <span id="ecMService" style="color:#1e5f8a;font-weight:700;"></span><br>
-    Remaining follow-ups will be cancelled. This closes the tracked service only — the application stays open.
+    Remaining follow-ups will be cancelled and this service is finished. The application stays open, and the service can be added again later as a new tracked service.
   </div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
     <div style="flex:1;min-width:180px;"><label class="fl">Closeout Reason</label><select class="fs" id="ecMReason"><option value="">-- Select Reason --</option></select></div>
@@ -622,16 +598,19 @@ const SL=['','In Crisis','Vulnerable','Stable','Safe','Thriving'], SC=['','c1','
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let goals=[], notes=[], gid=0, eidx=-1, eai=-1, enIdx=-1;
 let activeView = null;
-let fuEditPk='', fuEditDayIdx=0;
+let fuEditPk='', fuEditEp=0, fuEditDayIdx=0;
 let defaultLocation = ''; // persists across all note modals
-let pinned = Object.fromEntries(Object.keys(PROG).map(k=>[k,{ active:false, startDate:'', days:[], closeout:null }]));
+// A tracked service can run more than once. Each activation appends an
+// episode; closing one out finishes it and leaves it in history. Selecting the
+// same service again starts a new episode rather than reopening the old one.
+let pinned = Object.fromEntries(Object.keys(PROG).map(k=>[k,[]]));
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function today(){ return new Date().toISOString().split('T')[0]; }
 function addDays(ds, n){ const d=new Date(ds); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
 function fD(d){ if(!d)return'—'; const p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
 function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
-function switchTab(t){ document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active')); const m={situation:0,assessment:1,goals:2,notes:3,closeout:4}; document.querySelectorAll('.ctab')[m[t]].classList.add('active'); document.getElementById('tab-'+t).classList.add('active'); if(t==='situation')buildDom(); if(t==='assessment')buildA(); if(t==='closeout')renderCloseout(); }
+function switchTab(t){ document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active')); const m={situation:0,assessment:1,goals:2,notes:3,closeout:4}; document.querySelectorAll('.ctab')[m[t]].classList.add('active'); document.getElementById('tab-'+t).classList.add('active'); if(t==='situation')buildDom(); if(t==='assessment')buildA(); }
 
 // Populate a location <select> with the default pre-selected; update defaultLocation on change
 function populateLocSelect(id, overrideVal){
@@ -648,12 +627,19 @@ function populateLocSelect(id, overrideVal){
 function init(){ buildDom(); buildA(); buildGS(); buildF(); document.getElementById('nDt').value=today(); renderNotes(); }
 
 // ── ACTIVATE TRACKED PROGRAM ─────────────────────────────────────────────────
-function activateProgram(pk, startDate){
+function openEpisodeIdx(pk){ return (pinned[pk]||[]).findIndex(ep=>!ep.closeout); }
+function hasOpenEpisode(pk){ return openEpisodeIdx(pk)!==-1; }
+
+function activateProgram(pk, note){
   const p = PROG[pk];
-  pinned[pk].active = true;
-  pinned[pk].startDate = startDate;
-  pinned[pk].closeout = null;
-  pinned[pk].days = p.days.map(d=>({ day:d, fuDate:addDays(startDate,d), statusDate:'', outcome:'', contactOutcome:'', note:'' }));
+  if(hasOpenEpisode(pk)) return;           // already running — don't duplicate
+  pinned[pk].push({
+    startDate: note.date,
+    days: p.days.map(d=>({ day:d, fuDate:addDays(note.date,d), statusDate:'', outcome:'', contactOutcome:'', note:'' })),
+    closeout: null,
+    generalNotes: [],
+    originNote: { text:note.text, author:note.author, date:note.date }
+  });
 }
 
 // ── DOMAIN HISTORY ───────────────────────────────────────────────────────────
@@ -1020,7 +1006,7 @@ function buildSvcSelector(containerId, existingGrouped){
     let h = `<div class="dsg"><div class="dst">${domain}</div><div class="dsgr">`;
     svcs.forEach(svc=>{
       const trackedKey = TRACKED_SVCS[svc];
-      const alreadyTracked = trackedKey && pinned[trackedKey] && pinned[trackedKey].active;
+      const alreadyTracked = trackedKey && hasOpenEpisode(trackedKey);
       const preChecked = existingGrouped && existingGrouped[domain] && existingGrouped[domain].includes(svc);
       if(alreadyTracked){
         // Already tracked — show bolded, no checkbox interaction
@@ -1028,10 +1014,13 @@ function buildSvcSelector(containerId, existingGrouped){
           <input type="checkbox" disabled ${preChecked?'checked':''}> <strong>${svc}</strong>
         </label>`;
       } else {
-        const willActivate = trackedKey && !pinned[trackedKey].active;
+        const willActivate = trackedKey && !hasOpenEpisode(trackedKey);
+        // A service that has run before and been closed out starts over as a
+        // brand new tracked service.
+        const isRepeat = willActivate && (pinned[trackedKey]||[]).length>0;
         h += `<label style="display:flex;align-items:center;gap:4px;">
           <input type="checkbox" class="svc-cb" data-domain="${domain}" value="${svc}" ${preChecked?'checked':''}${willActivate?` data-activates="${trackedKey}"`:''}> 
-          ${svc}${willActivate?`<span style="background:#1e5f8a;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;white-space:nowrap;margin-left:2px;">+ TRACK</span>`:''}
+          ${svc}${willActivate?`<span style="background:${isRepeat?'#7d4a8a':'#1e5f8a'};color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;white-space:nowrap;margin-left:2px;">${isRepeat?'+ TRACK AGAIN':'+ TRACK'}</span>`:''}
         </label>`;
       }
     });
@@ -1045,15 +1034,18 @@ function renderNotes(){
   const left = document.getElementById('pnL');
   left.innerHTML = '';
 
-  const activePinnedKeys = Object.keys(pinned).filter(k=>pinned[k].active);
+  // Every episode of every tracked service gets its own card, newest first.
+  const episodes = [];
+  Object.keys(pinned).forEach(pk=>{
+    (pinned[pk]||[]).forEach((prog,ei)=>episodes.push({pk,ei,prog,total:pinned[pk].length}));
+  });
 
   // ── Pinned programs (always at top) ──
-  if(activePinnedKeys.length){
+  if(episodes.length){
     left.innerHTML += `<div class="pnl-sec-hdr">&#x1F4CC; Tracked Services</div>`;
-    activePinnedKeys.forEach(pk=>{
+    episodes.slice().reverse().forEach(({pk,ei,prog,total})=>{
       const p = PROG[pk];
-      const prog = pinned[pk];
-      const isActive = activeView && activeView.type==='pinned' && activeView.program===pk;
+      const isActive = activeView && activeView.type==='pinned' && activeView.program===pk && activeView.ep===ei;
       const completedCount = prog.days.filter(d=>d.statusDate).length;
       const pipHtml = prog.days.map(d=>{
         const isPast = d.fuDate <= today();
@@ -1061,14 +1053,14 @@ function renderNotes(){
         return `<div class="${pipCls}" title="${d.day}-Day: ${fD(d.fuDate)}"></div>`;
       }).join('');
       left.innerHTML += `
-        <div class="pn-pinned${isActive?' active':''}" onclick="selectPinned('${pk}')">
+        <div class="pn-pinned${isActive?' active':''}" onclick="selectPinned('${pk}',${ei})">
           <div class="pn-pinned-inner">
             <div class="pn-pinned-top">
               <div class="pn-pinned-label">
                 <span class="pn-icon ${p.iconClass}">${p.iconLetter}</span>
-                ${p.shortLabel}
+                ${p.shortLabel}${total>1?`<span style="color:#90a4ae;font-weight:600;margin-left:4px;">#${ei+1}</span>`:''}
               </div>
-              <span class="pn-pinned-count">${prog.closeout?'Closed early':completedCount+'/'+prog.days.length+' done'}</span>
+              <span class="pn-pinned-count">${prog.closeout?'Closed '+fD(prog.closeout.date):completedCount+'/'+prog.days.length+' done'}</span>
             </div>
             <div class="pn-pips">${pipHtml}</div>
           </div>
@@ -1097,7 +1089,7 @@ function renderNotes(){
     });
   }
 
-  if(!activePinnedKeys.length && !filtered.length){
+  if(!episodes.length && !filtered.length){
     const trackedNames = Object.values(PROG).map(c=>c.label).join(' or ');
     left.innerHTML = `<div class="pnempty-msg">No notes yet.<br><br>Click <strong>+ ADD</strong> to create a note.<br>Selecting ${trackedNames} will activate follow-up tracking.</div>`;
   }
@@ -1105,39 +1097,39 @@ function renderNotes(){
   renderRight();
 }
 
-function selectPinned(pk){ activeView={type:'pinned',program:pk}; renderNotes(); }
+function selectPinned(pk, ei){ activeView={type:'pinned',program:pk,ep:ei}; renderNotes(); }
 function selectNote(ri){ activeView={type:'general',idx:ri}; renderNotes(); }
 
 function renderRight(){
   const right = document.getElementById('pnR');
   if(!activeView){ right.innerHTML='<div class="pnempty-msg">Select a note or tracked program to view details.</div>'; return; }
-  if(activeView.type==='pinned') renderPinnedDetail(activeView.program);
+  if(activeView.type==='pinned') renderPinnedDetail(activeView.program, activeView.ep);
   else renderNoteDetail(activeView.idx);
 }
 
 // ── PINNED DETAIL ────────────────────────────────────────────────────────────
-function renderPinnedDetail(pk){
+function renderPinnedDetail(pk, ei){
   const right = document.getElementById('pnR');
   const p = PROG[pk];
-  const prog = pinned[pk];
+  const prog = (pinned[pk]||[])[ei];
+  if(!prog){ right.innerHTML='<div class="pnempty-msg">Select a note or tracked program to view details.</div>'; return; }
+  const total = pinned[pk].length;
   const completedCount = prog.days.filter(d=>d.statusDate).length;
 
-  // Find the originating note (the one that triggered this program)
-  const originNote = notes.find(n=>n.dsvc&&n.dsvc.includes(p.svc));
+  // The note that started this episode
+  const originNote = prog.originNote;
 
   let h = `<div class="nd-card">
     <!-- Banner -->
     <div style="background:${p.accentColor};padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="pn-icon ${p.iconClass}" style="width:24px;height:24px;font-size:13px;">${p.iconLetter}</span>
-        <span style="color:#fff;font-size:14px;font-weight:700;">${p.label}</span>
+        <span style="color:#fff;font-size:14px;font-weight:700;">${p.label}${total>1?` <span style="opacity:.75;font-weight:600;">#${ei+1}</span>`:''}</span>
         <span style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;">${p.svc}</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <span style="color:rgba(255,255,255,.85);font-size:11px;">Started: ${fD(prog.startDate)} &nbsp;|&nbsp; ${completedCount}/${prog.days.length} follow-ups completed</span>
-        ${prog.closeout
-          ? `<button onclick="reopenSvc('${pk}')" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;">&#8635; Reopen Service</button>`
-          : `<button onclick="openEcM('${pk}')" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;">&#9873; Close Out Early</button>`}
+        ${prog.closeout ? '' : `<button onclick="openEcM('${pk}',${ei})" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;">&#9873; Close Out Early</button>`}
       </div>
     </div>`;
 
@@ -1149,6 +1141,7 @@ function renderPinnedDetail(pk){
       <span style="font-size:12px;color:#37474f;"><strong>Date:</strong> ${fD(prog.closeout.date)}</span>
       <span style="font-size:12px;color:#37474f;"><strong>By:</strong> ${prog.closeout.by}</span>
       ${prog.closeout.note?`<div style="flex-basis:100%;font-size:12px;color:#546e7a;line-height:1.5;">${prog.closeout.note}</div>`:''}
+      <div style="flex-basis:100%;font-size:11px;color:#78909c;font-style:italic;">This service is finished. To pick it back up, add it again from a new progress note — it starts as a new tracked service.</div>
     </div>`;
   }
 
@@ -1187,7 +1180,7 @@ function renderPinnedDetail(pk){
             ${d.contactOutcome?`<div><div class="fu-label">Contact Outcome</div><span style="display:inline-block;background:#f0f7ee;border:1px solid #b2d8a8;color:#1e6e2f;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${d.contactOutcome}</span></div>`:''}
           </div>` : ''}
         ${d.note ? `<div class="fu-label">General Notes</div><div class="fu-note-text">${d.note}</div>` : (!d.outcome && !d.contactOutcome ? `<div class="fu-empty">No outcome or notes entered yet.</div>` : '')}
-        ${isCancelled?'':`<button class="fu-update-btn" onclick="openFuM('${pk}',${i})">${isDone?'&#9998; Edit':'&#9998; Update'}</button>`}
+        ${isCancelled?'':`<button class="fu-update-btn" onclick="openFuM('${pk}',${ei},${i})">${isDone?'&#9998; Edit':'&#9998; Update'}</button>`}
       </div>
     </div>`;
   });
@@ -1197,7 +1190,7 @@ function renderPinnedDetail(pk){
     <div style="border-top:2px solid #d0dbe5;">
       <div style="padding:8px 14px;background:#f8fafb;border-bottom:1px solid #e8edf2;display:flex;align-items:center;justify-content:space-between;">
         <span style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;">General Notes</span>
-        <button class="abtn" style="padding:3px 12px;font-size:11px;" onclick="openGenNoteM('${pk}')">+ Add Note</button>
+        <button class="abtn" style="padding:3px 12px;font-size:11px;" onclick="openGenNoteM('${pk}',${ei})">+ Add Note</button>
       </div>
       <div style="padding:10px 14px;">`;
 
@@ -1208,8 +1201,8 @@ function renderPinnedDetail(pk){
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
           <span style="font-size:11px;font-weight:700;color:#2c3e50;">${fD(gn.date)}${gn.location?`<span style="font-weight:400;color:#888;"> — ${gn.location}</span>`:''}</span>
           <div style="display:flex;gap:4px;">
-            <button style="background:#3d8fcf;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="openEditGenNoteM('${pk}',${gi})">&#9998;</button>
-            <button style="background:#e74c3c;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="delGenNote('${pk}',${gi})">&#x2715;</button>
+            <button style="background:#3d8fcf;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="openEditGenNoteM('${pk}',${ei},${gi})">&#9998;</button>
+            <button style="background:#e74c3c;color:#fff;border:none;border-radius:2px;width:20px;height:20px;cursor:pointer;font-size:11px;" onclick="delGenNote('${pk}',${ei},${gi})">&#x2715;</button>
           </div>
         </div>
         <div style="font-size:12px;color:#333;line-height:1.5;">${gn.text}</div>
@@ -1255,9 +1248,9 @@ function renderNoteDetail(ri){
 }
 
 // ── FOLLOW-UP MODAL ──────────────────────────────────────────────────────────
-function openFuM(pk, dayIdx){
-  fuEditPk=pk; fuEditDayIdx=dayIdx;
-  const p=PROG[pk], prog=pinned[pk], d=prog.days[dayIdx];
+function openFuM(pk, ei, dayIdx){
+  fuEditPk=pk; fuEditEp=ei; fuEditDayIdx=dayIdx;
+  const p=PROG[pk], prog=pinned[pk][ei], d=prog.days[dayIdx];
   document.getElementById('fuMTitle').textContent=`Update ${d.day}-Day Follow-Up`;
   document.getElementById('fuMProgram').textContent=p.label;
   document.getElementById('fuMDay').textContent=d.day+'-Day';
@@ -1291,9 +1284,9 @@ const EARLY_CLOSEOUT_REASONS = [
   'Referred to Another Provider',
   'Other'
 ];
-let ecEditPk='';
-function openEcM(pk){
-  ecEditPk=pk;
+let ecEditPk='', ecEditEp=0;
+function openEcM(pk, ei){
+  ecEditPk=pk; ecEditEp=ei;
   document.getElementById('ecMService').textContent=PROG[pk].label;
   const sel=document.getElementById('ecMReason');
   sel.innerHTML='<option value="">-- Select Reason --</option>';
@@ -1309,69 +1302,20 @@ function saveEcM(){
   const date=document.getElementById('ecMDate').value;
   const err=document.getElementById('ecMErr');
   if(!reason||!date){ err.textContent='Select a reason and a closeout date.'; err.style.display='block'; return; }
-  const prog=pinned[ecEditPk];
+  const prog=pinned[ecEditPk][ecEditEp];
   prog.closeout={ reason, date, note:document.getElementById('ecMNote').value.trim(), by:'CSC_DCassell', type:'Manual' };
   prog.days.forEach(d=>{ if(!d.statusDate) d.cancelled=true; });
   closeEcM(); renderNotes();
-  showToast('Service closed out early — remaining follow-ups cancelled.');
-}
-function reopenSvc(pk){
-  if(!confirm('Reopen this service and restore its remaining follow-ups?')) return;
-  pinned[pk].closeout=null;
-  pinned[pk].days.forEach(d=>{ delete d.cancelled; });
-  renderNotes(); showToast('Service reopened.');
+  showToast('Service closed out. Add it again from a new note to start a new one.');
 }
 
-// ── APPLICATION INACTIVITY (90-day auto closeout, 60-day warning) ────────────
-const INACTIVITY_WARN_DAYS=60, INACTIVITY_CLOSE_DAYS=90;
-// Services, referrals and case notes all reset the clock.
-function lastActivityDate(){
-  const dates=[];
-  notes.forEach(n=>{ if(n.date) dates.push(n.date); });
-  Object.keys(pinned).forEach(pk=>{
-    const prog=pinned[pk];
-    if(prog.startDate) dates.push(prog.startDate);
-    (prog.days||[]).forEach(d=>{ if(d.statusDate) dates.push(d.statusDate); });
-    (prog.generalNotes||[]).forEach(gn=>{ if(gn.date) dates.push(gn.date); });
-    if(prog.closeout&&prog.closeout.date) dates.push(prog.closeout.date);
-  });
-  goals.forEach(g=>{ if(g.date) dates.push(g.date); });
-  if(!dates.length) return null;
-  return dates.sort()[dates.length-1];
-}
-function renderCloseout(){
-  const box=document.getElementById('coActivity');
-  if(!box) return;
-  const last=lastActivityDate();
-  if(!last){
-    box.innerHTML='<div style="font-size:12px;color:#888;font-style:italic;">No activity recorded yet. The 90-day clock starts with the first service, referral or case note.</div>';
-    return;
-  }
-  const days=Math.max(0,Math.round((new Date(today())-new Date(last))/86400000));
-  const remaining=INACTIVITY_CLOSE_DAYS-days;
-  let state,color,bg;
-  if(days>=INACTIVITY_CLOSE_DAYS){ state='Eligible for system close out'; color='#e74c3c'; bg='#fdf0f0'; }
-  else if(days>=INACTIVITY_WARN_DAYS){ state='Warning sent to case manager'; color='#f39c12'; bg='#fef9e7'; }
-  else { state='Active'; color='#27ae60'; bg='#eafaf1'; }
-  const pct=Math.min(100,Math.round(days/INACTIVITY_CLOSE_DAYS*100));
-  box.innerHTML=`
-    <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:12px;">
-      <div><div class="fu-label">Last Activity</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${fD(last)}</div></div>
-      <div><div class="fu-label">Days Inactive</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${days}</div></div>
-      <div><div class="fu-label">Status</div><span style="display:inline-block;background:${bg};border:1px solid ${color};color:${color};font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${state}</span></div>
-      ${remaining>0?`<div><div class="fu-label">Auto Close Out In</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${remaining} days</div></div>`:''}
-    </div>
-    <div style="height:8px;background:#e8edf2;border-radius:4px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${color};"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:10px;color:#999;margin-top:4px;"><span>0 days</span><span>60 — warning</span><span>90 — auto close out</span></div>
-    <div style="font-size:11px;color:#888;margin-top:10px;">Counted from the most recent service, referral or case note on this application.</div>`;
-}
 function saveFuM(){
-  const d=pinned[fuEditPk].days[fuEditDayIdx];
+  const d=pinned[fuEditPk][fuEditEp].days[fuEditDayIdx];
   const errEl=document.getElementById('fuMStatusErr');
   errEl.style.display='none';
   const sd=document.getElementById('fuMStatusDate').value;
   if(sd){
-    if(sd < pinned[fuEditPk].startDate){ errEl.textContent='Status date cannot be before the service start date.'; errEl.style.display='block'; return; }
+    if(sd < pinned[fuEditPk][fuEditEp].startDate){ errEl.textContent='Status date cannot be before the service start date.'; errEl.style.display='block'; return; }
     if(sd > today()){ errEl.textContent='Status date cannot be in the future.'; errEl.style.display='block'; return; }
   }
   const noteVal = document.getElementById('fuMNote').value.trim();
@@ -1413,11 +1357,12 @@ function saveNote(){
     if(cb.dataset.activates) toActivate.push(cb.dataset.activates);
   });
   const docs=Array.from((document.getElementById('nDoc').files||[])).map(f=>f.name);
-  notes.unshift({date,location,text,domains:Object.keys(svcGrouped),dsvc:allSvcs,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()});
-  toActivate.forEach(pk=>activateProgram(pk, date));
+  const newNote={date,location,text,domains:Object.keys(svcGrouped),dsvc:allSvcs,svcGrouped,docs,author:'CLS_MPereyra',created:new Date().toLocaleString()};
+  notes.unshift(newNote);
+  toActivate.forEach(pk=>activateProgram(pk, newNote));
   closeNoteM();
   if(toActivate.length){
-    activeView={type:'pinned',program:toActivate[0]};
+    activeView={type:'pinned',program:toActivate[0],ep:openEpisodeIdx(toActivate[0])};
     showToast('Note saved. Tracking activated: '+toActivate.map(k=>PROG[k].label).join(', '));
   } else {
     activeView={type:'general',idx:0};
@@ -1457,10 +1402,10 @@ function delNote(ri){
 }
 
 // ── GENERAL NOTES ON TRACKED SERVICES ───────────────────────────────────────
-let genNoteEditPk='', genNoteEditIdx=-1;
+let genNoteEditPk='', genNoteEditEp=0, genNoteEditIdx=-1;
 
-function openGenNoteM(pk){
-  genNoteEditPk=pk; genNoteEditIdx=-1;
+function openGenNoteM(pk, ei){
+  genNoteEditPk=pk; genNoteEditEp=ei; genNoteEditIdx=-1;
   document.getElementById('genNoteMTitle').textContent='Add General Note';
   document.getElementById('genNoteMService').textContent=PROG[pk].label;
   document.getElementById('genNoteMDate').value=today();
@@ -1468,9 +1413,9 @@ function openGenNoteM(pk){
   populateLocSelect('genNoteMloc');
   document.getElementById('genNoteM').classList.add('show');
 }
-function openEditGenNoteM(pk, idx){
-  genNoteEditPk=pk; genNoteEditIdx=idx;
-  const gn=pinned[pk].generalNotes[idx];
+function openEditGenNoteM(pk, ei, idx){
+  genNoteEditPk=pk; genNoteEditEp=ei; genNoteEditIdx=idx;
+  const gn=pinned[pk][ei].generalNotes[idx];
   document.getElementById('genNoteMTitle').textContent='Edit General Note';
   document.getElementById('genNoteMService').textContent=PROG[pk].label;
   document.getElementById('genNoteMDate').value=gn.date;
@@ -1484,18 +1429,19 @@ function saveGenNoteM(){
   const date=document.getElementById('genNoteMDate').value;
   const location=document.getElementById('genNoteMloc').value;
   if(!text){ showToast('Enter a note.'); return; }
-  if(!pinned[genNoteEditPk].generalNotes) pinned[genNoteEditPk].generalNotes=[];
+  const ep=pinned[genNoteEditPk][genNoteEditEp];
+  if(!ep.generalNotes) ep.generalNotes=[];
   const entry={date, location, text, author:'CLS_MPereyra'};
   if(genNoteEditIdx===-1){
-    pinned[genNoteEditPk].generalNotes.unshift(entry);
+    ep.generalNotes.unshift(entry);
   } else {
-    pinned[genNoteEditPk].generalNotes[genNoteEditIdx]=entry;
+    ep.generalNotes[genNoteEditIdx]=entry;
   }
   closeGenNoteM(); renderNotes(); showToast('Note saved.');
 }
-function delGenNote(pk, idx){
+function delGenNote(pk, ei, idx){
   if(confirm('Delete this note?')){
-    pinned[pk].generalNotes.splice(idx,1);
+    pinned[pk][ei].generalNotes.splice(idx,1);
     renderNotes(); showToast('Deleted.');
   }
 }
