@@ -106,6 +106,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 .pip.done{background:#27ae60;}
 .pip.overdue{background:#e67e22;}
 .pip.upcoming{background:#d8e3ec;}
+.pip.cancelled{background:#cfd8dc;opacity:.55;}
 
 /* Regular note card */
 .pnc{padding:9px 12px;border-bottom:1px solid #e5edf4;cursor:pointer;}
@@ -145,6 +146,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 .fu-card-hdr.done{background:#d4edda;color:#155724;border-bottom:1px solid #c3e6cb;}
 .fu-card-hdr.overdue{background:#fff3cd;color:#856404;border-bottom:1px solid #ffeeba;}
 .fu-card-hdr.upcoming{background:#f0f4f8;color:#555;border-bottom:1px solid #d8e3ec;}
+.fu-card-hdr.cancelled{background:#eceff1;color:#78909c;border-bottom:1px solid #cfd8dc;}
 .fu-card-body{padding:10px 14px;background:#fff;font-size:12px;}
 .fu-card-body .fu-label{font-size:11px;color:#888;margin-bottom:3px;}
 .fu-card-body .fu-val{color:#2c3e50;font-weight:600;margin-bottom:8px;}
@@ -294,11 +296,45 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 
       <!-- CLOSE OUT -->
       <div class="tp" id="tab-closeout">
+        <div class="sec"><div class="sec-h">Application Activity</div><div class="sec-b">
+          <div id="coActivity"></div>
+        </div></div>
+
         <div class="sec"><div class="sec-h">Close Out Details</div><div class="sec-b">
-          <div class="fg"><label class="fl">Close Out Reason</label><select class="fs"><option value="">-- Select --</option><option>Goals Achieved</option><option>Client Request</option><option>Lost Contact</option><option>Moved Out of Area</option><option>Transferred</option><option>Non-Compliance</option><option>Other</option></select></div>
-          <div class="fg"><label class="fl">Close Out Date</label><input type="date" class="fi" style="width:200px;"></div>
+          <div class="fg"><label class="fl">Close Out Reason</label>
+            <select class="fs" id="coReason">
+              <option value="">-- Select --</option>
+              <optgroup label="Manual Close Out">
+                <option>Goals Achieved</option>
+                <option>Client Request</option>
+                <option>Lost Contact</option>
+                <option>Moved Out of Area</option>
+                <option>Transferred</option>
+                <option>Non-Compliance</option>
+                <option>Other</option>
+              </optgroup>
+              <optgroup label="System (applied automatically — not selectable)">
+                <option disabled>System Close Out — 90 Days No Activity</option>
+              </optgroup>
+            </select>
+            <div style="font-size:11px;color:#888;margin-top:5px;">Auto-closed applications carry one generic system reason, kept distinct from the manual reasons above.</div>
+          </div>
+          <div class="fg"><label class="fl">Close Out Date</label><input type="date" class="fi" id="coDate" style="width:200px;"></div>
           <div class="fg"><label class="fl">Final Case Notes</label><textarea class="ft" placeholder="Enter final notes..."></textarea></div>
           <button class="btn bblu" onclick="showToast('Case closed.')">Submit Close Out</button>
+        </div></div>
+
+        <div class="sec"><div class="sec-h">Auto-Closeout Rules</div><div class="sec-b">
+          <ul style="margin:0 0 0 18px;font-size:12px;color:#444;line-height:1.7;">
+            <li>90 days with no activity closes the application automatically; a warning goes out at 60 days to the case manager who opened it.</li>
+            <li>Services, referrals and case notes recorded under the application all reset the 90-day clock.</li>
+            <li>Manual close out stays available at any point.</li>
+            <li>A returning client gets a new application. Closed applications still count in reports.</li>
+            <li>Scope is CSC Case Management and Short-Term Intervention. CS Encounter is excluded; retired programs are handled by a separate one-time manual closeout.</li>
+          </ul>
+          <div style="margin-top:12px;padding:10px 12px;background:#fff8e1;border:1px solid #ffe0a3;border-radius:3px;font-size:11px;color:#7a5b00;line-height:1.6;">
+            <strong>Open from 8/26:</strong> whether a recent assessment on its own should also reset the clock. STARS revalidates every 30 days against ECM’s 90 — the group accepted the mismatch.
+          </div>
         </div></div>
       </div>
 
@@ -310,11 +346,11 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
 <div class="mo" id="goalM"><div class="modal modal-lg"><div class="mh"><h3 id="goalMTitle">Add Goal</h3><button class="mx" onclick="closeGoalM()">&#x2715;</button></div><div class="mbi">
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
     <div style="flex:1;min-width:160px;"><label class="fl">Goal Category</label><select class="fs" id="gSel" onchange="onGC()"><option value="">-- Select Category --</option></select></div>
-    <div style="flex:1;min-width:160px;"><label class="fl">Primary Goal</label><select class="fs" id="gGoalSel" onchange="onGoalSel()"><option value="">-- Select Goal --</option></select></div>
   </div>
-  <div id="gSubgoalsSection" style="display:none;margin-bottom:14px;">
-    <label class="fl">Additional Sub-Goals <span style="font-weight:400;color:#888;">(optional — select any others from this category)</span></label>
-    <div class="cbl" id="gSubgoalsList"></div>
+  <div id="gGoalsSection" style="display:none;margin-bottom:14px;">
+    <label class="fl">Goals <span style="font-weight:400;color:#888;">(select every goal that applies — one list per category, no primary goal)</span></label>
+    <div class="cbl" id="gGoalsList"></div>
+    <div id="gGoalsHint" style="font-size:11px;color:#888;margin-top:6px;"></div>
   </div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
     <div style="flex:1;min-width:140px;"><label class="fl">Consent</label><select class="fs" id="gConsent"><option value="Private">Private</option><option value="Public">Public</option></select></div>
@@ -386,6 +422,20 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#e9eff5;
   </div>
   <div class="fg"><label class="fl">Notes</label><textarea class="ft" id="fuMNote" placeholder="Enter follow-up notes..." style="min-height:90px;"></textarea></div>
 </div><div class="mf"><button class="btn bout" onclick="closeFuM()">Cancel</button><button class="btn bblu" onclick="saveFuM()">Save</button></div></div></div>
+
+<!-- EARLY CLOSEOUT MODAL (8/26 decision: manual early closeout on tracked services) -->
+<div class="mo" id="ecM"><div class="modal"><div class="mh"><h3>Close Out Service Early</h3><button class="mx" onclick="closeEcM()">&#x2715;</button></div><div class="mbi">
+  <div style="background:#fff8e1;border:1px solid #ffe0a3;border-radius:3px;padding:8px 12px;font-size:12px;color:#7a5b00;margin-bottom:14px;line-height:1.6;">
+    <strong>Service:</strong> <span id="ecMService" style="color:#1e5f8a;font-weight:700;"></span><br>
+    Remaining follow-ups will be cancelled. This closes the tracked service only — the application stays open.
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="flex:1;min-width:180px;"><label class="fl">Closeout Reason</label><select class="fs" id="ecMReason"><option value="">-- Select Reason --</option></select></div>
+    <div style="min-width:160px;"><label class="fl">Closeout Date</label><input type="date" class="fi" id="ecMDate"></div>
+  </div>
+  <div id="ecMErr" style="display:none;color:#e74c3c;font-size:11px;margin-bottom:10px;font-weight:600;"></div>
+  <div class="fg"><label class="fl">Notes</label><textarea class="ft" id="ecMNote" placeholder="Why is this service closing early?" style="min-height:90px;"></textarea></div>
+</div><div class="mf"><button class="btn bout" onclick="closeEcM()">Cancel</button><button class="btn bblu" onclick="saveEcM()">Close Out Service</button></div></div></div>
 
 <div class="toast" id="toast"></div>
 
@@ -480,10 +530,22 @@ const INT_TARGETS = {
     'Empowered/Thriving: Knowledgeable, confident parenting'
   ]
 };
-const TRACKED_SVCS = {
-  'DFSS Rental Assistance Program': 'rental',
-  'SNAP Benefits Refrl': 'snap'
+// ── TRACKED SERVICE CONFIGURATION ────────────────────────────────────────────
+// 8/26 decision: trackable services are modular, switched on by a backend
+// configuration flag rather than a code change. Add an entry with enabled:true
+// to give a service follow-up tracking, a pinned card and its own outcome list.
+// Set enabled:false to retire a service without touching historical records.
+const SVC_TRACKING_CONFIG = {
+  rental: { enabled:true,  svc:'DFSS Rental Assistance Program', label:'DFSS Rental Assistance', shortLabel:'Rental Asst.',  iconClass:'icon-rental', iconLetter:'R', accentColor:'#1e5f8a', days:[30,60,90] },
+  snap:   { enabled:true,  svc:'SNAP Benefits Refrl',            label:'SNAP Benefits',          shortLabel:'SNAP Benefits', iconClass:'icon-snap',   iconLetter:'S', accentColor:'#1e8a4a', days:[30,60,90] },
+  // Example of a configured-but-off service. Flip enabled to true and it picks
+  // up pinned tracking with no other change.
+  employ: { enabled:false, svc:'Employment Placement Refrl',     label:'Employment Placement',   shortLabel:'Employment',    iconClass:'icon-snap',   iconLetter:'E', accentColor:'#7d4a8a', days:[30,60,90] }
 };
+
+// Everything below is derived from the table above — nothing is hand-maintained.
+const PROG = Object.fromEntries(Object.entries(SVC_TRACKING_CONFIG).filter(([k,c])=>c.enabled));
+const TRACKED_SVCS = Object.fromEntries(Object.entries(PROG).map(([k,c])=>[c.svc,k]));
 
 const ALL_SVC_DOMAINS={
   'Housing':['DFSS Rental Assistance Program','Foreclosure Assistance Refrl','Utility Assistance Refrl','Supprtv Housing Prgm Placement','Furniture Refrl','CRS Refrl','Legal Assist 4 Housing Refrl','Disaster Relocation Assistance','Starter Kit','Interim Housing Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
@@ -497,12 +559,6 @@ const ALL_SVC_DOMAINS={
   'Parenting Skills':['Headstart Refrl','Family Counseling Refrl','Autism Center Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
   'Support System':['Support Group Refrl','Advocacy','Follow up Call','Letter Writing','Translation'],
   'Substance Abuse':['Advocacy','Follow up Call','Letter Writing','Translation']
-};
-
-// Program metadata
-const PROG = {
-  rental: { label:'DFSS Rental Assistance', shortLabel:'Rental Asst.', svc:'DFSS Rental Assistance Program', iconClass:'icon-rental', iconLetter:'R', accentColor:'#1e5f8a', days:[30,60,90] },
-  snap:   { label:'SNAP Benefits', shortLabel:'SNAP Benefits', svc:'SNAP Benefits Refrl', iconClass:'icon-snap', iconLetter:'S', accentColor:'#1e8a4a', days:[30,60,90] }
 };
 
 // Service-specific outcome options for follow-up dropdowns
@@ -531,6 +587,15 @@ const FU_OUTCOMES = {
 };
 
 // Contact outcomes — same across all tracked services
+FU_OUTCOMES.employ = [
+  'Employment Retained',
+  'Employment Lost',
+  'Placement Pending',
+  'Client Referred to Additional Services',
+  'Client Requested Closure',
+  'Other'
+];
+
 const CONTACT_OUTCOMES = [
   'Spoke with Client',
   'Left Voicemail',
@@ -559,17 +624,14 @@ let goals=[], notes=[], gid=0, eidx=-1, eai=-1, enIdx=-1;
 let activeView = null;
 let fuEditPk='', fuEditDayIdx=0;
 let defaultLocation = ''; // persists across all note modals
-let pinned = {
-  rental: { active:false, startDate:'', days:[] },
-  snap:   { active:false, startDate:'', days:[] }
-};
+let pinned = Object.fromEntries(Object.keys(PROG).map(k=>[k,{ active:false, startDate:'', days:[], closeout:null }]));
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function today(){ return new Date().toISOString().split('T')[0]; }
 function addDays(ds, n){ const d=new Date(ds); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
 function fD(d){ if(!d)return'—'; const p=d.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
 function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
-function switchTab(t){ document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active')); const m={situation:0,assessment:1,goals:2,notes:3,closeout:4}; document.querySelectorAll('.ctab')[m[t]].classList.add('active'); document.getElementById('tab-'+t).classList.add('active'); if(t==='situation')buildDom(); if(t==='assessment')buildA(); }
+function switchTab(t){ document.querySelectorAll('.ctab').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tp').forEach(e=>e.classList.remove('active')); const m={situation:0,assessment:1,goals:2,notes:3,closeout:4}; document.querySelectorAll('.ctab')[m[t]].classList.add('active'); document.getElementById('tab-'+t).classList.add('active'); if(t==='situation')buildDom(); if(t==='assessment')buildA(); if(t==='closeout')renderCloseout(); }
 
 // Populate a location <select> with the default pre-selected; update defaultLocation on change
 function populateLocSelect(id, overrideVal){
@@ -590,6 +652,7 @@ function activateProgram(pk, startDate){
   const p = PROG[pk];
   pinned[pk].active = true;
   pinned[pk].startDate = startDate;
+  pinned[pk].closeout = null;
   pinned[pk].days = p.days.map(d=>({ day:d, fuDate:addDays(startDate,d), statusDate:'', outcome:'', contactOutcome:'', note:'' }));
 }
 
@@ -649,28 +712,32 @@ function buildF(){
   nf.innerHTML='<option value="all">All Domains</option>';
   Object.keys(ALL_SVC_DOMAINS).forEach(d=>nf.innerHTML+=`<option value="${d}">${d}</option>`);
 }
+// 8/26 decision: goals are a single flat list per category. Every goal in the
+// category is offered at the same level — there is no primary goal and no
+// sub-goal nesting.
 function onGC(){
   const cat=document.getElementById('gSel').value;
-  const gs=document.getElementById('gGoalSel');
-  gs.innerHTML='<option value="">-- Select Goal --</option>';
-  document.getElementById('gSubgoalsSection').style.display='none';
-  document.getElementById('gSubgoalsList').innerHTML='';
-  if(!cat) return;
-  (GOALS[cat]||[]).forEach(s=>{ gs.innerHTML+=`<option value="${s}">${s}</option>`; });
-}
-function onGoalSel(){
-  const cat=document.getElementById('gSel').value;
-  const primary=document.getElementById('gGoalSel').value;
-  const sec=document.getElementById('gSubgoalsSection');
-  const list=document.getElementById('gSubgoalsList');
-  if(!primary){ sec.style.display='none'; return; }
-  const others=(GOALS[cat]||[]).filter(s=>s!==primary);
-  if(!others.length){ sec.style.display='none'; return; }
+  const sec=document.getElementById('gGoalsSection');
+  const list=document.getElementById('gGoalsList');
+  const hint=document.getElementById('gGoalsHint');
   list.innerHTML='';
-  others.forEach((s,i)=>{
-    const checked=(document.getElementById('goalM')._editSubgoals||[]).includes(s);
-    list.innerHTML+=`<div class="cbi"><input type="checkbox" id="sg${i}" value="${s}" ${checked?'checked':''}><label for="sg${i}">${s}</label></div>`;
+  hint.textContent='';
+  if(!cat){ sec.style.display='none'; return; }
+  const editIdx=document.getElementById('goalM')._editIdx;
+  const existing=goals.findIndex(g=>g.category===cat);
+  // Pre-tick whatever the category's list already holds, so the checkboxes
+  // always show the real list and saving updates it in place.
+  let preChecked=document.getElementById('goalM')._editGoals||[];
+  if(editIdx===undefined && existing!==-1) preChecked=goals[existing].goalList||[];
+  (GOALS[cat]||[]).forEach((s,i)=>{
+    const checked=preChecked.includes(s);
+    list.innerHTML+=`<div class="cbi"><input type="checkbox" id="gl${i}" value="${s}" ${checked?'checked':''}><label for="gl${i}">${s}</label></div>`;
   });
+  if(existing!==-1 && existing!==editIdx){
+    hint.innerHTML=`<span style="color:#f39c12;font-weight:600;">${cat} already has a goal list — its current goals are ticked below. Saving updates that list.</span>`;
+  } else {
+    hint.textContent=(GOALS[cat]||[]).length+' goals in this category. Select as many as apply.';
+  }
   sec.style.display='block';
 }
 
@@ -679,26 +746,20 @@ function openGoalM(idx){
   const gSel=document.getElementById('gSel');
   gSel.innerHTML='<option value="">-- Select Category --</option>';
   Object.keys(GOALS).forEach(g=>gSel.innerHTML+=`<option value="${g}">${g}</option>`);
-  document.getElementById('gGoalSel').innerHTML='<option value="">-- Select Goal --</option>';
-  document.getElementById('gSubgoalsSection').style.display='none';
-  document.getElementById('gSubgoalsList').innerHTML='';
+  document.getElementById('gGoalsSection').style.display='none';
+  document.getElementById('gGoalsList').innerHTML='';
+  document.getElementById('gGoalsHint').textContent='';
   document.getElementById('gDate').value=today();
   document.getElementById('gComments').value='';
   document.getElementById('gStaff').value='CSC_DCassell';
   document.getElementById('gConsent').value='Private';
-  document.getElementById('goalM')._editIdx=undefined;
-  document.getElementById('goalM')._editSubgoals=[];
+  document.getElementById('goalM')._editIdx=idx;
+  document.getElementById('goalM')._editGoals=[];
   if(idx!==undefined){
     const g=goals[idx];
     gSel.value=g.category||'';
-    if(g.category){ onGC(); document.getElementById('gGoalSel').value=g.goalText; }
-    document.getElementById('goalM')._editSubgoals=g.subgoals||[];
-    onGoalSel();
-    // Re-check previously saved subgoals
-    (g.subgoals||[]).forEach(s=>{
-      const cb=[...document.querySelectorAll('#gSubgoalsList input')].find(i=>i.value===s);
-      if(cb) cb.checked=true;
-    });
+    document.getElementById('goalM')._editGoals=g.goalList||[];
+    if(g.category) onGC();
     document.getElementById('gConsent').value=g.consent||'Private';
     document.getElementById('gStaff').value=g.staff||'CSC_DCassell';
     document.getElementById('gDate').value=g.date||today();
@@ -711,20 +772,25 @@ function closeGoalM(){ document.getElementById('goalM').classList.remove('show')
 
 function saveGoal(){
   const category=document.getElementById('gSel').value;
-  const goalText=document.getElementById('gGoalSel').value;
   if(!category){showToast('Select a category.');return;}
-  if(!goalText){showToast('Select a goal.');return;}
-  const subgoals=Array.from(document.querySelectorAll('#gSubgoalsList input:checked')).map(c=>c.value);
-  const editIdx=document.getElementById('goalM')._editIdx;
+  const goalList=Array.from(document.querySelectorAll('#gGoalsList input:checked')).map(c=>c.value);
+  if(!goalList.length){showToast('Select at least one goal.');return;}
+  let editIdx=document.getElementById('goalM')._editIdx;
+  // One list per category: adding to a category that already has a list merges
+  // into that list rather than creating a second card for the same category.
+  let merged=false;
+  if(editIdx===undefined){
+    const existing=goals.findIndex(g=>g.category===category);
+    if(existing!==-1){ editIdx=existing; merged=true; }
+  }
   const prev=editIdx!==undefined?goals[editIdx]:{};
   // Preserve existing progress when editing, init to Not Started for new
-  const prevProgress=prev.subgoalProgress||{};
-  const subgoalProgress={};
-  subgoals.forEach(s=>{ subgoalProgress[s]=prevProgress[s]||'Not Started'; });
+  const prevProgress=prev.goalProgress||{};
+  const goalProgress={};
+  goalList.forEach(s=>{ goalProgress[s]=prevProgress[s]||'Not Started'; });
   const obj={
     id:editIdx!==undefined?prev.id:gid++,
-    category, goalText, subgoals, subgoalProgress,
-    mainProgress: prev.mainProgress||'Not Started',
+    category, goalList, goalProgress,
     consent:document.getElementById('gConsent').value,
     staff:document.getElementById('gStaff').value,
     date:document.getElementById('gDate').value,
@@ -735,16 +801,16 @@ function saveGoal(){
     intervention:editIdx!==undefined?prev.intervention:{domain:'',target:'',currentDate:today()}
   };
   if(editIdx!==undefined){ goals[editIdx]=obj; } else { goals.push(obj); }
-  closeGoalM(); renderGoals(); showToast(editIdx!==undefined?'Goal updated.':'Goal added.');
+  closeGoalM(); renderGoals();
+  showToast(merged?category+' goal list updated.':(editIdx!==undefined?'Goals updated.':'Goals added.'));
 }
 
 const PROGRESS_OPTS=['Not Started','In Progress','Achieved','No Longer Needed','Unable to Achieve'];
 const PROGRESS_COLORS={'Not Started':'#b0bec5','In Progress':'#3d8fcf','Achieved':'#27ae60','No Longer Needed':'#f39c12','Unable to Achieve':'#e74c3c'};
 const PROGRESS_BG={'Not Started':'#f5f7f8','In Progress':'#e8f4fb','Achieved':'#eafaf1','No Longer Needed':'#fef9e7','Unable to Achieve':'#fdf0f0'};
 
-function updateGoalProgress(goalIdx, subgoal, val){
-  if(subgoal==='__main__') goals[goalIdx].mainProgress=val;
-  else goals[goalIdx].subgoalProgress[subgoal]=val;
+function updateGoalProgress(goalIdx, goalText, val){
+  goals[goalIdx].goalProgress[goalText]=val;
   renderGoals();
 }
 
@@ -785,12 +851,12 @@ function updateIntLevel(goalIdx, val){
 
 function renderGoals(){
   const c=document.getElementById('gBox');
-  document.getElementById('gCt').textContent=goals.length+' Goal'+(goals.length!==1?'s':'');
+  const totalGoals=goals.reduce((n,g)=>n+((g.goalList||[]).length),0);
+  document.getElementById('gCt').textContent=totalGoals+' Goal'+(totalGoals!==1?'s':'')+' in '+goals.length+' Categor'+(goals.length!==1?'ies':'y');
 
   let totalItems=0, achievedItems=0;
   goals.forEach(g=>{
-    totalItems++; if(g.mainProgress==='Achieved') achievedItems++;
-    (g.subgoals||[]).forEach(s=>{ totalItems++; if((g.subgoalProgress||{})[s]==='Achieved') achievedItems++; });
+    (g.goalList||[]).forEach(s=>{ totalItems++; if((g.goalProgress||{})[s]==='Achieved') achievedItems++; });
   });
   const inProcess=goals.filter(g=>g.status==='In Process').length;
   document.getElementById('gStatusSummary').textContent=goals.length?(inProcess+' In Process'):'—';
@@ -804,8 +870,7 @@ function renderGoals(){
     const int=g.intervention||{};
     const hasInt=!!int.domain;
     const catColor=CAT_COLORS[g.category]||'#555';
-    const sp=g.subgoalProgress||{};
-    const mp=g.mainProgress||'Not Started';
+    const gp=g.goalProgress||{};
     const intStatus=g.interventionStatus||'';
 
     // Intervention comparison scale
@@ -859,10 +924,10 @@ function renderGoals(){
                background:${PROGRESS_BG[current]};color:${PROGRESS_COLORS[current]};cursor:pointer;min-width:140px;">${opts}</select>`;
     };
 
-    const subRows=(g.subgoals||[]).map(s=>`
+    const goalRows=(g.goalList||[]).map(s=>`
       <tr style="border-bottom:1px solid #eef2f6;">
-        <td style="padding:7px 12px 7px 24px;font-size:12px;color:#444;"><span style="color:#bbb;margin-right:6px;">↳</span>${s}</td>
-        <td style="padding:7px 12px;text-align:right;">${pdrop(s,sp[s]||'Not Started',s)}</td>
+        <td style="padding:8px 14px;font-size:13px;color:#1e2d4a;font-weight:600;">${s}</td>
+        <td style="padding:8px 14px;text-align:right;">${pdrop(s,gp[s]||'Not Started',s)}</td>
       </tr>`).join('');
 
     c.innerHTML+=`
@@ -877,21 +942,14 @@ function renderGoals(){
         </div>
       </div>
 
-      <!-- Primary goal -->
-      <div style="padding:10px 14px;border-bottom:1px solid #e8edf2;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;border-left:4px solid ${catColor};">
-        <div>
-          <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">Primary Goal</div>
-          <div style="font-size:14px;font-weight:700;color:#1e2d4a;">${g.goalText}</div>
+      <!-- Goals (flat list, one per category — 8/26 decision) -->
+      <div style="border-bottom:1px solid #e8edf2;border-left:4px solid ${catColor};">
+        <div style="padding:5px 14px;background:#f5f8fb;border-bottom:1px solid #eef2f6;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;">Goals</span>
+          <span style="font-size:10px;color:#999;">${(g.goalList||[]).length} in this category</span>
         </div>
-        <div style="flex-shrink:0;">${pdrop(g.goalText,mp,'__main__')}</div>
+        <table style="width:100%;border-collapse:collapse;">${goalRows}</table>
       </div>
-
-      <!-- Sub-goals -->
-      ${g.subgoals&&g.subgoals.length?`
-      <div style="border-bottom:1px solid #e8edf2;">
-        <div style="padding:5px 14px;background:#f5f8fb;border-bottom:1px solid #eef2f6;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;">Sub-Goals</div>
-        <table style="width:100%;border-collapse:collapse;">${subRows}</table>
-      </div>`:''}
 
       <!-- Meta -->
       <div style="padding:7px 14px;display:flex;flex-wrap:wrap;gap:0;font-size:12px;background:#fafbfc;border-bottom:1px solid #e8edf2;">
@@ -999,7 +1057,7 @@ function renderNotes(){
       const completedCount = prog.days.filter(d=>d.statusDate).length;
       const pipHtml = prog.days.map(d=>{
         const isPast = d.fuDate <= today();
-        const pipCls = d.statusDate ? 'pip done' : (isPast ? 'pip overdue' : 'pip upcoming');
+        const pipCls = d.statusDate ? 'pip done' : (d.cancelled ? 'pip cancelled' : (isPast ? 'pip overdue' : 'pip upcoming'));
         return `<div class="${pipCls}" title="${d.day}-Day: ${fD(d.fuDate)}"></div>`;
       }).join('');
       left.innerHTML += `
@@ -1010,7 +1068,7 @@ function renderNotes(){
                 <span class="pn-icon ${p.iconClass}">${p.iconLetter}</span>
                 ${p.shortLabel}
               </div>
-              <span class="pn-pinned-count">${completedCount}/${prog.days.length} done</span>
+              <span class="pn-pinned-count">${prog.closeout?'Closed early':completedCount+'/'+prog.days.length+' done'}</span>
             </div>
             <div class="pn-pips">${pipHtml}</div>
           </div>
@@ -1040,7 +1098,8 @@ function renderNotes(){
   }
 
   if(!activePinnedKeys.length && !filtered.length){
-    left.innerHTML = `<div class="pnempty-msg">No notes yet.<br><br>Click <strong>+ ADD</strong> to create a note.<br>Selecting DFSS Rental Assistance or SNAP Benefits will activate 30/60/90-day tracking.</div>`;
+    const trackedNames = Object.values(PROG).map(c=>c.label).join(' or ');
+    left.innerHTML = `<div class="pnempty-msg">No notes yet.<br><br>Click <strong>+ ADD</strong> to create a note.<br>Selecting ${trackedNames} will activate follow-up tracking.</div>`;
   }
 
   renderRight();
@@ -1074,8 +1133,24 @@ function renderPinnedDetail(pk){
         <span style="color:#fff;font-size:14px;font-weight:700;">${p.label}</span>
         <span style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;">${p.svc}</span>
       </div>
-      <div style="color:rgba(255,255,255,.85);font-size:11px;">Started: ${fD(prog.startDate)} &nbsp;|&nbsp; ${completedCount}/${prog.days.length} follow-ups completed</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="color:rgba(255,255,255,.85);font-size:11px;">Started: ${fD(prog.startDate)} &nbsp;|&nbsp; ${completedCount}/${prog.days.length} follow-ups completed</span>
+        ${prog.closeout
+          ? `<button onclick="reopenSvc('${pk}')" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;">&#8635; Reopen Service</button>`
+          : `<button onclick="openEcM('${pk}')" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:3px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;">&#9873; Close Out Early</button>`}
+      </div>
     </div>`;
+
+  // Early closeout banner
+  if(prog.closeout){
+    h += `<div style="background:#eceff1;border-bottom:1px solid #cfd8dc;padding:9px 14px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
+      <span style="background:#78909c;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;">Closed Out Early</span>
+      <span style="font-size:12px;color:#37474f;"><strong>Reason:</strong> ${prog.closeout.reason}</span>
+      <span style="font-size:12px;color:#37474f;"><strong>Date:</strong> ${fD(prog.closeout.date)}</span>
+      <span style="font-size:12px;color:#37474f;"><strong>By:</strong> ${prog.closeout.by}</span>
+      ${prog.closeout.note?`<div style="flex-basis:100%;font-size:12px;color:#546e7a;line-height:1.5;">${prog.closeout.note}</div>`:''}
+    </div>`;
+  }
 
   // Originating note
   if(originNote){
@@ -1092,8 +1167,11 @@ function renderPinnedDetail(pk){
   prog.days.forEach((d,i)=>{
     const isPast = d.fuDate <= today();
     const isDone = !!d.statusDate;
-    const hdrCls = isDone ? 'done' : (isPast ? 'overdue' : 'upcoming');
-    const statusTxt = isDone ? `Completed ${fD(d.statusDate)}` : (isPast ? 'Overdue — not yet completed' : 'Upcoming');
+    const isCancelled = !!d.cancelled;
+    const hdrCls = isDone ? 'done' : (isCancelled ? 'cancelled' : (isPast ? 'overdue' : 'upcoming'));
+    const statusTxt = isDone ? `Completed ${fD(d.statusDate)}`
+      : (isCancelled ? 'Cancelled — service closed out early'
+      : (isPast ? 'Overdue — not yet completed' : 'Upcoming'));
     h += `<div class="fu-card">
       <div class="fu-card-hdr ${hdrCls}">
         <span>${d.day}-Day Follow-Up</span>
@@ -1109,7 +1187,7 @@ function renderPinnedDetail(pk){
             ${d.contactOutcome?`<div><div class="fu-label">Contact Outcome</div><span style="display:inline-block;background:#f0f7ee;border:1px solid #b2d8a8;color:#1e6e2f;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${d.contactOutcome}</span></div>`:''}
           </div>` : ''}
         ${d.note ? `<div class="fu-label">General Notes</div><div class="fu-note-text">${d.note}</div>` : (!d.outcome && !d.contactOutcome ? `<div class="fu-empty">No outcome or notes entered yet.</div>` : '')}
-        <button class="fu-update-btn" onclick="openFuM('${pk}',${i})">${isDone?'&#9998; Edit':'&#9998; Update'}</button>
+        ${isCancelled?'':`<button class="fu-update-btn" onclick="openFuM('${pk}',${i})">${isDone?'&#9998; Edit':'&#9998; Update'}</button>`}
       </div>
     </div>`;
   });
@@ -1200,6 +1278,93 @@ function openFuM(pk, dayIdx){
   document.getElementById('fuM').classList.add('show');
 }
 function closeFuM(){ document.getElementById('fuM').classList.remove('show'); }
+
+// ── MANUAL EARLY CLOSEOUT ON TRACKED SERVICES ────────────────────────────────
+// 8/26 decision: a case manager can close a tracked service before its last
+// follow-up. Remaining follow-ups are cancelled; the application stays open.
+const EARLY_CLOSEOUT_REASONS = [
+  'Service Completed Early',
+  'Client Requested Closure',
+  'Client Relocated',
+  'Lost Contact with Client',
+  'No Longer Eligible',
+  'Referred to Another Provider',
+  'Other'
+];
+let ecEditPk='';
+function openEcM(pk){
+  ecEditPk=pk;
+  document.getElementById('ecMService').textContent=PROG[pk].label;
+  const sel=document.getElementById('ecMReason');
+  sel.innerHTML='<option value="">-- Select Reason --</option>';
+  EARLY_CLOSEOUT_REASONS.forEach(r=>sel.innerHTML+=`<option value="${r}">${r}</option>`);
+  document.getElementById('ecMDate').value=today();
+  document.getElementById('ecMNote').value='';
+  document.getElementById('ecMErr').style.display='none';
+  document.getElementById('ecM').classList.add('show');
+}
+function closeEcM(){ document.getElementById('ecM').classList.remove('show'); }
+function saveEcM(){
+  const reason=document.getElementById('ecMReason').value;
+  const date=document.getElementById('ecMDate').value;
+  const err=document.getElementById('ecMErr');
+  if(!reason||!date){ err.textContent='Select a reason and a closeout date.'; err.style.display='block'; return; }
+  const prog=pinned[ecEditPk];
+  prog.closeout={ reason, date, note:document.getElementById('ecMNote').value.trim(), by:'CSC_DCassell', type:'Manual' };
+  prog.days.forEach(d=>{ if(!d.statusDate) d.cancelled=true; });
+  closeEcM(); renderNotes();
+  showToast('Service closed out early — remaining follow-ups cancelled.');
+}
+function reopenSvc(pk){
+  if(!confirm('Reopen this service and restore its remaining follow-ups?')) return;
+  pinned[pk].closeout=null;
+  pinned[pk].days.forEach(d=>{ delete d.cancelled; });
+  renderNotes(); showToast('Service reopened.');
+}
+
+// ── APPLICATION INACTIVITY (90-day auto closeout, 60-day warning) ────────────
+const INACTIVITY_WARN_DAYS=60, INACTIVITY_CLOSE_DAYS=90;
+// Services, referrals and case notes all reset the clock.
+function lastActivityDate(){
+  const dates=[];
+  notes.forEach(n=>{ if(n.date) dates.push(n.date); });
+  Object.keys(pinned).forEach(pk=>{
+    const prog=pinned[pk];
+    if(prog.startDate) dates.push(prog.startDate);
+    (prog.days||[]).forEach(d=>{ if(d.statusDate) dates.push(d.statusDate); });
+    (prog.generalNotes||[]).forEach(gn=>{ if(gn.date) dates.push(gn.date); });
+    if(prog.closeout&&prog.closeout.date) dates.push(prog.closeout.date);
+  });
+  goals.forEach(g=>{ if(g.date) dates.push(g.date); });
+  if(!dates.length) return null;
+  return dates.sort()[dates.length-1];
+}
+function renderCloseout(){
+  const box=document.getElementById('coActivity');
+  if(!box) return;
+  const last=lastActivityDate();
+  if(!last){
+    box.innerHTML='<div style="font-size:12px;color:#888;font-style:italic;">No activity recorded yet. The 90-day clock starts with the first service, referral or case note.</div>';
+    return;
+  }
+  const days=Math.max(0,Math.round((new Date(today())-new Date(last))/86400000));
+  const remaining=INACTIVITY_CLOSE_DAYS-days;
+  let state,color,bg;
+  if(days>=INACTIVITY_CLOSE_DAYS){ state='Eligible for system close out'; color='#e74c3c'; bg='#fdf0f0'; }
+  else if(days>=INACTIVITY_WARN_DAYS){ state='Warning sent to case manager'; color='#f39c12'; bg='#fef9e7'; }
+  else { state='Active'; color='#27ae60'; bg='#eafaf1'; }
+  const pct=Math.min(100,Math.round(days/INACTIVITY_CLOSE_DAYS*100));
+  box.innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:12px;">
+      <div><div class="fu-label">Last Activity</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${fD(last)}</div></div>
+      <div><div class="fu-label">Days Inactive</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${days}</div></div>
+      <div><div class="fu-label">Status</div><span style="display:inline-block;background:${bg};border:1px solid ${color};color:${color};font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;">${state}</span></div>
+      ${remaining>0?`<div><div class="fu-label">Auto Close Out In</div><div style="font-size:13px;font-weight:700;color:#2c3e50;">${remaining} days</div></div>`:''}
+    </div>
+    <div style="height:8px;background:#e8edf2;border-radius:4px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${color};"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:#999;margin-top:4px;"><span>0 days</span><span>60 — warning</span><span>90 — auto close out</span></div>
+    <div style="font-size:11px;color:#888;margin-top:10px;">Counted from the most recent service, referral or case note on this application.</div>`;
+}
 function saveFuM(){
   const d=pinned[fuEditPk].days[fuEditDayIdx];
   const errEl=document.getElementById('fuMStatusErr');
